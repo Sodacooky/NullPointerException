@@ -1,0 +1,6 @@
+server:
+  port: 8761 # eureka default port
+spring:
+  application:
+    name: eureka-server # and there's nothing more to be configured
+
