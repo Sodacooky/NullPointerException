@@ -28,10 +28,11 @@ create table article
 
 create table approval_article
 (
+    id         varchar(64) not null comment '点赞记录ID'
+        primary key,
     user_id    varchar(64) not null comment '用户ID',
     article_id varchar(64) not null comment '文章ID',
     time       datetime    not null comment '点赞时间',
-    primary key (user_id, article_id),
     constraint approval_article_article_id_fk
         foreign key (article_id) references article (id),
     constraint approval_article_user_info_id_fk
@@ -88,10 +89,11 @@ create table question_answer
 
 create table approval_answer
 (
+    id        varchar(64) not null comment '点赞记录ID'
+        primary key,
     user_id   varchar(64) not null comment '用户ID',
     answer_id varchar(64) not null comment '回答的ID',
     time      datetime    not null comment '点赞时间',
-    primary key (user_id, answer_id),
     constraint approval_answer_question_answer_id_fk
         foreign key (answer_id) references question_answer (id),
     constraint approval_answer_user_info_id_fk
@@ -119,18 +121,18 @@ create table question_reply
 
 create table report
 (
-    id                      varchar(64) not null comment '举报记录ID'
+    id                      varchar(64)          not null comment '举报记录ID'
         primary key,
-    goal_user_id            varchar(64) null comment '被举报的用户的ID',
-    goal_article_id         varchar(64) null comment '被举报的文章ID',
-    goal_article_reply_id   varchar(64) null comment '被举报的文章回复ID',
-    goal_question_id        varchar(64) null comment '被举报的问题ID',
-    goal_question_reply_id  varchar(64) null comment '被举报的问答回复ID',
-    goal_question_answer_id varchar(64) null comment '被举报的回答ID',
-    time                    datetime    not null comment '举报时间',
-    comment                 text        not null comment '举报附加信息',
-    is_processed            tinyint(1)  not null comment '是否已经处理',
-    reporter_id             varchar(64) not null comment '举报者的用户ID',
+    goal_user_id            varchar(64)          null comment '被举报的用户的ID',
+    goal_article_id         varchar(64)          null comment '被举报的文章ID',
+    goal_article_reply_id   varchar(64)          null comment '被举报的文章回复ID',
+    goal_question_id        varchar(64)          null comment '被举报的问题ID',
+    goal_question_reply_id  varchar(64)          null comment '被举报的问答回复ID',
+    goal_question_answer_id varchar(64)          null comment '被举报的回答ID',
+    time                    datetime             not null comment '举报时间',
+    comment                 text                 not null comment '举报附加信息',
+    is_processed            tinyint(1) default 0 not null comment '是否已经处理',
+    reporter_id             varchar(64)          not null comment '举报者的用户ID',
     constraint report_article_id_fk
         foreign key (goal_article_id) references article (id),
     constraint report_article_reply_id_fk
@@ -175,15 +177,16 @@ create table user_notice
 
 create table user_question_subscription
 (
-    user_id     varchar(64) not null comment '用户的id',
-    question_id varchar(64) not null comment '问题的ID',
-    date        datetime    not null comment '订阅的时间',
-    primary key (user_id, question_id),
-    constraint user_question_subscription_question_header_id_fk
+    id          varchar(64) not null comment '订阅ID'
+        primary key,
+    user_id     varchar(64) not null comment '订阅人ID',
+    question_id varchar(64) not null comment '所订阅的问题ID',
+    time        datetime    not null comment '订阅时间',
+    constraint user_question_subscription_question_info_id_fk
         foreign key (question_id) references question_info (id),
     constraint user_question_subscription_user_info_id_fk
         foreign key (user_id) references user_info (id)
 )
-    comment '用户关注订阅的问题';
+    comment '用户关注的问题';
 
 

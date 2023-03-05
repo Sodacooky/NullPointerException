@@ -12,7 +12,14 @@
 
     <packaging>pom</packaging>
     <modules>
+        <!--        网关-->
+        <module>springcloud-gateway</module>
+        <!--        注册中心-->
         <module>eureka-server</module>
+        <!--        各个服务-->
+        <module>service-authc</module>
+        <module>service-content</module>
+        <module>service-user</module>
     </modules>
 
     <groupId>soda.npe</groupId>
