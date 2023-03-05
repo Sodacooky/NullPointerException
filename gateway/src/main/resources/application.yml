@@ -1,0 +1,11 @@
+# 网关端口设置为8080
+server:
+  port: 8080
+# 设置服务名称并注册
+spring:
+  application:
+    name: gateway
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
