@@ -39,7 +39,7 @@
   </el-container>
 
   <!--        侧边栏-->
-  <el-aside width="300px" style="margin-right: 16px">
+  <el-aside width="20pc" style="margin-right: 16px">
     <!--          公告-->
     <el-card class="box-card">
       <template #header>
@@ -101,16 +101,16 @@
       </el-carousel>
     </el-card>
     <!--          网站数据-->
-    <el-card class="box-card">
+    <el-card class="box-card" :body-style="{ padding: '16px' }">
       <template #header>
         <div class="card-header">
           <span>网站状况</span>
         </div>
       </template>
-      <p>本日新增问题：114514</p>
-      <p>本日新增文章：666</p>
-      <p>本日登录用户：1245</p>
-      <p>总注册用户数：666666</p>
+      <div>本日新增问题：114514</div>
+      <div>本日新增文章：666</div>
+      <div>本日登录用户：1245</div>
+      <div>总注册用户数：666666</div>
     </el-card>
   </el-aside>
 </template>

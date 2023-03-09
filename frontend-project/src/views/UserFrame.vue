@@ -1,5 +1,5 @@
 <template>
-  <div class="common-layout">
+  <div style="padding-left: 5pc;padding-right: 5pc">
     <el-container>
       <!--      顶栏-->
       <el-header>

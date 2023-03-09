@@ -4,7 +4,7 @@ import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import soda.npe.serviceuser.entity.UserInfo;
-import soda.npe.serviceuser.service.UserInfoService;
+import soda.npe.serviceuser.mapper.UserInfoMapper;
 
 import java.util.List;
 
@@ -12,11 +12,11 @@ import java.util.List;
 public class TestController {
 
     @Resource
-    private UserInfoService userInfoService;
+    private UserInfoMapper userInfoMapper;
 
     @GetMapping("/all")
     public List<UserInfo> listAll() {
-        return userInfoService.list();
+        return userInfoMapper.selectList(null);
     }
 
 }
