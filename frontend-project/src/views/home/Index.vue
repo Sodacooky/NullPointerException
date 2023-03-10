@@ -4,18 +4,22 @@
   <el-container>
     <el-main>
       <!--          搜索框-->
-      <el-input v-model="searchContent" placeholder="搜索问题、文章和用户" style="font-size: large;margin-bottom: 16px">
+      <el-input v-model="searchContent"
+                @keydown.enter="doSearch"
+                placeholder="搜索问题、文章和用户"
+                style="font-size: large;margin-bottom: 16px">
         <template #prepend>
           <el-icon>
             <Search/>
           </el-icon>
         </template>
         <template #append>
-          <el-button>搜索</el-button>
+          <el-button @click="doSearch">搜索
+          </el-button>
         </template>
       </el-input>
       <!--      首页内容切换-->
-      <el-tabs v-model="activeTabName" @tab-click="tabClick">
+      <el-tabs v-model="activeTabName" @tab-click="listChanged">
         <el-tab-pane label="最新问题" name="latest-question">
           <router-view></router-view>
         </el-tab-pane>
@@ -117,7 +121,7 @@
 
 <script>
 export default {
-  name: "HomeBase",
+  name: "HomeIndex",
   data() {
     return {
       activeAnnouncementName: '-1',
@@ -126,15 +130,29 @@ export default {
     }
   },
   methods: {
-    tabClick(tab) {
-      console.log(tab.paneName)
-      if (String(tab.paneName).endsWith("question")) {
-        this.$router.push('/home/question');
-      } else if (String(tab.paneName).endsWith("article")) {
-        this.$router.push('/home/article');
-
+    listChanged(dstTab) {
+      //判断切换到问题还是文章
+      if (String(dstTab.paneName).endsWith("question")) {
+        //然后根据切换的是最新还是榜单
+        if (String(dstTab.paneName).startsWith("latest")) {
+          this.$router.push('/home/question/latest');
+        } else if (String(dstTab.paneName).startsWith("week")) {
+          this.$router.push('/home/question/weekly');
+        } else if (String(dstTab.paneName).startsWith("month")) {
+          this.$router.push('/home/question/monthly');
+        }
+      } else if (String(dstTab.paneName).endsWith("article")) {
+        if (String(dstTab.paneName).startsWith("latest")) {
+          this.$router.push('/home/article/latest');
+        } else if (String(dstTab.paneName).startsWith("week")) {
+          this.$router.push('/home/article/weekly');
+        } else if (String(dstTab.paneName).startsWith("month")) {
+          this.$router.push('/home/article/monthly');
+        }
       }
-
+    },
+    doSearch() {
+      this.$router.push({path: "/search/question", query: {searchText: this.searchContent}})
     }
   }
 }

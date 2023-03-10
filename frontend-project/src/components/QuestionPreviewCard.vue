@@ -1,10 +1,10 @@
 <template>
   <div class="question-preview-card">
-    <div class="title">{{ title }}</div>
-    <div class="short">{{ short }}</div>
+    <div class="title">{{ question_preview_data.title }}</div>
+    <div class="short">{{ question_preview_data.short }}</div>
     <div class="bottom-bar">
-      <span style="float: left"><el-tag type="info">{{ category }}</el-tag></span>
-      <span style="float: right;color: gray">{{ publish_time }}</span>
+      <span style="float: left"><el-tag type="info">{{ question_preview_data.category }}</el-tag></span>
+      <span style="float: right;color: gray">{{ question_preview_data.publish_time }}</span>
     </div>
     <el-divider/>
   </div>
@@ -13,7 +13,7 @@
 <script>
 export default {
   name: "QuestionPreviewCard",
-  props: ["title", "short", "category", "publish_time", "question_id"]
+  props: ["question_preview_data"]
 }
 </script>
 
