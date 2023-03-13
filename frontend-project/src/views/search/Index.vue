@@ -19,17 +19,14 @@
       </div>
       <!--  结果列表-->
       <div class="search-result-area" v-if="nowSearching.length>0">
-        <el-tabs v-model="activeSearchTypeName" class="demo-tabs" @tab-click="searchTypeChanged">
-          <el-tab-pane label="问题" name="question">
-            <router-view></router-view>
-          </el-tab-pane>
-          <el-tab-pane label="文章" name="article">
-            <router-view></router-view>
-          </el-tab-pane>
-          <el-tab-pane label="用户" name="user">
-            <router-view></router-view>
-          </el-tab-pane>
-        </el-tabs>
+        <el-menu :default-active="activeSearchTypeRoutePath" :router="true" mode="horizontal">
+          <el-menu-item index="/search/question">问题</el-menu-item>
+          <el-menu-item index="/search/article">文章</el-menu-item>
+          <el-menu-item index="/search/user">用户</el-menu-item>
+        </el-menu>
+        <div style="margin-top: 8px">
+          <router-view></router-view>
+        </div>
       </div>
       <!--      如果没有搜索-->
       <el-empty description="未输入搜索内容" v-if="nowSearching.length<=0"/>
@@ -44,7 +41,7 @@ export default {
   name: "SearchIndex",
   data() {
     return {
-      activeSearchTypeName: "question",
+      activeSearchTypeRoutePath: "/search/question",
       searchText: "", //输入框文本
       nowSearching: "", //当前搜索结果对应的搜索文本
     }
@@ -52,25 +49,18 @@ export default {
   methods: {
     doSearch() {
       this.nowSearching = this.searchText;
-      console.log(this.$route.path)
     },
-    searchTypeChanged(dstTab) {
-      if (String(dstTab.paneName).endsWith("question")) {
-        this.$router.push({path: "/search/question", query: {searchText: this.nowSearching}})
-      } else if (String(dstTab.paneName).endsWith("article")) {
-        this.$router.push({path: "/search/article", query: {searchText: this.nowSearching}})
-      } else if (String(dstTab.paneName).endsWith("user")) {
-        this.$router.push({path: "/search/user", query: {searchText: this.nowSearching}})
-      }
-    }
   },
-  created() {
-    this.searchText = this.$route.query.searchText;
+  mounted() {
+    //将其他页面过来时携带的查询参数的“指针”复制
+    this.searchText = this.$route.query.searchText === undefined ? "" : this.$route.query.searchText;
+    console.log("searchText: " + this.searchText);
+    //当前页面展示的结果是谁的
     this.nowSearching = this.searchText;
-
-    if (this.searchText.length <= 0) console.log("Empty Search");
-    else console.log("Searching: " + this.searchText);
-  }
+    console.log("nowSearching: " + this.nowSearching);
+    //修正原地刷新可能会遇到标签页不正确的问题
+    this.activeSearchTypeRoutePath = this.$route.path;
+  },
 
 }
 </script>

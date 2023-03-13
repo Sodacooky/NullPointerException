@@ -4,7 +4,7 @@
   <el-container>
     <el-main>
       <!--          搜索框-->
-      <el-input v-model="searchContent"
+      <el-input v-model="searchText"
                 @keydown.enter="doSearch"
                 placeholder="搜索问题、文章和用户"
                 style="font-size: large;margin-bottom: 16px">
@@ -19,26 +19,15 @@
         </template>
       </el-input>
       <!--      首页内容切换-->
-      <el-tabs v-model="activeTabName" @tab-click="listChanged">
-        <el-tab-pane label="最新问题" name="latest-question">
-          <router-view></router-view>
-        </el-tab-pane>
-        <el-tab-pane label="问题周榜" name="week-question">
-          <router-view></router-view>
-        </el-tab-pane>
-        <el-tab-pane label="问题月榜" name="month-question">
-          <router-view></router-view>
-        </el-tab-pane>
-        <el-tab-pane label="最新文章" name="latest-article">
-          <router-view></router-view>
-        </el-tab-pane>
-        <el-tab-pane label="文章周榜" name="week-article">
-          <router-view></router-view>
-        </el-tab-pane>
-        <el-tab-pane label="文章月榜" name="month-article">
-          <router-view></router-view>
-        </el-tab-pane>
-      </el-tabs>
+      <el-menu :default-active="activeListRoutePath" mode="horizontal" :router="true">
+        <el-menu-item index="/home/question/latest">最新问题</el-menu-item>
+        <el-menu-item index="/home/question/weekly">问题周榜</el-menu-item>
+        <el-menu-item index="/home/question/monthly">问题月榜</el-menu-item>
+        <el-menu-item index="/home/article/latest">最新文章</el-menu-item>
+        <el-menu-item index="/home/article/weekly">文章周榜</el-menu-item>
+        <el-menu-item index="/home/article/monthly">文章月榜</el-menu-item>
+      </el-menu>
+      <router-view></router-view>
     </el-main>
   </el-container>
 
@@ -125,35 +114,17 @@ export default {
   data() {
     return {
       activeAnnouncementName: '-1',
-      searchContent: '',
-      activeTabName: 'latest-question',
+      searchText: '',
+      activeListRoutePath: '/home/question/latest',
     }
   },
   methods: {
-    listChanged(dstTab) {
-      //判断切换到问题还是文章
-      if (String(dstTab.paneName).endsWith("question")) {
-        //然后根据切换的是最新还是榜单
-        if (String(dstTab.paneName).startsWith("latest")) {
-          this.$router.push('/home/question/latest');
-        } else if (String(dstTab.paneName).startsWith("week")) {
-          this.$router.push('/home/question/weekly');
-        } else if (String(dstTab.paneName).startsWith("month")) {
-          this.$router.push('/home/question/monthly');
-        }
-      } else if (String(dstTab.paneName).endsWith("article")) {
-        if (String(dstTab.paneName).startsWith("latest")) {
-          this.$router.push('/home/article/latest');
-        } else if (String(dstTab.paneName).startsWith("week")) {
-          this.$router.push('/home/article/weekly');
-        } else if (String(dstTab.paneName).startsWith("month")) {
-          this.$router.push('/home/article/monthly');
-        }
-      }
-    },
     doSearch() {
-      this.$router.push({path: "/search/question", query: {searchText: this.searchContent}})
-    }
+      this.$router.push({path: "/search/question", query: {searchText: this.searchText}})
+    },
+  },
+  mounted() {
+    this.activeListRoutePath = this.$route.path;
   }
 }
 </script>
