@@ -14,9 +14,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>3.5.3.1</version>
+            <groupId>soda.npe</groupId>
+            <artifactId>service-common</artifactId>
+            <version>NOVERSION</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>

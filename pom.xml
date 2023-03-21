@@ -16,7 +16,9 @@
         <module>springcloud-gateway</module>
         <!--        注册中心-->
         <module>eureka-server</module>
-        <!--        各个服务-->
+        <!--        公用服务-->
+        <module>service-common</module>
+        <!--        各个子服务-->
         <module>service-authc</module>
         <module>service-content</module>
         <module>service-user</module>
@@ -52,7 +54,7 @@
 
     <dependencyManagement>
         <dependencies>
-            <!-- 其他库的版本控制 -->
+            <!-- 库的版本控制 -->
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>

@@ -3,10 +3,11 @@ package soda.npe.serviceuser.controller;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import soda.npe.serviceuser.entity.UserInfo;
-import soda.npe.serviceuser.mapper.UserInfoMapper;
+import soda.npe.servicecommon.entity.UserInfo;
+import soda.npe.servicecommon.mapper.UserInfoMapper;
 
 import java.util.List;
+
 
 @RestController
 public class TestController {
