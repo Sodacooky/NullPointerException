@@ -54,6 +54,10 @@
       </div>
     </div>
   </div>
+
+  <!--  无论哪一个，没有数据都是展示这个-->
+  <el-empty v-if="resultData.length<=0" description="暂时没有数据"/>
+
 </template>
 
 <script>

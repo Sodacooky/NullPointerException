@@ -120,7 +120,8 @@ export default {
   },
   methods: {
     doSearch() {
-      this.$router.push({path: "/search/question", query: {searchText: this.searchText}})
+      if (this.searchText.length <= 0) this.searchText = " ";
+      this.$router.push(`/search/question/${this.searchText}`);
     },
   },
   mounted() {
