@@ -18,9 +18,8 @@
               这是一段自我介绍，他介绍了我自己，所以是一段自我介绍，正因为他是一段自我介绍，所以写的应该是关于我的东西。
             </div>
             <!--            灰色的注册时间和用户ID-->
-            <div style="color: rgb(96,96,96)">
+            <div style="color: gray;">
               <div>注册时间：2022.1.1 00:00:15</div>
-              <div>用户ID：{{ user_id }}</div>
             </div>
           </el-col>
         </el-row>

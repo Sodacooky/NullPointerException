@@ -31,7 +31,7 @@ export default {
   font-weight: bold;
 }
 
-.article-preview-card .short {
+.article-preview-card .text-short {
   font-size: small;
   color: gray;
 }
