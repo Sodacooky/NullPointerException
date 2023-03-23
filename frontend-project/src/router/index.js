@@ -26,7 +26,20 @@ const routerRules = [
             },
             {path: "/publisher", redirect: "/"},
             //个人设置页面
-            {path: "/settings", name: "ProfileSettings", component: () => import("@/views/profileSettings/Index.vue")}
+            {path: "/settings", name: "ProfileSettings", component: () => import("@/views/profileSettings/Index.vue")},
+            //登录页面
+            {
+                path: "/login",
+                name: "UserLogin",
+                component: () => import("@/views/authorization/LoginView.vue")
+            },
+            //注册页面
+            {
+                path: "/register",
+                name: "UserRegister",
+                component: () => import("@/views/authorization/RegisterView.vue")
+            },
+
         ]
     },
 
