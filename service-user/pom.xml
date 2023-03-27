@@ -8,14 +8,14 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <artifactId>service-user</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>NOVERSION</version>
     <name>service-user</name>
     <description>service-user</description>
 
     <dependencies>
         <dependency>
             <groupId>soda.npe</groupId>
-            <artifactId>service-common</artifactId>
+            <artifactId>common</artifactId>
             <version>NOVERSION</version>
         </dependency>
         <dependency>

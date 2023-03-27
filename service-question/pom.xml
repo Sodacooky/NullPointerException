@@ -7,10 +7,10 @@
         <artifactId>NullPointerException</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <artifactId>service-authc</artifactId>
+    <artifactId>service-question</artifactId>
     <version>NOVERSION</version>
-    <name>service-authc</name>
-    <description>service-authc</description>
+    <name>service-question</name>
+    <description>service-question</description>
 
     <dependencies>
         <dependency>
@@ -19,8 +19,8 @@
             <version>NOVERSION</version>
         </dependency>
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
     </dependencies>
 

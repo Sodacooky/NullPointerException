@@ -6,21 +6,22 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.0.4</version>
+        <version>3.0.5</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
     <packaging>pom</packaging>
     <modules>
         <!--        网关-->
-        <module>springcloud-gateway</module>
+        <module>gateway</module>
         <!--        注册中心-->
         <module>eureka-server</module>
-        <!--        公用服务-->
-        <module>service-common</module>
+        <!--        数据库、Redis操作、实体类等公共模块-->
+        <module>common</module>
         <!--        各个子服务-->
+        <module>service-question</module>
+        <module>service-article</module>
         <module>service-authc</module>
-        <module>service-content</module>
         <module>service-user</module>
     </modules>
 

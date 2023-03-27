@@ -7,16 +7,15 @@
         <artifactId>NullPointerException</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <artifactId>service-authc</artifactId>
+    <artifactId>gateway</artifactId>
     <version>NOVERSION</version>
-    <name>service-authc</name>
-    <description>service-authc</description>
+    <name>springcloud-gateway</name>
+    <description>springcloud-gateway</description>
 
     <dependencies>
         <dependency>
-            <groupId>soda.npe</groupId>
-            <artifactId>common</artifactId>
-            <version>NOVERSION</version>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-gateway</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -32,5 +31,6 @@
             </plugin>
         </plugins>
     </build>
+
 
 </project>

@@ -2,7 +2,7 @@
   <el-container>
     <!--    顶部菜单-->
     <el-header>
-      <el-menu mode="horizontal">
+      <el-menu mode="horizontal" :ellipsis="false">
         <!--    LOGO-->
         <img src="/logo.png" alt="website logo" width="128"/>
         <!--    使其他元素靠右的占位器-->
