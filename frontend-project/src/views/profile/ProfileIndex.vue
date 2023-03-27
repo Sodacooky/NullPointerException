@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import ProfileDetail from "@/views/profile/components/ProfileDetail.vue";
+import ProfileDetail from "@/views/profile/ProfileDetail.vue";
 
 export default {
   name: "ProfileIndex",

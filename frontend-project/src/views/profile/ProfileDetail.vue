@@ -1,8 +1,4 @@
 <template>
-  <div>
-    DEBUG: user_id={{ user_id }}, type={{ type }}
-  </div>
-
   <div class="content-container">
 
     <div v-if="type==='answer'">
