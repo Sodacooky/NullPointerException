@@ -18,7 +18,7 @@
     </sql>
 
     <select id="searchInfoByTime" resultType="soda.npe.common.entity.QuestionInfo">
-        select *
+        select qi.*
         from question_info qi
 
         left join question_answer qa on qi.id = qa.question_id and qa.order_number = 0
@@ -34,11 +34,11 @@
     </select>
 
     <select id="searchInfoBySubscriptionAmount" resultType="soda.npe.common.entity.QuestionInfo">
-        select *
+        select qi.*
         from question_info qi
 
         left join
-        (select question_id, count(id) from user_question_subscription group by question_id) sub_amount
+        (select question_id, count(id) as amount from user_question_subscription group by question_id) sub_amount
         on qi.id = sub_amount.question_id
 
         left join
@@ -49,7 +49,7 @@
         or qi.category like concat('%', #{keyword}, '%')
         or qa.text like concat('%', #{keyword}, '%')
 
-        order by qi.publish_time
+        order by sub_amount.amount
         <if test="!isAsc">desc</if>
 
         limit ${pageSize*(page-1)},#{pageSize}

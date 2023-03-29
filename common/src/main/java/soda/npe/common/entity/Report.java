@@ -4,23 +4,21 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Data;
-
 import java.io.Serializable;
 import java.util.Date;
+import lombok.Data;
 
 /**
  * 用户举报
- *
  * @TableName report
  */
-@TableName(value = "report")
+@TableName(value ="report")
 @Data
 public class Report implements Serializable {
     /**
      * 举报记录ID
      */
-    @TableId(type = IdType.ASSIGN_ID)
+    @TableId
     private Long id;
 
     /**
@@ -89,16 +87,16 @@ public class Report implements Serializable {
         }
         Report other = (Report) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-                && (this.getGoalUserId() == null ? other.getGoalUserId() == null : this.getGoalUserId().equals(other.getGoalUserId()))
-                && (this.getGoalArticleId() == null ? other.getGoalArticleId() == null : this.getGoalArticleId().equals(other.getGoalArticleId()))
-                && (this.getGoalArticleReplyId() == null ? other.getGoalArticleReplyId() == null : this.getGoalArticleReplyId().equals(other.getGoalArticleReplyId()))
-                && (this.getGoalQuestionId() == null ? other.getGoalQuestionId() == null : this.getGoalQuestionId().equals(other.getGoalQuestionId()))
-                && (this.getGoalQuestionReplyId() == null ? other.getGoalQuestionReplyId() == null : this.getGoalQuestionReplyId().equals(other.getGoalQuestionReplyId()))
-                && (this.getGoalQuestionAnswerId() == null ? other.getGoalQuestionAnswerId() == null : this.getGoalQuestionAnswerId().equals(other.getGoalQuestionAnswerId()))
-                && (this.getTime() == null ? other.getTime() == null : this.getTime().equals(other.getTime()))
-                && (this.getComment() == null ? other.getComment() == null : this.getComment().equals(other.getComment()))
-                && (this.getIsProcessed() == null ? other.getIsProcessed() == null : this.getIsProcessed().equals(other.getIsProcessed()))
-                && (this.getReporterId() == null ? other.getReporterId() == null : this.getReporterId().equals(other.getReporterId()));
+            && (this.getGoalUserId() == null ? other.getGoalUserId() == null : this.getGoalUserId().equals(other.getGoalUserId()))
+            && (this.getGoalArticleId() == null ? other.getGoalArticleId() == null : this.getGoalArticleId().equals(other.getGoalArticleId()))
+            && (this.getGoalArticleReplyId() == null ? other.getGoalArticleReplyId() == null : this.getGoalArticleReplyId().equals(other.getGoalArticleReplyId()))
+            && (this.getGoalQuestionId() == null ? other.getGoalQuestionId() == null : this.getGoalQuestionId().equals(other.getGoalQuestionId()))
+            && (this.getGoalQuestionReplyId() == null ? other.getGoalQuestionReplyId() == null : this.getGoalQuestionReplyId().equals(other.getGoalQuestionReplyId()))
+            && (this.getGoalQuestionAnswerId() == null ? other.getGoalQuestionAnswerId() == null : this.getGoalQuestionAnswerId().equals(other.getGoalQuestionAnswerId()))
+            && (this.getTime() == null ? other.getTime() == null : this.getTime().equals(other.getTime()))
+            && (this.getComment() == null ? other.getComment() == null : this.getComment().equals(other.getComment()))
+            && (this.getIsProcessed() == null ? other.getIsProcessed() == null : this.getIsProcessed().equals(other.getIsProcessed()))
+            && (this.getReporterId() == null ? other.getReporterId() == null : this.getReporterId().equals(other.getReporterId()));
     }
 
     @Override

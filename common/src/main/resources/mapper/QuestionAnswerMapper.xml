@@ -17,4 +17,38 @@
         id,question_id,text,
         order_number,publisher_id,publish_time
     </sql>
+
+    <select id="getOfQuestionByApproval" resultType="soda.npe.common.entity.QuestionAnswer">
+        select qa.*
+        from question_answer qa
+
+        left join
+        (select answer_id, count(id) as amount from approval_answer group by answer_id) app_amount
+        on qa.id = app_amount.answer_id
+
+        where qa.question_id=#{questionId}
+
+        order by app_amount.amount
+        <if test="!isAsc">desc</if>
+
+        limit ${pageSize*(page-1)},#{pageSize}
+    </select>
+
+    <select id="searchAnswerByApproval" resultType="soda.npe.common.entity.QuestionAnswer">
+        select qa.*
+        from question_answer qa
+
+        left join
+        (select answer_id, count(id) as amount from approval_answer group by answer_id) app_amount
+        on qa.id = app_amount.answer_id
+
+        where qa.text like concat('%',#{keyword},'%')
+
+        order by app_amount.amount
+        <if test="!isAsc">desc</if>
+
+        limit ${pageSize*(page-1)},#{pageSize}
+    </select>
+
+
 </mapper>

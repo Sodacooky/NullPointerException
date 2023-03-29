@@ -24,7 +24,7 @@ public class QuestionInfoService extends ServiceImpl<QuestionInfoMapper, Questio
     private UserQuestionSubscriptionMapper userQuestionSubscriptionMapper;
 
 
-    public String getText(long questionId) {
+    public String getText(Long questionId) {
         QuestionAnswer found =
                 questionAnswerMapper.selectOne(
                         new LambdaQueryWrapper<QuestionAnswer>()
@@ -34,32 +34,33 @@ public class QuestionInfoService extends ServiceImpl<QuestionInfoMapper, Questio
         else return null;
     }
 
-    public long getAnswerAmount(long questionId) {
+    public long getAnswerAmount(Long questionId) {
         return questionAnswerMapper.selectCount(
                 new LambdaQueryWrapper<QuestionAnswer>()
                         .eq(QuestionAnswer::getQuestionId, questionId));
     }
 
-    public long getSubscriptionAmount(long questionId) {
+    public long getSubscriptionAmount(Long questionId) {
         return userQuestionSubscriptionMapper.selectCount(
                 new LambdaQueryWrapper<UserQuestionSubscription>()
                         .eq(UserQuestionSubscription::getQuestionId, questionId));
     }
 
-    public List<QuestionInfo> searchInfoByTime(String keyword, int page, boolean isAsc) {
+    public List<QuestionInfo> searchInfoByTime(String keyword, Integer page, Boolean isAsc) {
         return getBaseMapper().searchInfoByTime(keyword, page, DBConstant.PAGE_SIZE, isAsc);
     }
 
-    public List<QuestionInfo> searchInfoBySubscriptionAmount(String keyword, int page, boolean isAsc) {
+    public List<QuestionInfo> searchInfoBySubscriptionAmount(String keyword, Integer page, Boolean isAsc) {
         return getBaseMapper().searchInfoBySubscriptionAmount(keyword, page, DBConstant.PAGE_SIZE, isAsc);
     }
 
 
-    public List<QuestionInfo> getInfoPublishedBy(long userId, int page) {
+    public List<QuestionInfo> getInfoPublishedBy(Long userId, Integer page) {
         return this.list(
                 new LambdaQueryWrapper<QuestionInfo>()
                         .eq(QuestionInfo::getPublisherId, userId)
                         .orderByDesc(QuestionInfo::getPublishTime)
                         .last("limit " + (DBConstant.PAGE_SIZE * (page - 1)) + "," + DBConstant.PAGE_SIZE));
     }
+
 }

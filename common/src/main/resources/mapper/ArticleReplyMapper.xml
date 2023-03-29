@@ -7,14 +7,13 @@
     <resultMap id="BaseResultMap" type="soda.npe.common.entity.ArticleReply">
             <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="goalArticleId" column="goal_article_id" jdbcType="BIGINT"/>
-            <result property="goalReplyId" column="goal_reply_id" jdbcType="BIGINT"/>
             <result property="text" column="text" jdbcType="VARCHAR"/>
             <result property="publisherId" column="publisher_id" jdbcType="BIGINT"/>
             <result property="publishTime" column="publish_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,goal_article_id,goal_reply_id,
+        id,goal_article_id,
         text,publisher_id,publish_time
     </sql>
 </mapper>

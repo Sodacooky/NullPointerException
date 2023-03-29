@@ -4,34 +4,27 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Data;
-
 import java.io.Serializable;
 import java.util.Date;
+import lombok.Data;
 
 /**
  * 文章回复
- *
  * @TableName article_reply
  */
-@TableName(value = "article_reply")
+@TableName(value ="article_reply")
 @Data
 public class ArticleReply implements Serializable {
     /**
      * 回复ID
      */
-    @TableId(type = IdType.ASSIGN_ID)
+    @TableId
     private Long id;
 
     /**
      * 回复的目标文章ID，如果回复的是其他回复请保持NULL
      */
     private Long goalArticleId;
-
-    /**
-     * 回复的目标回复的ID，如果回复的是文章请保持NULL
-     */
-    private Long goalReplyId;
 
     /**
      * 回复的内容正文
@@ -64,11 +57,10 @@ public class ArticleReply implements Serializable {
         }
         ArticleReply other = (ArticleReply) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-                && (this.getGoalArticleId() == null ? other.getGoalArticleId() == null : this.getGoalArticleId().equals(other.getGoalArticleId()))
-                && (this.getGoalReplyId() == null ? other.getGoalReplyId() == null : this.getGoalReplyId().equals(other.getGoalReplyId()))
-                && (this.getText() == null ? other.getText() == null : this.getText().equals(other.getText()))
-                && (this.getPublisherId() == null ? other.getPublisherId() == null : this.getPublisherId().equals(other.getPublisherId()))
-                && (this.getPublishTime() == null ? other.getPublishTime() == null : this.getPublishTime().equals(other.getPublishTime()));
+            && (this.getGoalArticleId() == null ? other.getGoalArticleId() == null : this.getGoalArticleId().equals(other.getGoalArticleId()))
+            && (this.getText() == null ? other.getText() == null : this.getText().equals(other.getText()))
+            && (this.getPublisherId() == null ? other.getPublisherId() == null : this.getPublisherId().equals(other.getPublisherId()))
+            && (this.getPublishTime() == null ? other.getPublishTime() == null : this.getPublishTime().equals(other.getPublishTime()));
     }
 
     @Override
@@ -77,7 +69,6 @@ public class ArticleReply implements Serializable {
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getGoalArticleId() == null) ? 0 : getGoalArticleId().hashCode());
-        result = prime * result + ((getGoalReplyId() == null) ? 0 : getGoalReplyId().hashCode());
         result = prime * result + ((getText() == null) ? 0 : getText().hashCode());
         result = prime * result + ((getPublisherId() == null) ? 0 : getPublisherId().hashCode());
         result = prime * result + ((getPublishTime() == null) ? 0 : getPublishTime().hashCode());
@@ -92,7 +83,6 @@ public class ArticleReply implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", goalArticleId=").append(goalArticleId);
-        sb.append(", goalReplyId=").append(goalReplyId);
         sb.append(", text=").append(text);
         sb.append(", publisherId=").append(publisherId);
         sb.append(", publishTime=").append(publishTime);
