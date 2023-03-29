@@ -46,11 +46,11 @@ public class QuestionInfoService extends ServiceImpl<QuestionInfoMapper, Questio
                         .eq(UserQuestionSubscription::getQuestionId, questionId));
     }
 
-    public List<QuestionInfo> searchInfoByTime(String keyword, Integer page, Boolean isAsc) {
+    public List<QuestionInfo> searchByTime(String keyword, Integer page, Boolean isAsc) {
         return getBaseMapper().searchInfoByTime(keyword, page, DBConstant.PAGE_SIZE, isAsc);
     }
 
-    public List<QuestionInfo> searchInfoBySubscriptionAmount(String keyword, Integer page, Boolean isAsc) {
+    public List<QuestionInfo> searchBySubscriptionAmount(String keyword, Integer page, Boolean isAsc) {
         return getBaseMapper().searchInfoBySubscriptionAmount(keyword, page, DBConstant.PAGE_SIZE, isAsc);
     }
 

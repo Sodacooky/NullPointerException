@@ -5,12 +5,12 @@
 <mapper namespace="soda.npe.common.mapper.QuestionAnswerMapper">
 
     <resultMap id="BaseResultMap" type="soda.npe.common.entity.QuestionAnswer">
-            <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="questionId" column="question_id" jdbcType="BIGINT"/>
-            <result property="text" column="text" jdbcType="VARCHAR"/>
-            <result property="orderNumber" column="order_number" jdbcType="INTEGER"/>
-            <result property="publisherId" column="publisher_id" jdbcType="BIGINT"/>
-            <result property="publishTime" column="publish_time" jdbcType="TIMESTAMP"/>
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="questionId" column="question_id" jdbcType="BIGINT"/>
+        <result property="text" column="text" jdbcType="VARCHAR"/>
+        <result property="orderNumber" column="order_number" jdbcType="INTEGER"/>
+        <result property="publisherId" column="publisher_id" jdbcType="BIGINT"/>
+        <result property="publishTime" column="publish_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <sql id="Base_Column_List">

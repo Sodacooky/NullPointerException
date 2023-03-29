@@ -1,43 +1,40 @@
 package soda.npe.common.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.Date;
-import lombok.Data;
 
 /**
  * 用户关注的问题
+ *
  * @TableName user_question_subscription
  */
-@TableName(value ="user_question_subscription")
+@TableName(value = "user_question_subscription")
 @Data
 public class UserQuestionSubscription implements Serializable {
+    @TableField(exist = false)
+    private static final long serialVersionUID = 1L;
     /**
      * 订阅ID
      */
     @TableId
     private Long id;
-
     /**
      * 订阅人ID
      */
     private Long userId;
-
     /**
      * 所订阅的问题ID
      */
     private Long questionId;
-
     /**
      * 订阅时间
      */
     private Date time;
-
-    @TableField(exist = false)
-    private static final long serialVersionUID = 1L;
 
     @Override
     public boolean equals(Object that) {
@@ -52,9 +49,9 @@ public class UserQuestionSubscription implements Serializable {
         }
         UserQuestionSubscription other = (UserQuestionSubscription) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getUserId() == null ? other.getUserId() == null : this.getUserId().equals(other.getUserId()))
-            && (this.getQuestionId() == null ? other.getQuestionId() == null : this.getQuestionId().equals(other.getQuestionId()))
-            && (this.getTime() == null ? other.getTime() == null : this.getTime().equals(other.getTime()));
+                && (this.getUserId() == null ? other.getUserId() == null : this.getUserId().equals(other.getUserId()))
+                && (this.getQuestionId() == null ? other.getQuestionId() == null : this.getQuestionId().equals(other.getQuestionId()))
+                && (this.getTime() == null ? other.getTime() == null : this.getTime().equals(other.getTime()));
     }
 
     @Override

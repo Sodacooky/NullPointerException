@@ -15,12 +15,12 @@ import java.util.List;
 public interface QuestionAnswerMapper extends BaseMapper<QuestionAnswer> {
 
     List<QuestionAnswer> getOfQuestionByApproval(@Param("questionId") Long questionId,
-                                                @Param("page") Integer page,
-                                                @Param("pageSize") Integer pageSize,
-                                                @Param("isAsc") Boolean isAsc);
+                                                 @Param("page") Integer page,
+                                                 @Param("pageSize") Integer pageSize,
+                                                 @Param("isAsc") Boolean isAsc);
 
     List<QuestionAnswer> searchAnswerByApproval(@Param("keyword") String keyword,
-                                                @Param("page")Integer page,
+                                                @Param("page") Integer page,
                                                 @Param("isAsc") Boolean isAsc);
 
 }

@@ -1,7 +1,6 @@
 package soda.npe.servicequestion.controller;
 
 import jakarta.annotation.Resource;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,8 +8,10 @@ import soda.npe.common.controller.RestResponse;
 import soda.npe.servicequestion.service.QuestionAnswerService;
 import soda.npe.servicequestion.service.QuestionInfoService;
 
+/**
+ * 处理问题相关的搜索，包括问题搜索和答案搜索
+ */
 @RestController
-@Slf4j
 @RequestMapping("/search")
 public class SearchController {
 
@@ -28,11 +29,11 @@ public class SearchController {
      * @param isAsc   是否时间升序（从旧到新）
      * @return 当前页下，找到的问题实体列表
      */
-    @GetMapping("/infoByTime")
-    public RestResponse infoByTime(String keyword, Integer page, Boolean isAsc) {
+    @GetMapping("/questionInfoByTime")
+    public RestResponse questionInfoByTime(String keyword, Integer page, Boolean isAsc) {
         if (page == null || page < 1) page = 1;
         if (isAsc == null) isAsc = false;
-        return RestResponse.ok(null, questionInfoService.searchInfoByTime(keyword, page, isAsc));
+        return RestResponse.ok(null, questionInfoService.searchByTime(keyword, page, isAsc));
     }
 
     /**
@@ -43,39 +44,41 @@ public class SearchController {
      * @param isAsc   是否数量升序（从少到多）
      * @return 当前页下，找到的问题实体列表
      */
-    @GetMapping("/infoBySubscriptionAmount")
-    public RestResponse infoBySubscriptionAmount(String keyword, Integer page, Boolean isAsc) {
+    @GetMapping("/questionInfoBySubscriptionAmount")
+    public RestResponse questionInfoBySubscriptionAmount(String keyword, Integer page, Boolean isAsc) {
         if (page == null || page < 1) page = 1;
         if (isAsc == null) isAsc = false;
-        return RestResponse.ok(null, questionInfoService.searchInfoBySubscriptionAmount(keyword, page, isAsc));
+        return RestResponse.ok(null, questionInfoService.searchBySubscriptionAmount(keyword, page, isAsc));
     }
 
     /**
      * 按照时间顺序搜索答案
+     *
      * @param keyword 关键词
-     * @param page 页
-     * @param isAsc 是否时间升序（从旧到新）
+     * @param page    页
+     * @param isAsc   是否时间升序（从旧到新）
      * @return 当前页下，找到的回答实体列表
      */
     @GetMapping("/answerByTime")
-    public RestResponse answerByTime(String keyword,Integer page,Boolean isAsc){
+    public RestResponse answerByTime(String keyword, Integer page, Boolean isAsc) {
         if (page == null || page < 1) page = 1;
         if (isAsc == null) isAsc = false;
-        return RestResponse.ok(null, questionAnswerService.searchAnswerByTime(keyword,page,isAsc));
+        return RestResponse.ok(null, questionAnswerService.searchByTime(keyword, page, isAsc));
     }
 
     /**
      * 按照点赞数量顺序搜索答案
+     *
      * @param keyword 关键词
-     * @param page 页
-     * @param isAsc 是否升序（从少到多）
+     * @param page    页
+     * @param isAsc   是否升序（从少到多）
      * @return 当前页下，找到的回答实体列表
      */
     @GetMapping("/answerByApproval")
-    public RestResponse answerByApproval(String keyword,Integer page,Boolean isAsc){
+    public RestResponse answerByApproval(String keyword, Integer page, Boolean isAsc) {
         if (page == null || page < 1) page = 1;
         if (isAsc == null) isAsc = false;
-        return RestResponse.ok(null, questionAnswerService.searchAnswerByApproval(keyword,page,isAsc));
+        return RestResponse.ok(null, questionAnswerService.searchByApproval(keyword, page, isAsc));
     }
 
 }

@@ -1,53 +1,48 @@
 package soda.npe.common.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.Date;
-import lombok.Data;
 
 /**
  * 文章
+ *
  * @TableName article
  */
-@TableName(value ="article")
+@TableName(value = "article")
 @Data
 public class Article implements Serializable {
+    @TableField(exist = false)
+    private static final long serialVersionUID = 1L;
     /**
      * 文章ID
      */
     @TableId
     private Long id;
-
     /**
      * 文章标题
      */
     private String title;
-
     /**
      * 文章正文
      */
     private String text;
-
     /**
      * 文章的分类
      */
     private String category;
-
     /**
      * 发布者用户ID
      */
     private Long publisherId;
-
     /**
      * 发布时间
      */
     private Date publishTime;
-
-    @TableField(exist = false)
-    private static final long serialVersionUID = 1L;
 
     @Override
     public boolean equals(Object that) {
@@ -62,11 +57,11 @@ public class Article implements Serializable {
         }
         Article other = (Article) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getTitle() == null ? other.getTitle() == null : this.getTitle().equals(other.getTitle()))
-            && (this.getText() == null ? other.getText() == null : this.getText().equals(other.getText()))
-            && (this.getCategory() == null ? other.getCategory() == null : this.getCategory().equals(other.getCategory()))
-            && (this.getPublisherId() == null ? other.getPublisherId() == null : this.getPublisherId().equals(other.getPublisherId()))
-            && (this.getPublishTime() == null ? other.getPublishTime() == null : this.getPublishTime().equals(other.getPublishTime()));
+                && (this.getTitle() == null ? other.getTitle() == null : this.getTitle().equals(other.getTitle()))
+                && (this.getText() == null ? other.getText() == null : this.getText().equals(other.getText()))
+                && (this.getCategory() == null ? other.getCategory() == null : this.getCategory().equals(other.getCategory()))
+                && (this.getPublisherId() == null ? other.getPublisherId() == null : this.getPublisherId().equals(other.getPublisherId()))
+                && (this.getPublishTime() == null ? other.getPublishTime() == null : this.getPublishTime().equals(other.getPublishTime()));
     }
 
     @Override

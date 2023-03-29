@@ -5,10 +5,10 @@
 <mapper namespace="soda.npe.common.mapper.ApprovalArticleMapper">
 
     <resultMap id="BaseResultMap" type="soda.npe.common.entity.ApprovalArticle">
-            <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="userId" column="user_id" jdbcType="BIGINT"/>
-            <result property="articleId" column="article_id" jdbcType="BIGINT"/>
-            <result property="time" column="time" jdbcType="TIMESTAMP"/>
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="userId" column="user_id" jdbcType="BIGINT"/>
+        <result property="articleId" column="article_id" jdbcType="BIGINT"/>
+        <result property="time" column="time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <sql id="Base_Column_List">

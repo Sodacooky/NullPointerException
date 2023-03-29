@@ -1,48 +1,44 @@
 package soda.npe.common.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.Date;
-import lombok.Data;
 
 /**
  * 文章回复
+ *
  * @TableName article_reply
  */
-@TableName(value ="article_reply")
+@TableName(value = "article_reply")
 @Data
 public class ArticleReply implements Serializable {
+    @TableField(exist = false)
+    private static final long serialVersionUID = 1L;
     /**
      * 回复ID
      */
     @TableId
     private Long id;
-
     /**
      * 回复的目标文章ID，如果回复的是其他回复请保持NULL
      */
     private Long goalArticleId;
-
     /**
      * 回复的内容正文
      */
     private String text;
-
     /**
      * 回复者ID
      */
     private Long publisherId;
-
     /**
      * 发布时间
      */
     private Date publishTime;
-
-    @TableField(exist = false)
-    private static final long serialVersionUID = 1L;
 
     @Override
     public boolean equals(Object that) {
@@ -57,10 +53,10 @@ public class ArticleReply implements Serializable {
         }
         ArticleReply other = (ArticleReply) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getGoalArticleId() == null ? other.getGoalArticleId() == null : this.getGoalArticleId().equals(other.getGoalArticleId()))
-            && (this.getText() == null ? other.getText() == null : this.getText().equals(other.getText()))
-            && (this.getPublisherId() == null ? other.getPublisherId() == null : this.getPublisherId().equals(other.getPublisherId()))
-            && (this.getPublishTime() == null ? other.getPublishTime() == null : this.getPublishTime().equals(other.getPublishTime()));
+                && (this.getGoalArticleId() == null ? other.getGoalArticleId() == null : this.getGoalArticleId().equals(other.getGoalArticleId()))
+                && (this.getText() == null ? other.getText() == null : this.getText().equals(other.getText()))
+                && (this.getPublisherId() == null ? other.getPublisherId() == null : this.getPublisherId().equals(other.getPublisherId()))
+                && (this.getPublishTime() == null ? other.getPublishTime() == null : this.getPublishTime().equals(other.getPublishTime()));
     }
 
     @Override

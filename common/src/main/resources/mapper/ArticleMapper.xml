@@ -5,12 +5,12 @@
 <mapper namespace="soda.npe.common.mapper.ArticleMapper">
 
     <resultMap id="BaseResultMap" type="soda.npe.common.entity.Article">
-            <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="title" column="title" jdbcType="VARCHAR"/>
-            <result property="text" column="text" jdbcType="VARCHAR"/>
-            <result property="category" column="category" jdbcType="VARCHAR"/>
-            <result property="publisherId" column="publisher_id" jdbcType="BIGINT"/>
-            <result property="publishTime" column="publish_time" jdbcType="TIMESTAMP"/>
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="title" column="title" jdbcType="VARCHAR"/>
+        <result property="text" column="text" jdbcType="VARCHAR"/>
+        <result property="category" column="category" jdbcType="VARCHAR"/>
+        <result property="publisherId" column="publisher_id" jdbcType="BIGINT"/>
+        <result property="publishTime" column="publish_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <sql id="Base_Column_List">

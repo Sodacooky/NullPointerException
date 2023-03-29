@@ -5,12 +5,12 @@
 <mapper namespace="soda.npe.common.mapper.UserInfoMapper">
 
     <resultMap id="BaseResultMap" type="soda.npe.common.entity.UserInfo">
-            <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="nickname" column="nickname" jdbcType="VARCHAR"/>
-            <result property="description" column="description" jdbcType="VARCHAR"/>
-            <result property="avatar" column="avatar" jdbcType="VARCHAR"/>
-            <result property="registerTime" column="register_time" jdbcType="TIMESTAMP"/>
-            <result property="isBanned" column="is_banned" jdbcType="TINYINT"/>
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="nickname" column="nickname" jdbcType="VARCHAR"/>
+        <result property="description" column="description" jdbcType="VARCHAR"/>
+        <result property="avatar" column="avatar" jdbcType="VARCHAR"/>
+        <result property="registerTime" column="register_time" jdbcType="TIMESTAMP"/>
+        <result property="isBanned" column="is_banned" jdbcType="TINYINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">

@@ -20,9 +20,9 @@ public interface QuestionInfoMapper extends BaseMapper<QuestionInfo> {
                                         @Param("isAsc") Boolean isAsc);
 
     List<QuestionInfo> searchInfoBySubscriptionAmount(@Param("keyword") String keyword,
-                                        @Param("page") Integer page,
-                                        @Param("pageSize") Integer pageSize,
-                                        @Param("isAsc") Boolean isAsc);
+                                                      @Param("page") Integer page,
+                                                      @Param("pageSize") Integer pageSize,
+                                                      @Param("isAsc") Boolean isAsc);
 
 }
 

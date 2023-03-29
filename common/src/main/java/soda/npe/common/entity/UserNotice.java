@@ -1,53 +1,48 @@
 package soda.npe.common.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.Date;
-import lombok.Data;
 
 /**
  * 用户消息
+ *
  * @TableName user_notice
  */
-@TableName(value ="user_notice")
+@TableName(value = "user_notice")
 @Data
 public class UserNotice implements Serializable {
+    @TableField(exist = false)
+    private static final long serialVersionUID = 1L;
     /**
      * 消息id
      */
     @TableId
     private Long id;
-
     /**
      * 接收消息的用户的ID
      */
     private Long goalUserId;
-
     /**
      * 消息标题
      */
     private String title;
-
     /**
      * 正文
      */
     private String text;
-
     /**
      * 通知时间
      */
     private Date time;
-
     /**
      * 是否已读消息
      */
     private Integer isRead;
-
-    @TableField(exist = false)
-    private static final long serialVersionUID = 1L;
 
     @Override
     public boolean equals(Object that) {
@@ -62,11 +57,11 @@ public class UserNotice implements Serializable {
         }
         UserNotice other = (UserNotice) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getGoalUserId() == null ? other.getGoalUserId() == null : this.getGoalUserId().equals(other.getGoalUserId()))
-            && (this.getTitle() == null ? other.getTitle() == null : this.getTitle().equals(other.getTitle()))
-            && (this.getText() == null ? other.getText() == null : this.getText().equals(other.getText()))
-            && (this.getTime() == null ? other.getTime() == null : this.getTime().equals(other.getTime()))
-            && (this.getIsRead() == null ? other.getIsRead() == null : this.getIsRead().equals(other.getIsRead()));
+                && (this.getGoalUserId() == null ? other.getGoalUserId() == null : this.getGoalUserId().equals(other.getGoalUserId()))
+                && (this.getTitle() == null ? other.getTitle() == null : this.getTitle().equals(other.getTitle()))
+                && (this.getText() == null ? other.getText() == null : this.getText().equals(other.getText()))
+                && (this.getTime() == null ? other.getTime() == null : this.getTime().equals(other.getTime()))
+                && (this.getIsRead() == null ? other.getIsRead() == null : this.getIsRead().equals(other.getIsRead()));
     }
 
     @Override

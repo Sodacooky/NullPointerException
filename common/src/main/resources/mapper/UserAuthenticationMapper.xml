@@ -5,9 +5,9 @@
 <mapper namespace="soda.npe.common.mapper.UserAuthenticationMapper">
 
     <resultMap id="BaseResultMap" type="soda.npe.common.entity.UserAuthentication">
-            <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="email" column="email" jdbcType="VARCHAR"/>
-            <result property="password" column="password" jdbcType="VARCHAR"/>
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="email" column="email" jdbcType="VARCHAR"/>
+        <result property="password" column="password" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="Base_Column_List">
