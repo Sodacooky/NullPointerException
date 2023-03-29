@@ -4,32 +4,34 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.Date;
-import lombok.Data;
 
 /**
  * 文章回复
+ *
  * @TableName article_reply
  */
-@TableName(value ="article_reply")
+@TableName(value = "article_reply")
 @Data
 public class ArticleReply implements Serializable {
     /**
      * 回复ID
      */
-    @TableId
-    private String id;
+    @TableId(type = IdType.ASSIGN_ID)
+    private Long id;
 
     /**
      * 回复的目标文章ID，如果回复的是其他回复请保持NULL
      */
-    private String goalArticleId;
+    private Long goalArticleId;
 
     /**
      * 回复的目标回复的ID，如果回复的是文章请保持NULL
      */
-    private String goalReplyId;
+    private Long goalReplyId;
 
     /**
      * 回复的内容正文
@@ -39,7 +41,7 @@ public class ArticleReply implements Serializable {
     /**
      * 回复者ID
      */
-    private String publisherId;
+    private Long publisherId;
 
     /**
      * 发布时间
@@ -62,11 +64,11 @@ public class ArticleReply implements Serializable {
         }
         ArticleReply other = (ArticleReply) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getGoalArticleId() == null ? other.getGoalArticleId() == null : this.getGoalArticleId().equals(other.getGoalArticleId()))
-            && (this.getGoalReplyId() == null ? other.getGoalReplyId() == null : this.getGoalReplyId().equals(other.getGoalReplyId()))
-            && (this.getText() == null ? other.getText() == null : this.getText().equals(other.getText()))
-            && (this.getPublisherId() == null ? other.getPublisherId() == null : this.getPublisherId().equals(other.getPublisherId()))
-            && (this.getPublishTime() == null ? other.getPublishTime() == null : this.getPublishTime().equals(other.getPublishTime()));
+                && (this.getGoalArticleId() == null ? other.getGoalArticleId() == null : this.getGoalArticleId().equals(other.getGoalArticleId()))
+                && (this.getGoalReplyId() == null ? other.getGoalReplyId() == null : this.getGoalReplyId().equals(other.getGoalReplyId()))
+                && (this.getText() == null ? other.getText() == null : this.getText().equals(other.getText()))
+                && (this.getPublisherId() == null ? other.getPublisherId() == null : this.getPublisherId().equals(other.getPublisherId()))
+                && (this.getPublishTime() == null ? other.getPublishTime() == null : this.getPublishTime().equals(other.getPublishTime()));
     }
 
     @Override

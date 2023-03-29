@@ -5,9 +5,9 @@
 <mapper namespace="soda.npe.common.mapper.QuestionInfoMapper">
 
     <resultMap id="BaseResultMap" type="soda.npe.common.entity.QuestionInfo">
-            <id property="id" column="id" jdbcType="VARCHAR"/>
+            <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="title" column="title" jdbcType="VARCHAR"/>
-            <result property="publisherId" column="publisher_id" jdbcType="VARCHAR"/>
+            <result property="publisherId" column="publisher_id" jdbcType="BIGINT"/>
             <result property="publishTime" column="publish_time" jdbcType="TIMESTAMP"/>
             <result property="category" column="category" jdbcType="VARCHAR"/>
     </resultMap>

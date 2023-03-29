@@ -4,22 +4,24 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.Date;
-import lombok.Data;
 
 /**
  * 用户基本信息表
+ *
  * @TableName user_info
  */
-@TableName(value ="user_info")
+@TableName(value = "user_info")
 @Data
 public class UserInfo implements Serializable {
     /**
-     * 用户的ID，UUID，没有横杠
+     * 用户的ID
      */
-    @TableId
-    private String id;
+    @TableId(type = IdType.ASSIGN_ID)
+    private Long id;
 
     /**
      * 昵称，要求系统中唯一
@@ -62,11 +64,11 @@ public class UserInfo implements Serializable {
         }
         UserInfo other = (UserInfo) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getNickname() == null ? other.getNickname() == null : this.getNickname().equals(other.getNickname()))
-            && (this.getDescription() == null ? other.getDescription() == null : this.getDescription().equals(other.getDescription()))
-            && (this.getAvatar() == null ? other.getAvatar() == null : this.getAvatar().equals(other.getAvatar()))
-            && (this.getRegisterTime() == null ? other.getRegisterTime() == null : this.getRegisterTime().equals(other.getRegisterTime()))
-            && (this.getIsBanned() == null ? other.getIsBanned() == null : this.getIsBanned().equals(other.getIsBanned()));
+                && (this.getNickname() == null ? other.getNickname() == null : this.getNickname().equals(other.getNickname()))
+                && (this.getDescription() == null ? other.getDescription() == null : this.getDescription().equals(other.getDescription()))
+                && (this.getAvatar() == null ? other.getAvatar() == null : this.getAvatar().equals(other.getAvatar()))
+                && (this.getRegisterTime() == null ? other.getRegisterTime() == null : this.getRegisterTime().equals(other.getRegisterTime()))
+                && (this.getIsBanned() == null ? other.getIsBanned() == null : this.getIsBanned().equals(other.getIsBanned()));
     }
 
     @Override

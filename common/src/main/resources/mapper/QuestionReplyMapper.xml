@@ -5,11 +5,11 @@
 <mapper namespace="soda.npe.common.mapper.QuestionReplyMapper">
 
     <resultMap id="BaseResultMap" type="soda.npe.common.entity.QuestionReply">
-            <id property="id" column="id" jdbcType="VARCHAR"/>
-            <result property="goalAnswerId" column="goal_answer_id" jdbcType="VARCHAR"/>
-            <result property="goalReplyId" column="goal_reply_id" jdbcType="VARCHAR"/>
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="goalAnswerId" column="goal_answer_id" jdbcType="BIGINT"/>
+            <result property="goalReplyId" column="goal_reply_id" jdbcType="BIGINT"/>
             <result property="text" column="text" jdbcType="VARCHAR"/>
-            <result property="publisherId" column="publisher_id" jdbcType="VARCHAR"/>
+            <result property="publisherId" column="publisher_id" jdbcType="BIGINT"/>
             <result property="publishTime" column="publish_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 

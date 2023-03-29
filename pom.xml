@@ -19,6 +19,7 @@
         <!--        数据库、Redis操作、实体类等公共模块-->
         <module>common</module>
         <!--        各个子服务-->
+        <module>service-miscellaneous</module>
         <module>service-question</module>
         <module>service-article</module>
         <module>service-authc</module>

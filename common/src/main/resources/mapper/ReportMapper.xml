@@ -5,17 +5,17 @@
 <mapper namespace="soda.npe.common.mapper.ReportMapper">
 
     <resultMap id="BaseResultMap" type="soda.npe.common.entity.Report">
-            <id property="id" column="id" jdbcType="VARCHAR"/>
-            <result property="goalUserId" column="goal_user_id" jdbcType="VARCHAR"/>
-            <result property="goalArticleId" column="goal_article_id" jdbcType="VARCHAR"/>
-            <result property="goalArticleReplyId" column="goal_article_reply_id" jdbcType="VARCHAR"/>
-            <result property="goalQuestionId" column="goal_question_id" jdbcType="VARCHAR"/>
-            <result property="goalQuestionReplyId" column="goal_question_reply_id" jdbcType="VARCHAR"/>
-            <result property="goalQuestionAnswerId" column="goal_question_answer_id" jdbcType="VARCHAR"/>
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="goalUserId" column="goal_user_id" jdbcType="BIGINT"/>
+            <result property="goalArticleId" column="goal_article_id" jdbcType="BIGINT"/>
+            <result property="goalArticleReplyId" column="goal_article_reply_id" jdbcType="BIGINT"/>
+            <result property="goalQuestionId" column="goal_question_id" jdbcType="BIGINT"/>
+            <result property="goalQuestionReplyId" column="goal_question_reply_id" jdbcType="BIGINT"/>
+            <result property="goalQuestionAnswerId" column="goal_question_answer_id" jdbcType="BIGINT"/>
             <result property="time" column="time" jdbcType="TIMESTAMP"/>
             <result property="comment" column="comment" jdbcType="VARCHAR"/>
             <result property="isProcessed" column="is_processed" jdbcType="TINYINT"/>
-            <result property="reporterId" column="reporter_id" jdbcType="VARCHAR"/>
+            <result property="reporterId" column="reporter_id" jdbcType="BIGINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">

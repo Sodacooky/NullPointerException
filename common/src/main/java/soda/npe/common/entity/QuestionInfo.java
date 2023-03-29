@@ -4,22 +4,24 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.Date;
-import lombok.Data;
 
 /**
  * 问题的信息
+ *
  * @TableName question_info
  */
-@TableName(value ="question_info")
+@TableName(value = "question_info")
 @Data
 public class QuestionInfo implements Serializable {
     /**
      * 问题的ID
      */
-    @TableId
-    private String id;
+    @TableId(type = IdType.ASSIGN_ID)
+    private Long id;
 
     /**
      * 问题的标题、概述
@@ -29,7 +31,7 @@ public class QuestionInfo implements Serializable {
     /**
      * 发布者用户的ID
      */
-    private String publisherId;
+    private Long publisherId;
 
     /**
      * 发布的时间
@@ -57,10 +59,10 @@ public class QuestionInfo implements Serializable {
         }
         QuestionInfo other = (QuestionInfo) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getTitle() == null ? other.getTitle() == null : this.getTitle().equals(other.getTitle()))
-            && (this.getPublisherId() == null ? other.getPublisherId() == null : this.getPublisherId().equals(other.getPublisherId()))
-            && (this.getPublishTime() == null ? other.getPublishTime() == null : this.getPublishTime().equals(other.getPublishTime()))
-            && (this.getCategory() == null ? other.getCategory() == null : this.getCategory().equals(other.getCategory()));
+                && (this.getTitle() == null ? other.getTitle() == null : this.getTitle().equals(other.getTitle()))
+                && (this.getPublisherId() == null ? other.getPublisherId() == null : this.getPublisherId().equals(other.getPublisherId()))
+                && (this.getPublishTime() == null ? other.getPublishTime() == null : this.getPublishTime().equals(other.getPublishTime()))
+                && (this.getCategory() == null ? other.getCategory() == null : this.getCategory().equals(other.getCategory()));
     }
 
     @Override

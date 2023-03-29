@@ -4,32 +4,34 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.Date;
-import lombok.Data;
 
 /**
  * 用户对文章赞的记录
+ *
  * @TableName approval_article
  */
-@TableName(value ="approval_article")
+@TableName(value = "approval_article")
 @Data
 public class ApprovalArticle implements Serializable {
     /**
      * 点赞记录ID
      */
-    @TableId
-    private String id;
+    @TableId(type = IdType.ASSIGN_ID)
+    private Long id;
 
     /**
      * 用户ID
      */
-    private String userId;
+    private Long userId;
 
     /**
      * 文章ID
      */
-    private String articleId;
+    private Long articleId;
 
     /**
      * 点赞时间
@@ -52,9 +54,9 @@ public class ApprovalArticle implements Serializable {
         }
         ApprovalArticle other = (ApprovalArticle) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getUserId() == null ? other.getUserId() == null : this.getUserId().equals(other.getUserId()))
-            && (this.getArticleId() == null ? other.getArticleId() == null : this.getArticleId().equals(other.getArticleId()))
-            && (this.getTime() == null ? other.getTime() == null : this.getTime().equals(other.getTime()));
+                && (this.getUserId() == null ? other.getUserId() == null : this.getUserId().equals(other.getUserId()))
+                && (this.getArticleId() == null ? other.getArticleId() == null : this.getArticleId().equals(other.getArticleId()))
+                && (this.getTime() == null ? other.getTime() == null : this.getTime().equals(other.getTime()));
     }
 
     @Override

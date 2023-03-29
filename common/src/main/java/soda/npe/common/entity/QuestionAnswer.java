@@ -4,27 +4,29 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.Date;
-import lombok.Data;
 
 /**
  * 对问题的回答，包括一楼的问题详细内容
+ *
  * @TableName question_answer
  */
-@TableName(value ="question_answer")
+@TableName(value = "question_answer")
 @Data
 public class QuestionAnswer implements Serializable {
     /**
      * 回答的ID
      */
-    @TableId
-    private String id;
+    @TableId(type = IdType.ASSIGN_ID)
+    private Long id;
 
     /**
      * 问题的ID
      */
-    private String questionId;
+    private Long questionId;
 
     /**
      * 回答的正文
@@ -39,7 +41,7 @@ public class QuestionAnswer implements Serializable {
     /**
      * 发布回答用户的ID
      */
-    private String publisherId;
+    private Long publisherId;
 
     /**
      * 发布时间
@@ -62,11 +64,11 @@ public class QuestionAnswer implements Serializable {
         }
         QuestionAnswer other = (QuestionAnswer) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getQuestionId() == null ? other.getQuestionId() == null : this.getQuestionId().equals(other.getQuestionId()))
-            && (this.getText() == null ? other.getText() == null : this.getText().equals(other.getText()))
-            && (this.getOrderNumber() == null ? other.getOrderNumber() == null : this.getOrderNumber().equals(other.getOrderNumber()))
-            && (this.getPublisherId() == null ? other.getPublisherId() == null : this.getPublisherId().equals(other.getPublisherId()))
-            && (this.getPublishTime() == null ? other.getPublishTime() == null : this.getPublishTime().equals(other.getPublishTime()));
+                && (this.getQuestionId() == null ? other.getQuestionId() == null : this.getQuestionId().equals(other.getQuestionId()))
+                && (this.getText() == null ? other.getText() == null : this.getText().equals(other.getText()))
+                && (this.getOrderNumber() == null ? other.getOrderNumber() == null : this.getOrderNumber().equals(other.getOrderNumber()))
+                && (this.getPublisherId() == null ? other.getPublisherId() == null : this.getPublisherId().equals(other.getPublisherId()))
+                && (this.getPublishTime() == null ? other.getPublishTime() == null : this.getPublishTime().equals(other.getPublishTime()));
     }
 
     @Override

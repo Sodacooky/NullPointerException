@@ -5,9 +5,9 @@
 <mapper namespace="soda.npe.common.mapper.ApprovalAnswerMapper">
 
     <resultMap id="BaseResultMap" type="soda.npe.common.entity.ApprovalAnswer">
-            <id property="id" column="id" jdbcType="VARCHAR"/>
-            <result property="userId" column="user_id" jdbcType="VARCHAR"/>
-            <result property="answerId" column="answer_id" jdbcType="VARCHAR"/>
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="userId" column="user_id" jdbcType="BIGINT"/>
+            <result property="answerId" column="answer_id" jdbcType="BIGINT"/>
             <result property="time" column="time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
