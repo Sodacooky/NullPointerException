@@ -5,15 +5,54 @@
 <mapper namespace="soda.npe.common.mapper.QuestionInfoMapper">
 
     <resultMap id="BaseResultMap" type="soda.npe.common.entity.QuestionInfo">
-            <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="title" column="title" jdbcType="VARCHAR"/>
-            <result property="publisherId" column="publisher_id" jdbcType="BIGINT"/>
-            <result property="publishTime" column="publish_time" jdbcType="TIMESTAMP"/>
-            <result property="category" column="category" jdbcType="VARCHAR"/>
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="title" column="title" jdbcType="VARCHAR"/>
+        <result property="publisherId" column="publisher_id" jdbcType="BIGINT"/>
+        <result property="publishTime" column="publish_time" jdbcType="TIMESTAMP"/>
+        <result property="category" column="category" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         id,title,publisher_id,
         publish_time,category
     </sql>
+
+    <select id="searchInfoByTime" resultType="soda.npe.common.entity.QuestionInfo">
+        select *
+        from question_info qi
+
+        left join question_answer qa on qi.id = qa.question_id and qa.order_number = 0
+
+        where qi.title like concat('%', #{keyword}, '%')
+        or qi.category like concat('%', #{keyword}, '%')
+        or qa.text like concat('%', #{keyword}, '%')
+
+        order by qi.publish_time
+        <if test="!isAsc">desc</if>
+
+        limit ${pageSize*(page-1)},#{pageSize}
+    </select>
+
+    <select id="searchInfoBySubscriptionAmount" resultType="soda.npe.common.entity.QuestionInfo">
+        select *
+        from question_info qi
+
+        left join
+        (select question_id, count(id) from user_question_subscription group by question_id) sub_amount
+        on qi.id = sub_amount.question_id
+
+        left join
+        question_answer qa
+        on qi.id = qa.question_id and qa.order_number = 0
+
+        where qi.title like concat('%', #{keyword}, '%')
+        or qi.category like concat('%', #{keyword}, '%')
+        or qa.text like concat('%', #{keyword}, '%')
+
+        order by qi.publish_time
+        <if test="!isAsc">desc</if>
+
+        limit ${pageSize*(page-1)},#{pageSize}
+    </select>
+
 </mapper>
