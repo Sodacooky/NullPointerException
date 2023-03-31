@@ -5,6 +5,7 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.jwt.JWT;
 import cn.hutool.jwt.JWTUtil;
 import jakarta.annotation.Resource;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
@@ -19,7 +20,9 @@ import java.util.Map;
 public class JwtAuthUtil {
 
     @Resource
+    @Qualifier("jwtRedisTemplate")
     private StringRedisTemplate jwtRedisTemplate;
+
 
     public String createToken(Map<String, Object> payload) {
         //generate key
