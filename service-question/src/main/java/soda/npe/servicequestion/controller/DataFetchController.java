@@ -8,6 +8,7 @@ import soda.npe.common.entity.QuestionInfo;
 import soda.npe.servicequestion.service.QuestionAnswerService;
 import soda.npe.servicequestion.service.QuestionInfoService;
 import soda.npe.servicequestion.service.QuestionReplyService;
+import soda.npe.servicequestion.service.UserQuestionSubscriptionService;
 
 /**
  * 处理问题相关的（包括问题、首页的问题列表、问题的回答、回答的回复）内容读取控制器
@@ -21,6 +22,9 @@ public class DataFetchController {
     private QuestionInfoService questionInfoService;
     @Resource
     private QuestionReplyService questionReplyService;
+
+    @Resource
+    private UserQuestionSubscriptionService userQuestionSubscriptionService;
 
     /**
      * 以从新到就的顺序，获取指定用户发表过的问题
@@ -98,10 +102,10 @@ public class DataFetchController {
      * @param questionId 问题ID
      * @return 回答数量
      */
-    @GetMapping("/getAnswerAmountOfQuestion")
-    public RestResponse getAnswerAmountOfQuestion(Long questionId) {
+    @GetMapping("/getAnswerAmountOf")
+    public RestResponse getAnswerAmountOf(Long questionId) {
         if (questionId == null) return RestResponse.fail(1, "questionId is null");
-        return RestResponse.ok(null, questionInfoService.getAnswerAmount(questionId));
+        return RestResponse.ok(null, questionAnswerService.getAnswerAmountOf(questionId));
     }
 
     /**
@@ -110,10 +114,10 @@ public class DataFetchController {
      * @param questionId 问题ID
      * @return 订阅人数
      */
-    @GetMapping("/getSubscriptionAmountOfQuestion")
-    public RestResponse getSubscriptionAmountOfQuestion(Long questionId) {
+    @GetMapping("/getSubscriptionAmountOf")
+    public RestResponse getSubscriptionAmountOf(Long questionId) {
         if (questionId == null) return RestResponse.fail(1, "questionId is null");
-        return RestResponse.ok(null, questionInfoService.getSubscriptionAmount(questionId));
+        return RestResponse.ok(null, userQuestionSubscriptionService.getSubscriptionAmountOf(questionId));
     }
 
     /**
@@ -124,11 +128,11 @@ public class DataFetchController {
      * @param isAsc      asc
      * @return 答案实体列表
      */
-    @GetMapping("/getAnswerOfQuestionByTime")
-    public RestResponse getAnswerOfQuestionByTime(Long questionId, Integer page, Boolean isAsc) {
+    @GetMapping("/getAnswerByTimeOf")
+    public RestResponse getAnswerByTimeOf(Long questionId, Integer page, Boolean isAsc) {
         if (questionId == null) return RestResponse.fail(1, "未指定问题");
         if (page == null || page < 1) page = 1;
-        return RestResponse.ok(null, questionAnswerService.getOfQuestionByTime(questionId, page, isAsc));
+        return RestResponse.ok(null, questionAnswerService.getByTimeOf(questionId, page, isAsc));
     }
 
     /**
@@ -139,11 +143,11 @@ public class DataFetchController {
      * @param isAsc      asc
      * @return 答案实体列表
      */
-    @GetMapping("/getAnswerOfQuestionByApproval")
-    public RestResponse getAnswerOfQuestionByApproval(Long questionId, Integer page, Boolean isAsc) {
+    @GetMapping("/getAnswerByApprovalOf")
+    public RestResponse getAnswerByApprovalOf(Long questionId, Integer page, Boolean isAsc) {
         if (questionId == null) return RestResponse.fail(1, "未指定问题");
         if (page == null || page < 1) page = 1;
-        return RestResponse.ok(null, questionAnswerService.getOfQuestionByApproval(questionId, page, isAsc));
+        return RestResponse.ok(null, questionAnswerService.getByApprovalOf(questionId, page, isAsc));
     }
 
 

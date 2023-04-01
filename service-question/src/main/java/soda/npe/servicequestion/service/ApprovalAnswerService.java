@@ -6,7 +6,6 @@ import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import soda.npe.common.entity.ApprovalAnswer;
 import soda.npe.common.entity.UserInfo;
-import soda.npe.common.entity.UserQuestionSubscription;
 import soda.npe.common.mapper.ApprovalAnswerMapper;
 import soda.npe.common.mapper.UserInfoMapper;
 
@@ -18,7 +17,7 @@ public class ApprovalAnswerService extends ServiceImpl<ApprovalAnswerMapper, App
     @Resource
     private UserInfoMapper userInfoMapper;
 
-    public Boolean approve(Long answerId,Long userId){
+    public Boolean approve(Long answerId, Long userId) {
         //check user valid
         if (!userInfoMapper.exists(new LambdaQueryWrapper<UserInfo>().eq(UserInfo::getId, userId))) return false;
         //check already approved?
@@ -34,12 +33,12 @@ public class ApprovalAnswerService extends ServiceImpl<ApprovalAnswerMapper, App
         return this.save(newRecord);
     }
 
-    public Boolean unApprove(Long answerId,Long userId){
+    public Boolean unApprove(Long answerId, Long userId) {
         //check user valid
         if (!userInfoMapper.exists(new LambdaQueryWrapper<UserInfo>().eq(UserInfo::getId, userId))) return false;
         //check already subscribed?
         ApprovalAnswer approvalRecord = this.getOne(new LambdaQueryWrapper<ApprovalAnswer>()
-                .eq(ApprovalAnswer::getAnswerId, answerId )
+                .eq(ApprovalAnswer::getAnswerId, answerId)
                 .eq(ApprovalAnswer::getUserId, userId));
         if (approvalRecord == null) return false;
         //do unSubscription, remove record

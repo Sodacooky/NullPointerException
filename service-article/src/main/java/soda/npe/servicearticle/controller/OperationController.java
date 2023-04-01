@@ -1,4 +1,4 @@
-package soda.npe.servicequestion.controller;
+package soda.npe.servicearticle.controller;
 
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.GetMapping;

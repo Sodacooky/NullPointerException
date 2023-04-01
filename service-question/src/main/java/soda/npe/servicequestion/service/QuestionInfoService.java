@@ -34,18 +34,6 @@ public class QuestionInfoService extends ServiceImpl<QuestionInfoMapper, Questio
         else return null;
     }
 
-    public long getAnswerAmount(Long questionId) {
-        return questionAnswerMapper.selectCount(
-                new LambdaQueryWrapper<QuestionAnswer>()
-                        .eq(QuestionAnswer::getQuestionId, questionId));
-    }
-
-    public long getSubscriptionAmount(Long questionId) {
-        return userQuestionSubscriptionMapper.selectCount(
-                new LambdaQueryWrapper<UserQuestionSubscription>()
-                        .eq(UserQuestionSubscription::getQuestionId, questionId));
-    }
-
     public List<QuestionInfo> searchByTime(String keyword, Integer page, Boolean isAsc) {
         return getBaseMapper().searchInfoByTime(keyword, page, DBConstant.PAGE_SIZE, isAsc);
     }

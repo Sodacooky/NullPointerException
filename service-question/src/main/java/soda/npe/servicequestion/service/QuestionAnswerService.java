@@ -20,7 +20,7 @@ public class QuestionAnswerService extends ServiceImpl<QuestionAnswerMapper, Que
                         .last("limit " + (DBConstant.PAGE_SIZE * (page - 1)) + "," + DBConstant.PAGE_SIZE));
     }
 
-    public List<QuestionAnswer> getOfQuestionByTime(Long questionId, Integer page, Boolean isAsc) {
+    public List<QuestionAnswer> getByTimeOf(Long questionId, Integer page, Boolean isAsc) {
         return this.list(
                 new LambdaQueryWrapper<QuestionAnswer>()
                         .eq(QuestionAnswer::getQuestionId, questionId)
@@ -29,7 +29,7 @@ public class QuestionAnswerService extends ServiceImpl<QuestionAnswerMapper, Que
                         .last("limit " + (DBConstant.PAGE_SIZE * (page - 1)) + "," + DBConstant.PAGE_SIZE));
     }
 
-    public List<QuestionAnswer> getOfQuestionByApproval(Long questionId, Integer page, Boolean isAsc) {
+    public List<QuestionAnswer> getByApprovalOf(Long questionId, Integer page, Boolean isAsc) {
         return this.getBaseMapper().getOfQuestionByApproval(questionId, page, DBConstant.PAGE_SIZE, isAsc);
     }
 
@@ -43,6 +43,10 @@ public class QuestionAnswerService extends ServiceImpl<QuestionAnswerMapper, Que
 
     public List<QuestionAnswer> searchByApproval(String keyword, Integer page, Boolean isAsc) {
         return this.getBaseMapper().searchAnswerByApproval(keyword, page, isAsc);
+    }
+
+    public Long getAnswerAmountOf(Long questionId){
+        return this.count( new LambdaQueryWrapper<QuestionAnswer>().eq(QuestionAnswer::getQuestionId, questionId));
     }
 
 }
