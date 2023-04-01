@@ -17,4 +17,40 @@
         id,title,text,
         category,publisher_id,publish_time
     </sql>
+
+    <select id="searchByApproval" resultType="soda.npe.common.entity.Article">
+        select a.* from article a
+
+        left join
+        (select article_id, count(id) as amount from approval_article group by article_id) app_amount
+        on a.id = app_amount.article_id
+
+        where a.text like concat('%', #{keyword}, '%')
+        or a.category like concat('%', #{keyword}, '%')
+        or a.title like concat('%', #{keyword}, '%')
+
+        order by app_amount.amount
+        <if test="!isAsc">desc</if>
+
+        limit ${pageSize*(page-1)},#{pageSize}
+    </select>
+
+    <select id="searchByReplyAmount" resultType="soda.npe.common.entity.Article">
+        select a.*
+        from article a
+
+        left join
+        (select goal_article_id, count(id) as amount from article_reply ar group by ar.goal_article_id) ar_amount
+        on ar_amount.goal_article_id = a.id
+
+        where a.text like concat('%', #{keyword}, '%')
+        or a.category like concat('%', #{keyword}, '%')
+        or a.title like concat('%', #{keyword}, '%')
+
+        order by ar_amount.amount
+        <if test="!isAsc">desc</if>
+
+        limit ${pageSize*(page-1)},#{pageSize}
+    </select>
+
 </mapper>

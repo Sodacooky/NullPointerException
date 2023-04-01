@@ -29,8 +29,8 @@ public class SearchController {
      * @param isAsc   是否时间升序（从旧到新）
      * @return 当前页下，找到的问题实体列表
      */
-    @GetMapping("/questionInfoByTime")
-    public RestResponse questionInfoByTime(String keyword, Integer page, Boolean isAsc) {
+    @GetMapping("/infoByTime")
+    public RestResponse infoByTime(String keyword, Integer page, Boolean isAsc) {
         if (page == null || page < 1) page = 1;
         if (isAsc == null) isAsc = false;
         return RestResponse.ok(null, questionInfoService.searchByTime(keyword, page, isAsc));
@@ -44,8 +44,8 @@ public class SearchController {
      * @param isAsc   是否数量升序（从少到多）
      * @return 当前页下，找到的问题实体列表
      */
-    @GetMapping("/questionInfoBySubscriptionAmount")
-    public RestResponse questionInfoBySubscriptionAmount(String keyword, Integer page, Boolean isAsc) {
+    @GetMapping("/infoBySubscriptionAmount")
+    public RestResponse infoBySubscriptionAmount(String keyword, Integer page, Boolean isAsc) {
         if (page == null || page < 1) page = 1;
         if (isAsc == null) isAsc = false;
         return RestResponse.ok(null, questionInfoService.searchBySubscriptionAmount(keyword, page, isAsc));

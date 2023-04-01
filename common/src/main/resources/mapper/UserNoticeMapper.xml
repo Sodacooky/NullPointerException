@@ -5,16 +5,19 @@
 <mapper namespace="soda.npe.common.mapper.UserNoticeMapper">
 
     <resultMap id="BaseResultMap" type="soda.npe.common.entity.UserNotice">
-        <id property="id" column="id" jdbcType="BIGINT"/>
-        <result property="goalUserId" column="goal_user_id" jdbcType="BIGINT"/>
-        <result property="title" column="title" jdbcType="VARCHAR"/>
-        <result property="text" column="text" jdbcType="VARCHAR"/>
-        <result property="time" column="time" jdbcType="TIMESTAMP"/>
-        <result property="isRead" column="is_read" jdbcType="TINYINT"/>
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="goalUserId" column="goal_user_id" jdbcType="BIGINT"/>
+            <result property="type" column="type" jdbcType="VARCHAR"/>
+            <result property="title" column="title" jdbcType="VARCHAR"/>
+            <result property="text" column="text" jdbcType="VARCHAR"/>
+            <result property="time" column="time" jdbcType="TIMESTAMP"/>
+            <result property="jumpUrl" column="jump_url" jdbcType="VARCHAR"/>
+            <result property="isRead" column="is_read" jdbcType="TINYINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,goal_user_id,title,
-        text,time,is_read
+        id,goal_user_id,type,
+        title,text,time,
+        jump_url,is_read
     </sql>
 </mapper>
