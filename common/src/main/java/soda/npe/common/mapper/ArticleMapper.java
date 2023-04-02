@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 import soda.npe.common.entity.Article;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,6 +24,10 @@ public interface ArticleMapper extends BaseMapper<Article> {
                                       @Param("page") Integer page,
                                       @Param("pageSize") Integer pageSize,
                                       @Param("isAsc") Boolean isAsc);
+
+    List<Article> getWeeklyReplyTop100(@Param("weekStart") Date weekStart);
+
+    List<Article> getMonthlyReplyTop200(@Param("monthStart") Date monthStart);
 
 }
 

@@ -22,6 +22,8 @@ public class DataFetchController {
 
     @Resource
     private UserInfoService userInfoService;
+    @Value("${npe.avatar-path:./avatar/}")
+    private String avatarPath;
 
     /**
      * 获取用户信息
@@ -37,20 +39,17 @@ public class DataFetchController {
         return RestResponse.ok(null, found);
     }
 
-    @Value("${npe.avatar-path:./avatar/}")
-    private String avatarPath;
-
     @GetMapping("/avatar/{filename}")
-    public byte[] getUserAvatar(@PathVariable("filename") String filename)  {
+    public byte[] getUserAvatar(@PathVariable("filename") String filename) {
         //load file and check existence
         File toGetAvatarFile = new File(avatarPath, filename);
-        if (!toGetAvatarFile.exists() || !toGetAvatarFile.isFile()) return RestResponse.fail(1,"文件不存在").toString().getBytes();
+        if (!toGetAvatarFile.exists() || !toGetAvatarFile.isFile())
+            return RestResponse.fail(1, "文件不存在").toString().getBytes();
         //read as bytes
         try (var stream = new FileInputStream(toGetAvatarFile)) {
             return stream.readAllBytes();
-        }
-        catch (IOException e){
-            return RestResponse.fail(2,"读取文件出错").toString().getBytes();
+        } catch (IOException e) {
+            return RestResponse.fail(2, "读取文件出错").toString().getBytes();
         }
     }
 

@@ -1,5 +1,6 @@
 package soda.npe.common.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -20,7 +21,7 @@ public class UserAuthentication implements Serializable {
     /**
      * 用户id
      */
-    @TableId
+    @TableId(type = IdType.ASSIGN_UUID)
     private Long id;
     /**
      * 用户注册时的邮箱

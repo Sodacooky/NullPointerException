@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 import soda.npe.common.entity.QuestionInfo;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,6 +24,11 @@ public interface QuestionInfoMapper extends BaseMapper<QuestionInfo> {
                                                       @Param("page") Integer page,
                                                       @Param("pageSize") Integer pageSize,
                                                       @Param("isAsc") Boolean isAsc);
+
+
+    List<QuestionInfo> getWeeklyAnswerTop100(@Param("weekStart") Date weekStart);
+
+    List<QuestionInfo> getMonthlyAnswerTop200(@Param("monthStart") Date monthStart);
 
 }
 

@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"soda.npe.serviceauthc", "soda.npe.common"})
 @EnableDiscoveryClient
 @MapperScan("soda.npe.common.mapper")
 public class ServiceAuthcApplication {

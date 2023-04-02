@@ -53,4 +53,34 @@
         limit ${pageSize*(page-1)},#{pageSize}
     </select>
 
+    <select id="getWeeklyReplyTop100" resultType="soda.npe.common.entity.Article">
+        select a.*
+        from article a
+
+                 left join
+             (select goal_article_id, count(id) as amount from article_reply group by goal_article_id) ar_amount
+             on a.id = ar_amount.goal_article_id
+
+        where a.publish_time >= #{weekStart}
+
+        order by ar_amount.amount
+
+        limit 100
+    </select>
+
+    <select id="getMonthlyReplyTop200" resultType="soda.npe.common.entity.Article">
+        select a.*
+        from article a
+
+                 left join
+             (select goal_article_id, count(id) as amount from article_reply group by goal_article_id) ar_amount
+             on a.id = ar_amount.goal_article_id
+
+        where a.publish_time >= #{monthStart}
+
+        order by ar_amount.amount
+
+        limit 200
+    </select>
+
 </mapper>

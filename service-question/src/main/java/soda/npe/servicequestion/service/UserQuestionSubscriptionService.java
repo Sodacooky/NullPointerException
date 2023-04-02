@@ -47,7 +47,7 @@ public class UserQuestionSubscriptionService extends ServiceImpl<UserQuestionSub
                 .eq(UserQuestionSubscription::getUserId, userId));
     }
 
-    public Long getSubscriptionAmountOf(Long questionId){
+    public Long getSubscriptionAmountOf(Long questionId) {
         return this.count(new LambdaQueryWrapper<UserQuestionSubscription>().eq(UserQuestionSubscription::getQuestionId, questionId));
     }
 

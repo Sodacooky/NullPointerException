@@ -55,4 +55,34 @@
         limit ${pageSize*(page-1)},#{pageSize}
     </select>
 
+    <select id="getWeeklyAnswerTop100" resultType="soda.npe.common.entity.QuestionInfo">
+        select qi.*
+        from question_info qi
+
+                 left join
+             (select question_id, count(id) as amount from question_answer group by question_id) qa_amount
+             on qi.id = qa_amount.question_id
+
+        where qi.publish_time >= #{weekStart}
+
+        order by qa_amount.amount
+
+        limit 100
+    </select>
+
+    <select id="getMonthlyAnswerTop200" resultType="soda.npe.common.entity.QuestionInfo">
+        select qi.*
+        from question_info qi
+
+                 left join
+             (select question_id, count(id) as amount from question_answer group by question_id) qa_amount
+             on qi.id = qa_amount.question_id
+
+        where qi.publish_time >= #{monthStart}
+
+        order by qa_amount.amount
+
+        limit 200
+    </select>
+
 </mapper>

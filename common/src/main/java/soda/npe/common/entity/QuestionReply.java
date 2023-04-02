@@ -1,5 +1,6 @@
 package soda.npe.common.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -21,7 +22,7 @@ public class QuestionReply implements Serializable {
     /**
      * 回复的ID
      */
-    @TableId
+    @TableId(type = IdType.ASSIGN_UUID)
     private Long id;
     /**
      * 目标问题ID，如果回复的是其他回复请保持为NULL

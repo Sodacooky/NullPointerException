@@ -1,5 +1,6 @@
 package soda.npe.common.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -21,7 +22,7 @@ public class Report implements Serializable {
     /**
      * 举报记录ID
      */
-    @TableId
+    @TableId(type = IdType.ASSIGN_UUID)
     private Long id;
     /**
      * 被举报的用户的ID

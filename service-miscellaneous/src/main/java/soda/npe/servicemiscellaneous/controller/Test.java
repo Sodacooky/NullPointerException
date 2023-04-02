@@ -12,8 +12,8 @@ public class Test {
     private MailUtil mailUtil;
 
     @GetMapping("/send")
-    public Boolean send(String to, String title,String content){
-        return mailUtil.sendEmail(to,title,content);
+    public Boolean send(String to, String title, String content) {
+        return mailUtil.sendEmail(to, title, content);
     }
 
 }

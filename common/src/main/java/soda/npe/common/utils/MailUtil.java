@@ -4,15 +4,13 @@ import cn.hutool.extra.mail.MailAccount;
 import cn.hutool.extra.mail.MailException;
 import org.springframework.stereotype.Component;
 
-import java.security.GeneralSecurityException;
-
 @Component
 public class MailUtil {
 
     private final MailAccount mailAccount;
 
     //construct
-    public MailUtil() throws GeneralSecurityException {
+    public MailUtil() {
         mailAccount = new MailAccount();
         mailAccount.setHost("smtp.qq.com");
         mailAccount.setPort(465);
@@ -20,7 +18,7 @@ public class MailUtil {
         mailAccount.setAuth(true);
         mailAccount.setFrom("hibin_org@qq.com");
         mailAccount.setUser("hibin_org@qq.com");
-        mailAccount.setPass("***");
+        mailAccount.setPass("");
     }
 
     public boolean sendEmail(String goalAddress, String title, String content) {

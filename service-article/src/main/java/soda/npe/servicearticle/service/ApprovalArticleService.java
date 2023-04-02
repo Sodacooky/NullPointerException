@@ -4,11 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
-import soda.npe.common.entity.ApprovalAnswer;
 import soda.npe.common.entity.ApprovalArticle;
-import soda.npe.common.entity.ArticleReply;
 import soda.npe.common.entity.UserInfo;
-import soda.npe.common.mapper.ApprovalAnswerMapper;
 import soda.npe.common.mapper.ApprovalArticleMapper;
 import soda.npe.common.mapper.UserInfoMapper;
 
@@ -21,8 +18,8 @@ public class ApprovalArticleService extends ServiceImpl<ApprovalArticleMapper, A
     private UserInfoMapper userInfoMapper;
 
 
-    public Long getApprovalAmountOf(Long articleId){
-        return this.count(new LambdaQueryWrapper<ApprovalArticle>().eq(ApprovalArticle::getArticleId,articleId));
+    public Long getApprovalAmountOf(Long articleId) {
+        return this.count(new LambdaQueryWrapper<ApprovalArticle>().eq(ApprovalArticle::getArticleId, articleId));
     }
 
     public Boolean approve(Long articleId, Long userId) {

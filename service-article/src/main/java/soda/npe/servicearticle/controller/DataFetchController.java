@@ -57,7 +57,7 @@ public class DataFetchController {
      * 获取文章的回复
      *
      * @param articleId 文章ID
-     * @param page     页
+     * @param page      页
      * @return 回复列表
      */
     @GetMapping("/getReplyOf")

@@ -1,5 +1,6 @@
 package soda.npe.common.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -21,7 +22,7 @@ public class ApprovalAnswer implements Serializable {
     /**
      * 点赞记录ID
      */
-    @TableId
+    @TableId(type = IdType.ASSIGN_UUID)
     private Long id;
     /**
      * 用户ID
