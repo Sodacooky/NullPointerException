@@ -6,7 +6,9 @@
                     <el-menu :default-active="activeTypeRoutePath" :router="true">
                         <el-menu-item index="/notice/subscription">订阅的问题</el-menu-item>
                         <el-menu-item index="/notice/subscription">回答的回复</el-menu-item>
-                        <el-menu-item index="/notice/article_reply">文章的回复</el-menu-item>
+                        <el-menu-item index="/notice/article_reply"
+                        >文章的回复
+                        </el-menu-item>
                         <el-menu-item index="/notice/system_notice">系统通知</el-menu-item>
                     </el-menu>
                 </el-col>
@@ -24,14 +26,12 @@ export default {
     data() {
         return {
             activeTypeRoutePath: "/notice/subscription",
-        }
+        };
     },
     mounted() {
         this.activeTypeRoutePath = this.$route.path;
-    }
-}
+    },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

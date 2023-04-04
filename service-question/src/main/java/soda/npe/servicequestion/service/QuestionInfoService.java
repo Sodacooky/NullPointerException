@@ -34,7 +34,7 @@ public class QuestionInfoService extends ServiceImpl<QuestionInfoMapper, Questio
     private UserInfoMapper userInfoMapper;
 
     @Resource
-    private RedisTemplate<String, QuestionInfoPreviewVO> voRedisTemplate;
+    private RedisTemplate<String, QuestionInfoPreviewVO> redisTemplate;
 
     public Long publish(Long userId, QuestionPublishVO questionPublishVO) {
         //先创建info填写基本信息，id保持为空让mybatis plus自己添加
@@ -78,21 +78,21 @@ public class QuestionInfoService extends ServiceImpl<QuestionInfoMapper, Questio
         else return null;
     }
 
-    public List<QuestionInfo> searchByTime(String keyword, Integer page, Boolean isAsc) {
-        return getBaseMapper().searchInfoByTime(keyword, page, DBConstant.PAGE_SIZE, isAsc);
+    public List<QuestionInfoPreviewVO> searchByTime(String keyword, Integer page, Boolean isAsc) {
+        return convertToPreviewVO(getBaseMapper().searchInfoByTime(keyword, page, DBConstant.PAGE_SIZE, isAsc));
     }
 
-    public List<QuestionInfo> searchBySubscriptionAmount(String keyword, Integer page, Boolean isAsc) {
-        return getBaseMapper().searchInfoBySubscriptionAmount(keyword, page, DBConstant.PAGE_SIZE, isAsc);
+    public List<QuestionInfoPreviewVO> searchBySubscriptionAmount(String keyword, Integer page, Boolean isAsc) {
+        return convertToPreviewVO(getBaseMapper().searchInfoBySubscriptionAmount(keyword, page, DBConstant.PAGE_SIZE, isAsc));
     }
 
 
-    public List<QuestionInfo> getInfoPublishedBy(Long userId, Integer page) {
-        return this.list(
-                new LambdaQueryWrapper<QuestionInfo>()
+    public List<QuestionInfoPreviewVO> getInfoPublishedBy(Long userId, Integer page) {
+        return convertToPreviewVO(
+                this.list(new LambdaQueryWrapper<QuestionInfo>()
                         .eq(QuestionInfo::getPublisherId, userId)
                         .orderByDesc(QuestionInfo::getPublishTime)
-                        .last("limit " + (DBConstant.PAGE_SIZE * (page - 1)) + "," + DBConstant.PAGE_SIZE));
+                        .last("limit " + (DBConstant.PAGE_SIZE * (page - 1)) + "," + DBConstant.PAGE_SIZE)));
     }
 
 
@@ -143,8 +143,8 @@ public class QuestionInfoService extends ServiceImpl<QuestionInfoMapper, Questio
 
     public List<QuestionInfoPreviewVO> getHomeWeekly() {
         //判断redis中有没有，有的话就不再计算了，这是一个非常重量级的计算
-        if (Boolean.TRUE.equals(voRedisTemplate.hasKey("homeWeeklyQuestion"))) {
-            return voRedisTemplate.opsForList().range("homeWeeklyQuestion", 0, -1);
+        if (Boolean.TRUE.equals(redisTemplate.hasKey("homeWeeklyQuestion"))) {
+            return redisTemplate.opsForList().range("homeWeeklyQuestion", 0, -1);
         }
 
         /*
@@ -157,6 +157,9 @@ public class QuestionInfoService extends ServiceImpl<QuestionInfoMapper, Questio
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_MONTH, -7);
         List<QuestionInfo> answerTop100 = this.getBaseMapper().getWeeklyAnswerTop100(calendar.getTime());
+
+        //极端情况，如果没有数据，那么我计算个锤子
+        if (answerTop100.isEmpty()) return new ArrayList<>();
 
         //全部转化为vo
         List<QuestionInfoPreviewVO> voTop100 = convertToPreviewVO(answerTop100);
@@ -180,16 +183,16 @@ public class QuestionInfoService extends ServiceImpl<QuestionInfoMapper, Questio
         while (iterator.hasNext() && result.size() < 10) {
             result.add(treeMap.get(iterator.next()));
         }
-        voRedisTemplate.delete("homeWeeklyQuestion");
-        voRedisTemplate.opsForList().leftPushAll("homeWeeklyQuestion", result);
+        redisTemplate.delete("homeWeeklyQuestion");
+        redisTemplate.opsForList().leftPushAll("homeWeeklyQuestion", result);
 
         return result;
     }
 
     public List<QuestionInfoPreviewVO> getHomeMonthly() {
         //判断redis中有没有，有的话就不再计算了，这是一个非常重量级的计算
-        if (Boolean.TRUE.equals(voRedisTemplate.hasKey("homeMonthlyQuestion"))) {
-            return voRedisTemplate.opsForList().range("homeMonthlyQuestion", 0, -1);
+        if (Boolean.TRUE.equals(redisTemplate.hasKey("homeMonthlyQuestion"))) {
+            return redisTemplate.opsForList().range("homeMonthlyQuestion", 0, -1);
         }
 
         /*
@@ -202,6 +205,9 @@ public class QuestionInfoService extends ServiceImpl<QuestionInfoMapper, Questio
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_MONTH, -30);
         List<QuestionInfo> answerTop200 = this.getBaseMapper().getMonthlyAnswerTop200(calendar.getTime());
+
+        //极端情况，如果没有数据，那么我计算个锤子
+        if (answerTop200.isEmpty()) return new ArrayList<>();
 
         //全部转化为vo
         List<QuestionInfoPreviewVO> voTop200 = convertToPreviewVO(answerTop200);
@@ -225,8 +231,8 @@ public class QuestionInfoService extends ServiceImpl<QuestionInfoMapper, Questio
         while (iterator.hasNext() && result.size() < 10) {
             result.add(treeMap.get(iterator.next()));
         }
-        voRedisTemplate.delete("homeMonthlyQuestion");
-        voRedisTemplate.opsForList().leftPushAll("homeMonthlyQuestion", result);
+        redisTemplate.delete("homeMonthlyQuestion");
+        redisTemplate.opsForList().leftPushAll("homeMonthlyQuestion", result);
 
         return result;
     }

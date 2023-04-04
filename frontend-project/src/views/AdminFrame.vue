@@ -24,10 +24,8 @@
 
 <script>
 export default {
-    name: "AdminFrame"
-}
+    name: "AdminFrame",
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

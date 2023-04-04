@@ -2,10 +2,11 @@ package soda.npe.servicearticle.vo;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Data
-public class ArticlePreviewVO {
+public class ArticlePreviewVO implements Serializable {
 
     private Long id;
 

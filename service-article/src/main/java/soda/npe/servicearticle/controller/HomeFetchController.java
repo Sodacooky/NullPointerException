@@ -1,13 +1,13 @@
 package soda.npe.servicearticle.controller;
 
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import soda.npe.common.controller.RestResponse;
 import soda.npe.servicearticle.service.ArticleService;
-
-import java.util.Date;
 
 @RestController
 @RequestMapping("/home")
@@ -24,12 +24,13 @@ public class HomeFetchController {
      * @return QuestionInfoPreviewVO列表
      */
     @GetMapping("/latest")
-    public RestResponse latest(Integer page, Date queryTime) {
+    public RestResponse latest(Integer page, String queryTime) {
         //check params
         if (page == null || page < 1) page = 1;
-        if (queryTime == null) queryTime = new Date();
+        if (StrUtil.isBlank(queryTime)) return RestResponse.fail(1, "queryTime缺失");
+        if (DateUtil.parse(queryTime) == null) RestResponse.fail(2, "queryTime格式错误");
         //do fetch
-        return RestResponse.ok(null, articleService.getHomeLatest(page, queryTime));
+        return RestResponse.ok(null, articleService.getHomeLatest(page, DateUtil.parse(queryTime).toJdkDate()));
     }
 
     /**

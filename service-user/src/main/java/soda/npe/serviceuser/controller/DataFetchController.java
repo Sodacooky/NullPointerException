@@ -42,7 +42,7 @@ public class DataFetchController {
     @GetMapping("/avatar/{filename}")
     public byte[] getUserAvatar(@PathVariable("filename") String filename) {
         //load file and check existence
-        File toGetAvatarFile = new File(avatarPath, filename);
+        File toGetAvatarFile = new File(avatarPath, filename + ".jpg");
         if (!toGetAvatarFile.exists() || !toGetAvatarFile.isFile())
             return RestResponse.fail(1, "文件不存在").toString().getBytes();
         //read as bytes

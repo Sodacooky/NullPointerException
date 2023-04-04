@@ -34,9 +34,9 @@ public class ArticleService extends ServiceImpl<ArticleMapper, Article> {
     private ApprovalArticleMapper approvalArticleMapper;
 
     @Resource
-    private RedisTemplate<String, ArticlePreviewVO> voRedisTemplate;
+    private RedisTemplate<String, ArticlePreviewVO> redisTemplate;
 
-    public List<Article> getPublishedBy(Long userId, Integer page) {
+    public List<ArticlePreviewVO> getPublishedBy(Long userId, Integer page) {
         //从数据库获取当前页的数据
         List<Article> found = this.list(new LambdaQueryWrapper<Article>()
                 .eq(Article::getPublisherId, userId)
@@ -44,10 +44,10 @@ public class ArticleService extends ServiceImpl<ArticleMapper, Article> {
                 .last("limit " + (DBConstant.PAGE_SIZE * (page - 1)) + "," + DBConstant.PAGE_SIZE));
         //移除text
         found.forEach(obj -> obj.setText(null));
-        return found;
+        return convertToPreviewVO(found);
     }
 
-    public List<Article> searchByTime(String keyword, Integer page, Boolean isAsc) {
+    public List<ArticlePreviewVO> searchByTime(String keyword, Integer page, Boolean isAsc) {
         List<Article> found = this.list(new LambdaQueryWrapper<Article>()
                 .like(Article::getText, keyword)
                 .or().like(Article::getCategory, keyword)
@@ -56,24 +56,24 @@ public class ArticleService extends ServiceImpl<ArticleMapper, Article> {
                 .last("limit " + (DBConstant.PAGE_SIZE * (page - 1)) + "," + DBConstant.PAGE_SIZE));
         //移除text
         found.forEach(obj -> obj.setText(null));
-        return found;
+        return convertToPreviewVO(found);
     }
 
 
-    public List<Article> searchByApproval(String keyword, Integer page, Boolean isAsc) {
+    public List<ArticlePreviewVO> searchByApproval(String keyword, Integer page, Boolean isAsc) {
         //搜索
         List<Article> found = this.getBaseMapper().searchByApproval(keyword, page, DBConstant.PAGE_SIZE, isAsc);
         //移除text
         found.forEach(obj -> obj.setText(null));
-        return found;
+        return convertToPreviewVO(found);
     }
 
-    public List<Article> searchByReplyAmount(String keyword, Integer page, Boolean isAsc) {
+    public List<ArticlePreviewVO> searchByReplyAmount(String keyword, Integer page, Boolean isAsc) {
         //搜索
         List<Article> found = this.getBaseMapper().searchByReplyAmount(keyword, page, DBConstant.PAGE_SIZE, isAsc);
         //移除text
         found.forEach(obj -> obj.setText(null));
-        return found;
+        return convertToPreviewVO(found);
     }
 
     public Boolean publish(Long userId, ArticlePublishVO articlePublishVO) {
@@ -132,8 +132,8 @@ public class ArticleService extends ServiceImpl<ArticleMapper, Article> {
 
     public List<ArticlePreviewVO> getHomeWeekly() {
         //判断redis中有没有，有的话就不再计算了，这是一个非常重量级的计算
-        if (Boolean.TRUE.equals(voRedisTemplate.hasKey("homeWeeklyArticle"))) {
-            return voRedisTemplate.opsForList().range("homeWeeklyArticle", 0, -1);
+        if (Boolean.TRUE.equals(redisTemplate.hasKey("homeWeeklyArticle"))) {
+            return redisTemplate.opsForList().range("homeWeeklyArticle", 0, -1);
         }
 
         /*
@@ -146,6 +146,9 @@ public class ArticleService extends ServiceImpl<ArticleMapper, Article> {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_MONTH, -7);
         List<Article> replyTop100 = this.getBaseMapper().getWeeklyReplyTop100(calendar.getTime());
+
+        //极端情况，如果没有数据，那么我计算个锤子
+        if (replyTop100.isEmpty()) return new ArrayList<>();
 
         //全部转化为vo
         List<ArticlePreviewVO> voTop100 = convertToPreviewVO(replyTop100);
@@ -169,16 +172,16 @@ public class ArticleService extends ServiceImpl<ArticleMapper, Article> {
         while (iterator.hasNext() && result.size() < 10) {
             result.add(treeMap.get(iterator.next()));
         }
-        voRedisTemplate.delete("homeWeeklyArticle");
-        voRedisTemplate.opsForList().leftPushAll("homeWeeklyArticle", result);
+        redisTemplate.delete("homeWeeklyArticle");
+        redisTemplate.opsForList().leftPushAll("homeWeeklyArticle", result);
 
         return result;
     }
 
     public List<ArticlePreviewVO> getHomeMonthly() {
         //判断redis中有没有，有的话就不再计算了，这是一个非常重量级的计算
-        if (Boolean.TRUE.equals(voRedisTemplate.hasKey("homeMonthlyArticle"))) {
-            return voRedisTemplate.opsForList().range("homeMonthlyArticle", 0, -1);
+        if (Boolean.TRUE.equals(redisTemplate.hasKey("homeMonthlyArticle"))) {
+            return redisTemplate.opsForList().range("homeMonthlyArticle", 0, -1);
         }
 
         /*
@@ -191,6 +194,9 @@ public class ArticleService extends ServiceImpl<ArticleMapper, Article> {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_MONTH, -7);
         List<Article> replyTop200 = this.getBaseMapper().getMonthlyReplyTop200(calendar.getTime());
+
+        //极端情况，如果没有数据，那么我计算个锤子
+        if (replyTop200.isEmpty()) return new ArrayList<>();
 
         //全部转化为vo
         List<ArticlePreviewVO> voTop200 = convertToPreviewVO(replyTop200);
@@ -214,8 +220,8 @@ public class ArticleService extends ServiceImpl<ArticleMapper, Article> {
         while (iterator.hasNext() && result.size() < 10) {
             result.add(treeMap.get(iterator.next()));
         }
-        voRedisTemplate.delete("homeMonthlyArticle");
-        voRedisTemplate.opsForList().leftPushAll("homeMonthlyArticle", result);
+        redisTemplate.delete("homeMonthlyArticle");
+        redisTemplate.opsForList().leftPushAll("homeMonthlyArticle", result);
 
         return result;
     }

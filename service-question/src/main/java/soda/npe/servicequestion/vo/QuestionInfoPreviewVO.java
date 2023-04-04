@@ -2,13 +2,14 @@ package soda.npe.servicequestion.vo;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * 在原有的QuestionInfo的基础上添加了一段摘要、回答数量、订阅数量等
  */
 @Data
-public class QuestionInfoPreviewVO {
+public class QuestionInfoPreviewVO implements Serializable {
 
     private Long id;
 

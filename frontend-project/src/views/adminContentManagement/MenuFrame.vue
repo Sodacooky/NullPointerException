@@ -1,5 +1,4 @@
 <template>
-
   <!--  侧边菜单-->
     <el-aside style="padding-left: 16px" width="10%">
         <el-menu mode="vertical">
@@ -14,15 +13,12 @@
     <el-main>
         <router-view></router-view>
     </el-main>
-
 </template>
 
 <script>
 export default {
-    name: "MenuFrame"
-}
+    name: "MenuFrame",
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

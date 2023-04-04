@@ -4,5 +4,8 @@ import adminRoute from "@/router/adminRoute";
 
 const routerRules = [userRoute, adminRoute];
 
-const router = createRouter({routes: routerRules, history: createWebHistory()});
+const router = createRouter({
+    routes: routerRules,
+    history: createWebHistory(),
+});
 export default router;

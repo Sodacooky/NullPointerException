@@ -1,268 +1,226 @@
 <template>
-  <!--  用户页面框架-->
-    <el-container>
-        <el-main>
+  <el-main>
+    <!--顶部搜索框，给你再次搜索的机会      -->
+    <div
+      class="search-input-area"
+      style="display: flex; justify-content: center"
+    >
+      <el-input
+        v-model="keyword"
+        placeholder="搜索问题、文章或用户"
+        style="font-size: larger; margin-bottom: 16px"
+        @keydown.enter="onNewSearch()"
+      >
+        <template #prepend>
+          <el-icon>
+            <Search />
+          </el-icon>
+        </template>
+        <template #append>
+          <el-button @click="onNewSearch()">搜索</el-button>
+        </template>
+      </el-input>
+    </div>
 
-            <!--  搜索框-->
-            <div class="search-input-area" style="display: flex;justify-content: center;">
-                <el-input v-model="searchInputText"
-                          placeholder="搜索问题、文章和用户"
-                          style="font-size: large;margin-bottom: 16px"
-                          @keydown.enter="doSearch">
-                    <template #prepend>
-                        <el-icon>
-                            <Search/>
-                        </el-icon>
-                    </template>
-                    <template #append>
-                        <el-button @click="doSearch">搜索</el-button>
-                    </template>
-                </el-input>
-            </div>
+    <!--搜索条件选择栏      -->
+    <div
+      class="type-selector"
+      style="display: flex; justify-content: space-between"
+    >
+      <!--搜索类型选择器      -->
+      <span>
+        <el-radio-group size="large" v-model="type" @change="onTypeChange()">
+          <el-radio-button label="问题" />
+          <el-radio-button label="文章" />
+          <el-radio-button label="用户" />
+        </el-radio-group>
+      </span>
+      <!--搜索顺序选择器-->
+      <span>
+        <el-select size="large" v-model="order" @change="onOrderChange()">
+          <el-option
+            v-for="item in nowAvailableOrderList"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
+      </span>
+    </div>
 
+    <!--结果区      -->
+    <div class="result-area">
+      <!--顶部翻页控件        -->
+      <div class="pager-top">
+        <Pager
+          @prevBtnClick="onPrevPageBtnClick()"
+          @nextBtnClick="onNextPageBtnClick()"
+          :current-page="page"
+          :max-page="maxPage"
+        />
+      </div>
 
-            <!--  结果列表-->
-            <div v-if="searchText.length>0" class="search-result-area">
-                <!--      切换结果类型按钮-->
-                <div>
-                    <div style="margin-top: 8px">
-                        <el-button-group>
-                            <el-button :type="searchType==='question'?'primary':''" text
-                                       @click="onTypeButtonClick('question')">
-                                问题
-                            </el-button>
-                            <el-button :type="searchType==='article'?'primary':''" text
-                                       @click="onTypeButtonClick('article')">
-                                文章
-                            </el-button>
-                            <el-button :type="searchType==='user'?'primary':''" text @click="onTypeButtonClick('user')">
-                                用户
-                            </el-button>
-                        </el-button-group>
-                    </div>
+      <!--数据列表        -->
+      <div class="result-list">
+        <!--如果搜索的是问题-->
+        <div class="question-list" v-for="item in searchResult" :key="item.id">
+          <QuestionListItem :item="item" />
+        </div>
+      </div>
 
+      <!--如果没有数据则显示        -->
+      <div v-if="searchResult.length <= 0" class="empty-tips">
+        <el-empty description="没有搜索到东西"></el-empty>
+      </div>
 
-                    <!--  问题结果-->
-                    <div v-if="searchType==='question'">
-                        <!--    问题列表-->
-                        <div v-for="item in searchResultData" :key="item.id" class="list">
-                            <div class="preview-card">
-                                <div class="title">{{ item.title }}</div>
-                                <div class="text-short">{{ item.text_short }}</div>
-                                <div class="bottom-bar">
-                                    <span style="float: left"><el-tag type="info">{{ item.category }}</el-tag></span>
-                                    <span style="float: right;color: gray">{{ item.publish_time }}</span>
-                                </div>
-                                <el-divider/>
-                            </div>
-                        </div>
-                        <!--加载更多按钮-->
-                        <div v-if="searchCurrentPage!==-1"
-                             style="display: flex;justify-content: center;margin-top: 16px">
-                            <el-button type="primary" @click="onLoadMoreButtonClick">加载更多</el-button>
-                        </div>
-                    </div>
-
-                    <!--  文章结果-->
-                    <div v-if="searchType==='article'">
-                        <!--    文章列表-->
-                        <div v-for="item in searchResultData" :key="item.id" class="list">
-                            <div class="preview-card">
-                                <div class="title">{{ item.title }}</div>
-                                <div class="bottom-bar">
-                                    <span style="float: left"><el-tag type="info">{{ item.category }}</el-tag></span>
-                                    <span style="float: right;color: gray">{{ item.publish_time }}</span>
-                                </div>
-                                <el-divider/>
-                            </div>
-                        </div>
-                        <!--加载更多按钮-->
-                        <div v-if="searchCurrentPage!==-1"
-                             style="display: flex;justify-content: center;margin-top: 16px">
-                            <el-button type="primary" @click="onLoadMoreButtonClick">加载更多</el-button>
-                        </div>
-                    </div>
-
-                    <!--  用户结果-->
-                    <div v-if="searchType==='user'">
-                        <div class="list">
-                            <el-row>
-                                <el-col v-for="item in searchResultData" :key="item.id" :span="12" class="preview-card">
-                                    <el-row>
-                                        <el-col :span="4">
-                                            <el-image :src="item.avatar_url" fit="fill"/>
-                                        </el-col>
-                                        <el-col :span="20">
-                                            <div>
-                                                <div class="left">
-                                                </div>
-                                                <div class="right" style="padding-left: 8px">
-                                                    <div style="font-weight: bold">{{ item.nickname }}</div>
-                                                    <div style="color: gray">{{ item.description }}</div>
-                                                    <div style="color: gray">注册时间: {{ item.register_time }}</div>
-                                                </div>
-                                            </div>
-                                        </el-col>
-                                    </el-row>
-                                    <el-divider/>
-                                </el-col>
-                            </el-row>
-                        </div>
-
-                        <!--加载更多按钮-->
-                        <div v-if="searchCurrentPage!==-1"
-                             style="display: flex;justify-content: center;margin-top: 16px">
-                            <el-button type="primary" @click="onLoadMoreButtonClick">加载更多</el-button>
-                        </div>
-                    </div>
-
-
-                </div>
-            </div>
-
-            <!--      如果没有搜索-->
-            <el-empty v-if="searchText.length<=0" description="未输入搜索内容"/>
-
-            <!--  没有数据都是展示这个-->
-            <el-empty v-if="searchResultData.length<=0 && searchText.length>0" description="没有结果..."/>
-
-
-        </el-main>
-    </el-container>
-
-
+      <!--底部翻页        -->
+      <div class="pager-bottom">
+        <Pager
+          @prevBtnClick="onPrevPageBtnClick()"
+          @nextBtnClick="onNextPageBtnClick()"
+          :current-page="page"
+          :max-page="maxPage"
+        />
+      </div>
+    </div>
+  </el-main>
 </template>
 
 <script>
+import { Search } from "@element-plus/icons-vue";
+import Pager from "@/views/search/component/Pager.vue";
+import { searchQuestionByTime } from "@/api/search";
+import QuestionListItem from "@/components/QuestionListItem.vue";
 
 export default {
-    name: "SearchIndex",
-    props: ["text", "type"],
-    data() {
-        return {
-            searchInputText: "", //输入框文本
-            searchText: "", //当前真搜索文本，结果对应的文本
-            searchType: "",
-            searchQueryTime: null,//搜索发起时间，由第一次搜索请求响应中携带(应该改成当前时间
-            searchCurrentPage: -1,//当前搜索的页面，为-1不展示加载更多按钮
-            searchResultData: [],//结果
-        }
+  name: "Index",
+  components: { QuestionListItem, Pager, Search },
+  data() {
+    return {
+      //和query中参数相对应的各个搜索参数
+      keyword: "",
+      type: "问题",
+      order: "time_desc",
+      page: 1,
+      //最大页数需要通过api接口调用结果产生
+      maxPage: null,
+      //搜索结果
+      searchResult: [],
+      //不同搜索类型的排序方式由不同，用于生成选择框
+      questionOrderList: [
+        { label: "最新发布", value: "time_desc" },
+        { label: "最早发布", value: "time_asc" },
+        { label: "最多回答", value: "ans_desc" },
+        { label: "最少回答", value: "ans_asc" },
+        { label: "最多订阅", value: "sub_desc" },
+        { label: "最少订阅", value: "sub_asc" },
+      ],
+      articleOrderList: [
+        { label: "最新发布", value: "time_desc" },
+        { label: "最早发布", value: "time_asc" },
+        { label: "最多点赞", value: "app_desc" },
+        { label: "最少点赞", value: "app_asc" },
+        { label: "最多回复", value: "rep_desc" },
+        { label: "最少回复", value: "rep_asc" },
+      ],
+      userOrderList: [
+        { label: "最新注册", value: "time_desc" },
+        { label: "最早注册", value: "time_asc" },
+      ],
+    };
+  },
+  computed: {
+    nowAvailableOrderList() {
+      switch (this.type) {
+        case "问题":
+          return this.questionOrderList;
+        case "文章":
+          return this.articleOrderList;
+        case "用户":
+          return this.userOrderList;
+      }
     },
-    methods: {
-        //搜索框搜索按钮被按下
-        doSearch() {
-            //更改当前搜索文本
-            this.searchText = this.searchInputText;
-            //访问API加载第一页
-            this.searchFirstPage(this.searchText, this.searchType);
-        },
-        //搜索类型切换按钮被按下
-        onTypeButtonClick(type) {
-            //更改类型
-            this.searchType = type;
-            //访问API加载第一页
-            this.searchFirstPage(this.searchText, this.searchType);
-        },
-        //最新问题的获取更多按钮
-        onLoadMoreButtonClick() {
-            let result = this.searchForUniverse(this.searchText, this.searchType, this.searchCurrentPage + 1);
-            if (result.length > 0) {
-                this.searchCurrentPage++;
-                this.searchResultData = this.searchResultData.concat(result);
-            } else {
-                this.searchCurrentPage = -1;//no more result
-            }
-        },
-        //问题搜索请求
-        searchForQuestion(text, page) {
-            return [{
-                "id": page,
-                "title": "最新问题标题" + page,
-                "text_short": "正文的部分概览" + text,
-                "category": "分类",
-                "publisher_name": "发布者",
-                "publish_time": "2022-1-1 00:00:00"
-            }];
-        },
-        //文章搜索请求
-        searchForArticle(text, page) {
-            return [{
-                "id": page,
-                "title": "最新文章标题" + page + text,
-                "category": "分类",
-                "publisher_name": "发布者",
-                "publish_time": "2022-1-1 00:00:00"
-            }];
-        },
-        //用户搜索请求
-        searchForUser(text, page) {
-            return [{
-                "id": page,
-                "nickname": "用户" + page,
-                "description": "正文的部分概览" + text,
-                "avatar_url": "https://s3.bmp.ovh/imgs/2022/12/14/18f7342584baa5a4.png",
-                "register_time": "2022-1-1 00:00:00"
-            }];
-        },
-        //搜索指定页的内容，返回结果列表
-        searchForUniverse(text, type, page) {
-            let result = null;
-            switch (type) {
-                case "question":
-                    result = this.searchForQuestion(text, page);
-                    break;
-                case "article":
-                    result = this.searchForArticle(text, page);
-                    break;
-                case "user":
-                    result = this.searchForUser(text, page);
-                    break;
-            }
-            return result;
-        },
-        //清空容器，然后搜索第一页的内容，并储存
-        searchFirstPage(text, type) {
-            //清空容器和页码记录
-            this.searchResultData = [];
-            this.searchCurrentPage = -1;
-            //搜索
-            let result = this.searchForUniverse(text, type, 1);
-            if (result.length > 0) {
-                this.searchCurrentPage = 1;
-                this.searchResultData = this.searchResultData.concat(result);
-            }
-        },
+  },
+  mounted() {
+    //获取query中的参数
+    if (this.$route.query.keyword) this.keyword = this.$route.query.keyword;
+    if (this.$route.query.type) this.type = this.$route.query.type;
+    if (this.$route.query.order) this.order = this.$route.query.order;
+    if (this.$route.query.page) this.page = this.$route.query.page;
+    //发送请求获取内容
+    this.executeSearchApi();
+  },
+  methods: {
+    onPrevPageBtnClick() {
+      //上一页按钮触发
+      this.page--;
+      this.onNewSearch();
     },
-    mounted() {
-        this.searchText = JSON.parse(JSON.stringify(this.text));
-        this.searchInputText = JSON.parse(JSON.stringify(this.searchText));
-        this.searchType = JSON.parse(JSON.stringify(this.type));
-        this.searchFirstPage(this.searchText, this.searchType);
+    onNextPageBtnClick() {
+      //下一页按钮触发
+      this.page++;
+      this.onNewSearch();
+    },
+    onTypeChange() {
+      //更改了搜索类型
+      this.onNewSearch();
+    },
+    onOrderChange() {
+      //更改了搜索结果顺序
+      this.onNewSearch();
+    },
+    onNewSearch() {
+      //根据目前已有的参数，进行一次新的查询，跳转到新的查询页面
+      this.$router.replace({
+        path: "/search",
+        query: {
+          keyword: this.keyword,
+          type: this.type,
+          order: this.order,
+          page: this.page,
+        },
+      });
     },
 
-}
+    //以下是搜索API相关
+
+    executeSearchApi() {
+      //使用this里面的属性值，调用对应的api，并将结果储存到this.searchResult
+      switch (this.type) {
+        case "问题":
+          this.executeQuestionSearchApi();
+          break;
+        case "文章":
+          break;
+        case "用户":
+          break;
+      }
+    },
+    executeQuestionSearchApi() {
+      //根据order和page调用api，下面的两个方法同
+      let isAsc = this.order.endsWith("asc");
+      if (this.order.startsWith("time")) {
+        searchQuestionByTime(this.keyword, this.page, isAsc).then((resp) =>
+          this.processSearchResult(resp)
+        );
+      } else if (this.order.startsWith("ans")) {
+      } else if (this.order.startsWith("sub")) {
+      }
+    },
+    executeArticleSearchApi() {},
+    executeUserSearchApi() {},
+    processSearchResult(resp) {
+      //处理搜索的结果
+      //如果搜索有内容，那么正常装载
+      if (resp.data.data.length > 0) this.searchResult = resp.data.data;
+      else {
+        //如果搜索没有内容，且当前不是第一页，返回第一页
+        this.page = 1;
+        this.onNewSearch();
+      }
+    },
+  },
+};
 </script>
 
-<style scoped>
-.preview-card {
-    padding: 8px 8px 1px 8px;
-}
-
-.preview-card:hover {
-    background-color: rgb(248, 248, 248);
-}
-
-.preview-card .title {
-    font-weight: bold;
-}
-
-.preview-card .text-short {
-    font-size: small;
-    color: gray;
-}
-
-.preview-card .bottom-bar {
-    margin-top: 2px;
-    height: 10px;
-}
-</style>
+<style scoped></style>
