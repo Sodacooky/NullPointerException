@@ -1,29 +1,47 @@
 <template>
   <!--  主体展示文章内容-->
-  <el-container>
-    <el-main>
-      <!--      标题，作者，分类-->
+  <el-main style="display: flex; justify-content: center">
+    <!--整页内容归该元素下，控制大小-->
+    <div class="page-container" style="width: 65%; min-width: 600px">
       <el-card :body-style="{ padding: '16px' }" class="container-card">
-        <span style="font-size: larger; font-weight: bold">{{ title }}</span>
-        <span style="font-size: large; margin-left: 8px">
-          <el-tag type="info">{{ category }}</el-tag>
-        </span>
-        <div style="color: gray">发布于：{{ publish_time }}</div>
-        <div class="publisher-info">
-          <span class="avatar">
-            <el-avatar :src="publisherAvatarUrl" />
+        <!--第一行，标题分类-->
+        <div class="title-category">
+          <!--标题          -->
+          <span style="font-size: larger; font-weight: bold">{{ title }}</span>
+          <!--分类-->
+          <span style="font-size: large; margin-left: 8px">
+            <el-tag type="info">{{ category }}</el-tag>
           </span>
-          <span style="margin-left: 8px">{{ publisherNickname }}</span>
         </div>
-      </el-card>
-
-      <!--      正文-->
-      <el-card :body-style="{ padding: '16px' }" class="container-card">
-        <div class="text" v-highlight v-html="renderedMarkdown"></div>
+        <!--第二行，日期和作者        -->
+        <div class="publisher-date">
+          <el-row>
+            <el-col :span="2">
+              <el-avatar :src="getUserAvatarUrl(publisherAvatar)" />
+            </el-col>
+            <el-col :span="22">
+              <div class="publisher-info">
+                <a style="font-weight: bold">{{ publisherNickname }}</a>
+              </div>
+              <div style="color: gray">发布于：{{ publishTime }}</div></el-col
+            >
+          </el-row>
+        </div>
+        <!--正文          -->
+        <div
+          class="text"
+          style="margin-top: 16px"
+          v-highlight
+          v-html="renderedMarkdown"
+        ></div>
       </el-card>
 
       <!--      评论编写-->
-      <el-card :body-style="{ padding: '16px' }" class="container-card">
+      <el-card
+        :body-style="{ padding: '16px' }"
+        class="reply-input"
+        style="margin-top: 16px"
+      >
         <template #header>
           <span style="font-weight: bold">撰写回复</span>
         </template>
@@ -37,9 +55,13 @@
       </el-card>
 
       <!--评论内容区-->
-      <el-card :body-style="{ padding: '16px' }" class="container-card">
+      <el-card
+        :body-style="{ padding: '16px' }"
+        class="reply-list"
+        style="margin-top: 16px"
+      >
         <template #header>
-          <span style="font-weight: bold">文章全部回复</span>
+          <span style="font-weight: bold">文章回复</span>
         </template>
         <div
           v-for="item in replyListData"
@@ -47,92 +69,89 @@
           class="reply-list"
           style="margin-bottom: 16px"
         >
-          <div class="reply">
-            <!--          回复者信息-->
-            <div class="publisher-info">
-              <span>
-                <el-avatar :src="item.publisherAvatarUrl" size="small" />
-              </span>
-              <span style="margin-left: 4px">{{ item.publisherNickname }}</span>
-            </div>
-            <!--          回复正文内容-->
-            <div class="reply-text" style="padding: 2px 4px 2px 4px">
-              {{ item.text }}
-            </div>
-            <!--          回复按钮和发布日期-->
-            <div
-              class="operation-and-info"
-              style="color: gray; margin-top: 4px"
-            >
-              <span><el-button size="small">回复</el-button></span>
-              <span>{{ item.publishTime }}</span>
-            </div>
-          </div>
+          <ArticleReplyListItem :item="item" />
         </div>
-      </el-card>
-    </el-main>
 
-    <el-aside style="margin-top: 32px; padding: 8px" width="20%">
-      <el-card :body-style="{ padding: '4px' }">
-        <template #header> 文章操作</template>
-        <div>
-          <el-button style="width: 100%">点赞</el-button>
+        <div class="load-more" style="justify-content: center; display: flex">
+          <el-button v-if="replyCurrentPage !== -1" @click="loadMoreReplies()">
+            加载更多
+          </el-button>
+          <el-divider v-if="replyCurrentPage === -1">已无更多</el-divider>
         </div>
-        <div>
-          <el-button style="width: 100%; margin-top: 4px">举报</el-button>
-        </div>
+
+        <el-empty v-if="replyListData.length < 1" description="还没有回复" />
       </el-card>
-    </el-aside>
-  </el-container>
+    </div>
+  </el-main>
 </template>
 
 <script>
 import { marked } from "marked";
+import ArticleReplyListItem from "@/views/reading/components/ArticleReplyListItem.vue";
+import { getArticle, getArticleReply } from "@/api/reading";
+import { getUserAvatarUrl, getUserInfo } from "@/api/user";
+import { ElNotification } from "element-plus";
 
 export default {
   name: "ArticleReading",
+  components: { ArticleReplyListItem },
   props: ["article_id"],
   data() {
     return {
-      //文章信息
-      title: "文章标题",
-      category: "分类名称",
-      publish_time: "2022-1-1 10:10:11",
-      text:
-        "# 标题\n" +
-        "\n" +
-        "* 列表项目1\n" +
-        "* 列表项目2\n" +
-        "\n" +
-        "我的代码如下：\n" +
-        "```java\n" +
-        "if (articlePublishVO == null) {\n" +
-        '    return RestResponse.fail(1, "缺少参数");\n' +
-        "}\n" +
-        "```\n" +
-        "\n" +
-        "> 你看懂了吗",
-      //文章发布者信息
-      publisherId: "114514",
-      publisherNickname: "田所浩二",
-      publisherAvatarUrl:
-        "https://s3.bmp.ovh/imgs/2022/12/14/18f7342584baa5a4.png",
-      //回复相关
-      replyInput: "",
-      replyListData: [
-        {
-          id: 1,
-          publisherNickname: "田所浩二2",
-          publisherAvatarUrl:
-            "https://s3.bmp.ovh/imgs/2022/12/14/18f7342584baa5a4.png",
-          text: "好活",
-          publishTime: "2022-1-1 12:00:00",
-        },
-      ],
+      //id在props里，以下是文章实体的属性
+      title: "",
+      text: "",
+      category: "",
+      publisherId: 0,
+      publishTime: "",
+      //用户实体属性，用于展示作者
+      publisherNickname: "",
+      publisherAvatar: undefined,
+      //回复内容
+      replyListData: [],
+      replyCurrentPage: 1,
     };
+  }, //end of data
+  methods: {
+    getUserAvatarUrl,
+    loadArticleContent() {
+      //调用接口，加载文章内容，并加载文章对应的用户信息
+      getArticle(this.article_id).then((resp) => {
+        if (resp.data.code !== 0) {
+          ElNotification({
+            title: "加载失败",
+            message: "无法加载文章，正在跳转回首页",
+            type: "error",
+          });
+          this.$router.replace("/home");
+          return;
+        }
+        this.title = resp.data.data.title;
+        this.text = resp.data.data.text;
+        this.category = resp.data.data.category;
+        this.publisherId = resp.data.data.publisherId;
+        this.publishTime = resp.data.data.publishTime;
+        getUserInfo(this.publisherId).then((resp2) => {
+          this.publisherNickname = resp2.data.data.nickname;
+          this.publisherAvatar = resp2.data.data.avatar;
+        });
+      });
+    },
+    loadMoreReplies() {
+      getArticleReply(this.article_id, this.replyCurrentPage).then((resp) => {
+        if (resp.data.data === undefined || resp.data.data.length <= 0) {
+          this.replyCurrentPage = -1;
+        } else {
+          this.replyListData = this.replyListData.concat(resp.data.data);
+          this.replyCurrentPage++;
+        }
+      });
+    },
   },
-  methods: {},
-  mounted() {},
+  mounted() {
+    this.loadArticleContent();
+    this.loadMoreReplies();
+  },
   computed: {
     renderedMarkdown() {
       return marked(this.text);
@@ -141,39 +160,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.publisher-info {
-  display: flex;
-  align-items: center;
-  margin-top: 4px;
-  padding: 0;
-  background-color: transparent;
-}
-
-.publisher-info:hover {
-  background-image: linear-gradient(
-    to right,
-    rgba(225, 225, 225, 1),
-    rgba(225, 225, 225, 0.1) 50%,
-    rgba(225, 225, 225, 0)
-  );
-  transition: background-image 0.5s ease;
-}
-
-.container-card {
-  margin-top: 16px;
-}
-
-.reply {
-  padding: 4px 4px 4px 4px;
-}
-
-.reply:hover {
-  background-color: rgb(248, 248, 248);
-}
-
-.operation-and-info {
-  display: flex;
-  justify-content: space-between;
-}
-</style>
+<style scoped></style>

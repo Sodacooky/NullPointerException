@@ -166,6 +166,7 @@ public class ArticleService extends ServiceImpl<ArticleMapper, Article> {
         }
         redisTemplate.delete("homeWeeklyArticle");
         redisTemplate.opsForList().leftPushAll("homeWeeklyArticle", result);
+        
 
         return result;
     }

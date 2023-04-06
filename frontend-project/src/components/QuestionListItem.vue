@@ -31,8 +31,9 @@
       <span class="user-info">
         <span style="display: flex; align-items: center; float: left">
           <el-avatar
-            :src="baseUrl() + '/service-user/avatar/' + item.publisherAvatar"
+            :src="getUserAvatarUrl(item.publisherAvatar)"
             size="small"
+            style="margin-right: 8px"
           />
           {{ item.publisherNickname }}
         </span>
@@ -60,10 +61,12 @@ import {
   VideoCameraFilled,
 } from "@element-plus/icons-vue";
 import { baseUrl } from "@/api/requests";
+import { getUserAvatarUrl } from "@/api/user";
 
 export default {
   name: "QuestionListItem",
   methods: {
+    getUserAvatarUrl,
     baseUrl() {
       return baseUrl;
     },

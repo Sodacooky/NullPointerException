@@ -1,112 +1,114 @@
 <template>
-  <el-main>
-    <!--顶部搜索框，给你再次搜索的机会      -->
-    <div
-      class="search-input-area"
-      style="display: flex; justify-content: center"
-    >
-      <el-input
-        v-model="keyword"
-        placeholder="搜索问题、文章或用户"
-        style="font-size: larger; margin-bottom: 16px"
-        @keydown.enter="onNewSearch()"
+  <el-main style="display: flex; justify-content: center">
+    <div class="page-container" style="min-width: 600px; width: 60pc">
+      <!--顶部搜索框，给你再次搜索的机会      -->
+      <div
+        class="search-input-area"
+        style="display: flex; justify-content: center"
       >
-        <template #prepend>
-          <el-icon>
-            <Search />
-          </el-icon>
-        </template>
-        <template #append>
-          <el-button @click="onNewSearch()">搜索</el-button>
-        </template>
-      </el-input>
-    </div>
+        <el-input
+          v-model="keyword"
+          placeholder="搜索问题、文章或用户"
+          style="font-size: larger; margin-bottom: 16px"
+          @keydown.enter="onNewSearch()"
+        >
+          <template #prepend>
+            <el-icon>
+              <Search />
+            </el-icon>
+          </template>
+          <template #append>
+            <el-button @click="onNewSearch()">搜索</el-button>
+          </template>
+        </el-input>
+      </div>
 
-    <!--搜索条件选择栏      -->
-    <div
-      class="type-selector"
-      style="display: flex; justify-content: space-between"
-    >
-      <!--搜索类型选择器      -->
-      <span>
-        <el-radio-group size="large" v-model="type" @change="onTypeChange()">
-          <el-radio-button label="问题" />
-          <el-radio-button label="文章" />
-          <el-radio-button label="用户" />
-        </el-radio-group>
-      </span>
-      <!--搜索顺序选择器-->
-      <span>
-        <el-select size="large" v-model="order" @change="onOrderChange()">
-          <el-option
-            v-for="item in nowAvailableOrderList"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
-        </el-select>
-      </span>
-    </div>
+      <!--搜索条件选择栏      -->
+      <div
+        class="type-selector"
+        style="display: flex; justify-content: space-between"
+      >
+        <!--搜索类型选择器      -->
+        <span>
+          <el-radio-group size="large" v-model="type" @change="onTypeChange()">
+            <el-radio-button label="问题" />
+            <el-radio-button label="文章" />
+            <el-radio-button label="用户" />
+          </el-radio-group>
+        </span>
+        <!--搜索顺序选择器-->
+        <span>
+          <el-select size="large" v-model="order" @change="onOrderChange()">
+            <el-option
+              v-for="item in nowAvailableOrderList"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </span>
+      </div>
 
-    <!--结果区      -->
-    <div class="result-area" style="margin-top: 8px">
-      <!--数据列表        -->
-      <div class="result-list">
-        <!--如果搜索的是问题-->
-        <div class="question-list" v-if="type === '问题'">
-          <QuestionListItem
-            v-for="item in searchResult"
-            :key="item.id"
-            :item="item"
-          />
-        </div>
-        <div class="question-list" v-if="type === '文章'">
-          <ArticleListItem
-            v-for="item in searchResult"
-            :key="item.id"
-            :item="item"
-          />
-        </div>
-        <div class="question-list" v-if="type === '用户'">
-          <el-row>
-            <UserListItem
+      <!--结果区      -->
+      <div class="result-area" style="margin-top: 8px">
+        <!--数据列表        -->
+        <div class="result-list">
+          <!--如果搜索的是问题-->
+          <div class="question-list" v-if="type === '问题'">
+            <QuestionListItem
               v-for="item in searchResult"
               :key="item.id"
               :item="item"
             />
-          </el-row>
+          </div>
+          <div class="question-list" v-if="type === '文章'">
+            <ArticleListItem
+              v-for="item in searchResult"
+              :key="item.id"
+              :item="item"
+            />
+          </div>
+          <div class="question-list" v-if="type === '用户'">
+            <el-row>
+              <UserListItem
+                v-for="item in searchResult"
+                :key="item.id"
+                :item="item"
+              />
+            </el-row>
+          </div>
         </div>
-      </div>
 
-      <!--如果没有数据则显示        -->
-      <div v-if="searchResult.length <= 0" class="empty-tips">
-        <el-empty description="没有搜索到东西"></el-empty>
-      </div>
+        <!--如果没有数据则显示        -->
+        <div v-if="searchResult.length <= 0" class="empty-tips">
+          <el-empty description="没有搜索到东西"></el-empty>
+        </div>
 
-      <!--底部翻页        -->
-      <div
-        class="pager-bottom"
-        style="padding: 8px 8px 8px 0; display: flex; align-items: center"
-      >
-        <el-button-group>
-          <el-button
-            type="default"
-            :icon="ArrowLeft"
-            @click="onPrevPageBtnClick()"
-            :disabled="page <= 1"
-          >
-            上一页
-          </el-button>
-          <el-button type="default" @click="onNextPageBtnClick()">
-            下一页
-            <el-icon class="el-icon--right"><ArrowRight /> </el-icon>
-          </el-button>
-        </el-button-group>
-        <span style="margin-left: 8px; max-width: 160px">
-          <el-input v-model="page" type="number">
-            <template #prepend>当前页</template>
-          </el-input>
-        </span>
+        <!--底部翻页        -->
+        <div
+          class="pager-bottom"
+          style="padding: 8px 8px 8px 0; display: flex; align-items: center"
+        >
+          <el-button-group>
+            <el-button
+              type="default"
+              :icon="ArrowLeft"
+              @click="onPrevPageBtnClick()"
+              :disabled="page <= 1"
+            >
+              上一页
+            </el-button>
+            <el-button type="default" @click="onNextPageBtnClick()">
+              下一页
+              <el-icon class="el-icon--right"><ArrowRight /> </el-icon>
+            </el-button>
+          </el-button-group>
+          <span style="margin-left: 8px; max-width: 160px">
+            <el-input v-model="page" type="number">
+              <template #prepend>当前页</template>
+            </el-input>
+          </span>
+        </div>
       </div>
     </div>
   </el-main>

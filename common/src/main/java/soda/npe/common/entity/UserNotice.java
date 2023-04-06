@@ -22,7 +22,7 @@ public class UserNotice implements Serializable {
     /**
      * 消息id
      */
-    @TableId(type = IdType.ASSIGN_UUID)
+    @TableId(type = IdType.ASSIGN_ID)
     private Long id;
     /**
      * 接收消息的用户的ID
@@ -45,13 +45,13 @@ public class UserNotice implements Serializable {
      */
     private Date time;
     /**
-     * 用户点击消息跳转到的url
-     */
-    private String jumpUrl;
-    /**
      * 是否已读消息
      */
     private Integer isRead;
+    /**
+     * 附带的内容，可能是要跳转到的ID
+     */
+    private String supplement;
 
     @Override
     public boolean equals(Object that) {
@@ -71,8 +71,8 @@ public class UserNotice implements Serializable {
                 && (this.getTitle() == null ? other.getTitle() == null : this.getTitle().equals(other.getTitle()))
                 && (this.getText() == null ? other.getText() == null : this.getText().equals(other.getText()))
                 && (this.getTime() == null ? other.getTime() == null : this.getTime().equals(other.getTime()))
-                && (this.getJumpUrl() == null ? other.getJumpUrl() == null : this.getJumpUrl().equals(other.getJumpUrl()))
-                && (this.getIsRead() == null ? other.getIsRead() == null : this.getIsRead().equals(other.getIsRead()));
+                && (this.getIsRead() == null ? other.getIsRead() == null : this.getIsRead().equals(other.getIsRead()))
+                && (this.getSupplement() == null ? other.getSupplement() == null : this.getSupplement().equals(other.getSupplement()));
     }
 
     @Override
@@ -85,8 +85,8 @@ public class UserNotice implements Serializable {
         result = prime * result + ((getTitle() == null) ? 0 : getTitle().hashCode());
         result = prime * result + ((getText() == null) ? 0 : getText().hashCode());
         result = prime * result + ((getTime() == null) ? 0 : getTime().hashCode());
-        result = prime * result + ((getJumpUrl() == null) ? 0 : getJumpUrl().hashCode());
         result = prime * result + ((getIsRead() == null) ? 0 : getIsRead().hashCode());
+        result = prime * result + ((getSupplement() == null) ? 0 : getSupplement().hashCode());
         return result;
     }
 
@@ -102,8 +102,8 @@ public class UserNotice implements Serializable {
         sb.append(", title=").append(title);
         sb.append(", text=").append(text);
         sb.append(", time=").append(time);
-        sb.append(", jumpUrl=").append(jumpUrl);
         sb.append(", isRead=").append(isRead);
+        sb.append(", supplement=").append(supplement);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

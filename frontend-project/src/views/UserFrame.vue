@@ -1,5 +1,5 @@
 <template>
-  <div style="padding-left: 5vw; padding-right: 5vw">
+  <div>
     <el-container>
       <!--      顶栏-->
       <el-header>

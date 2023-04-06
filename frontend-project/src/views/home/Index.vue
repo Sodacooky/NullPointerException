@@ -1,6 +1,6 @@
 <template>
   <!--  主体部分-->
-  <el-main style="width: 80pc; min-width: 500px">
+  <el-main style="min-width: 600px; margin-left: 96px">
     <!--          搜索框-->
     <el-input
       v-model="searchText"
@@ -34,7 +34,7 @@
   </el-main>
 
   <!--        侧边栏-->
-  <el-aside style="margin-right: 16px; width: 20pc">
+  <el-aside style="width: 20pc; margin-right: 96px">
     <!--          公告-->
     <el-card class="box-card">
       <template #header>
@@ -101,15 +101,6 @@
           "
         >
           <h3>广告位招租2</h3>
-        </el-carousel-item>
-        <el-carousel-item
-          style="
-            background-color: gray;
-            text-align: center;
-            vertical-align: center;
-          "
-        >
-          <h3>广告位招租3</h3>
         </el-carousel-item>
       </el-carousel>
     </el-card>
