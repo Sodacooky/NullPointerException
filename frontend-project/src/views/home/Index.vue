@@ -1,6 +1,6 @@
 <template>
   <!--  主体部分-->
-  <el-main style="width: 80pc">
+  <el-main style="width: 80pc; min-width: 500px">
     <!--          搜索框-->
     <el-input
       v-model="searchText"
@@ -14,7 +14,7 @@
         </el-icon>
       </template>
       <template #append>
-        <el-button @click="doSearch">搜索</el-button>
+        <el-button @click="doSearch()">搜索</el-button>
       </template>
     </el-input>
     <!--      首页内容切换-->

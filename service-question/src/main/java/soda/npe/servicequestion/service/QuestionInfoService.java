@@ -79,11 +79,15 @@ public class QuestionInfoService extends ServiceImpl<QuestionInfoMapper, Questio
     }
 
     public List<QuestionInfoPreviewVO> searchByTime(String keyword, Integer page, Boolean isAsc) {
-        return convertToPreviewVO(getBaseMapper().searchInfoByTime(keyword, page, DBConstant.PAGE_SIZE, isAsc));
+        return convertToPreviewVO(getBaseMapper().searchInfoByTime(keyword.trim(), page, DBConstant.PAGE_SIZE, isAsc));
     }
 
     public List<QuestionInfoPreviewVO> searchBySubscriptionAmount(String keyword, Integer page, Boolean isAsc) {
-        return convertToPreviewVO(getBaseMapper().searchInfoBySubscriptionAmount(keyword, page, DBConstant.PAGE_SIZE, isAsc));
+        return convertToPreviewVO(getBaseMapper().searchInfoBySubscriptionAmount(keyword.trim(), page, DBConstant.PAGE_SIZE, isAsc));
+    }
+
+    public List<QuestionInfoPreviewVO> searchByAnswerAmount(String keyword, Integer page, Boolean isAsc) {
+        return convertToPreviewVO(getBaseMapper().searchInfoByAnswerAmount(keyword.trim(), page, DBConstant.PAGE_SIZE, isAsc));
     }
 
 
@@ -236,4 +240,6 @@ public class QuestionInfoService extends ServiceImpl<QuestionInfoMapper, Questio
 
         return result;
     }
+
+
 }

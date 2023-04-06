@@ -25,8 +25,8 @@ public class SearchController {
      * @param isAsc   是否时间顺序（从老到新）
      * @return 符合要求的用户实体列表
      */
-    @GetMapping("/searchInfoByRegisterTime")
-    public RestResponse searchInfoByRegisterTime(String keyword, Integer page, Boolean isAsc) {
+    @GetMapping("/infoByRegisterTime")
+    public RestResponse infoByRegisterTime(String keyword, Integer page, Boolean isAsc) {
         if (page == null || page < 1) page = 1;
         if (isAsc == null) isAsc = false;
         return RestResponse.ok(null, userInfoService.searchByRegisterTime(keyword, page, isAsc));

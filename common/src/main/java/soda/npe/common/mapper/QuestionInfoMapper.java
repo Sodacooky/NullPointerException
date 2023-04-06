@@ -25,6 +25,10 @@ public interface QuestionInfoMapper extends BaseMapper<QuestionInfo> {
                                                       @Param("pageSize") Integer pageSize,
                                                       @Param("isAsc") Boolean isAsc);
 
+    List<QuestionInfo> searchInfoByAnswerAmount(@Param("keyword") String keyword,
+                                                @Param("page") Integer page,
+                                                @Param("pageSize") Integer pageSize,
+                                                @Param("isAsc") Boolean isAsc);
 
     List<QuestionInfo> getWeeklyAnswerTop100(@Param("weekStart") Date weekStart);
 

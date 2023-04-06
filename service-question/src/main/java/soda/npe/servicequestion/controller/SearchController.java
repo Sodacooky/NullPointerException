@@ -51,6 +51,14 @@ public class SearchController {
         return RestResponse.ok(null, questionInfoService.searchBySubscriptionAmount(keyword, page, isAsc));
     }
 
+
+    @GetMapping("/infoByAnswerAmount")
+    public RestResponse infoByAnswerAmount(String keyword, Integer page, Boolean isAsc) {
+        if (page == null || page < 1) page = 1;
+        if (isAsc == null) isAsc = false;
+        return RestResponse.ok(null, questionInfoService.searchByAnswerAmount(keyword, page, isAsc));
+    }
+
     /**
      * 按照时间顺序搜索答案
      *

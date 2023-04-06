@@ -38,13 +38,13 @@ public class QuestionAnswerService extends ServiceImpl<QuestionAnswerMapper, Que
     public List<QuestionAnswer> searchByTime(String keyword, Integer page, Boolean isAsc) {
         return this.list(
                 new LambdaQueryWrapper<QuestionAnswer>()
-                        .like(QuestionAnswer::getText, keyword)
+                        .like(QuestionAnswer::getText, keyword.trim())
                         .orderByDesc(QuestionAnswer::getPublishTime)
                         .last("limit " + (DBConstant.PAGE_SIZE * (page - 1)) + "," + DBConstant.PAGE_SIZE));
     }
 
     public List<QuestionAnswer> searchByApproval(String keyword, Integer page, Boolean isAsc) {
-        return this.getBaseMapper().searchAnswerByApproval(keyword, page, isAsc);
+        return this.getBaseMapper().searchAnswerByApproval(keyword.trim(), page, isAsc);
     }
 
     public Long getAnswerAmountOf(Long questionId) {

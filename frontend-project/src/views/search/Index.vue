@@ -49,22 +49,32 @@
     </div>
 
     <!--结果区      -->
-    <div class="result-area">
-      <!--顶部翻页控件        -->
-      <div class="pager-top">
-        <Pager
-          @prevBtnClick="onPrevPageBtnClick()"
-          @nextBtnClick="onNextPageBtnClick()"
-          :current-page="page"
-          :max-page="maxPage"
-        />
-      </div>
-
+    <div class="result-area" style="margin-top: 8px">
       <!--数据列表        -->
       <div class="result-list">
         <!--如果搜索的是问题-->
-        <div class="question-list" v-for="item in searchResult" :key="item.id">
-          <QuestionListItem :item="item" />
+        <div class="question-list" v-if="type === '问题'">
+          <QuestionListItem
+            v-for="item in searchResult"
+            :key="item.id"
+            :item="item"
+          />
+        </div>
+        <div class="question-list" v-if="type === '文章'">
+          <ArticleListItem
+            v-for="item in searchResult"
+            :key="item.id"
+            :item="item"
+          />
+        </div>
+        <div class="question-list" v-if="type === '用户'">
+          <el-row>
+            <UserListItem
+              v-for="item in searchResult"
+              :key="item.id"
+              :item="item"
+            />
+          </el-row>
         </div>
       </div>
 
@@ -74,27 +84,60 @@
       </div>
 
       <!--底部翻页        -->
-      <div class="pager-bottom">
-        <Pager
-          @prevBtnClick="onPrevPageBtnClick()"
-          @nextBtnClick="onNextPageBtnClick()"
-          :current-page="page"
-          :max-page="maxPage"
-        />
+      <div
+        class="pager-bottom"
+        style="padding: 8px 8px 8px 0; display: flex; align-items: center"
+      >
+        <el-button-group>
+          <el-button
+            type="default"
+            :icon="ArrowLeft"
+            @click="onPrevPageBtnClick()"
+            :disabled="page <= 1"
+          >
+            上一页
+          </el-button>
+          <el-button type="default" @click="onNextPageBtnClick()">
+            下一页
+            <el-icon class="el-icon--right"><ArrowRight /> </el-icon>
+          </el-button>
+        </el-button-group>
+        <span style="margin-left: 8px; max-width: 160px">
+          <el-input v-model="page" type="number">
+            <template #prepend>当前页</template>
+          </el-input>
+        </span>
       </div>
     </div>
   </el-main>
 </template>
 
 <script>
-import { Search } from "@element-plus/icons-vue";
-import Pager from "@/views/search/component/Pager.vue";
-import { searchQuestionByTime } from "@/api/search";
+import { ArrowLeft, ArrowRight, Search } from "@element-plus/icons-vue";
+import {
+  searchArticleByApproval,
+  searchArticleByReplyAmount,
+  searchArticleByTime,
+  searchQuestionByAnsAmount,
+  searchQuestionBySubAmount,
+  searchQuestionByTime,
+  searchUserByRegisterTime,
+} from "@/api/search";
 import QuestionListItem from "@/components/QuestionListItem.vue";
+import { ElNotification } from "element-plus";
+import ArticleListItem from "@/components/ArticleListItem.vue";
+import UserListItem from "@/views/search/component/UserListItem.vue";
 
 export default {
   name: "Index",
-  components: { QuestionListItem, Pager, Search },
+  components: {
+    UserListItem,
+    ArticleListItem,
+    ArrowRight,
+    QuestionListItem,
+    Search,
+  },
+
   data() {
     return {
       //和query中参数相对应的各个搜索参数
@@ -102,8 +145,6 @@ export default {
       type: "问题",
       order: "time_desc",
       page: 1,
-      //最大页数需要通过api接口调用结果产生
-      maxPage: null,
       //搜索结果
       searchResult: [],
       //不同搜索类型的排序方式由不同，用于生成选择框
@@ -128,8 +169,12 @@ export default {
         { label: "最早注册", value: "time_asc" },
       ],
     };
-  },
+  }, //end of data
+
   computed: {
+    ArrowLeft() {
+      return ArrowLeft;
+    },
     nowAvailableOrderList() {
       switch (this.type) {
         case "问题":
@@ -140,7 +185,8 @@ export default {
           return this.userOrderList;
       }
     },
-  },
+  }, //end of computed
+
   mounted() {
     //获取query中的参数
     if (this.$route.query.keyword) this.keyword = this.$route.query.keyword;
@@ -149,7 +195,8 @@ export default {
     if (this.$route.query.page) this.page = this.$route.query.page;
     //发送请求获取内容
     this.executeSearchApi();
-  },
+  }, //end of mounted
+
   methods: {
     onPrevPageBtnClick() {
       //上一页按钮触发
@@ -163,10 +210,23 @@ export default {
     },
     onTypeChange() {
       //更改了搜索类型
+      this.page = 1;
+      switch (this.type) {
+        case "问题":
+          this.order = this.questionOrderList[0].value;
+          break;
+        case "文章":
+          this.order = this.articleOrderList[0].value;
+          break;
+        case "用户":
+          this.order = this.userOrderList[0].value;
+          break;
+      }
       this.onNewSearch();
     },
     onOrderChange() {
       //更改了搜索结果顺序
+      this.page = 1;
       this.onNewSearch();
     },
     onNewSearch() {
@@ -183,7 +243,6 @@ export default {
     },
 
     //以下是搜索API相关
-
     executeSearchApi() {
       //使用this里面的属性值，调用对应的api，并将结果储存到this.searchResult
       switch (this.type) {
@@ -191,8 +250,10 @@ export default {
           this.executeQuestionSearchApi();
           break;
         case "文章":
+          this.executeArticleSearchApi();
           break;
         case "用户":
+          this.executeUserSearchApi();
           break;
       }
     },
@@ -204,22 +265,56 @@ export default {
           this.processSearchResult(resp)
         );
       } else if (this.order.startsWith("ans")) {
+        searchQuestionByAnsAmount(this.keyword, this.page, isAsc).then(
+          (resp) => {
+            this.processSearchResult(resp);
+          }
+        );
       } else if (this.order.startsWith("sub")) {
+        searchQuestionBySubAmount(this.keyword, this.page, isAsc).then((resp) =>
+          this.processSearchResult(resp)
+        );
       }
     },
-    executeArticleSearchApi() {},
-    executeUserSearchApi() {},
+    executeArticleSearchApi() {
+      let isAsc = this.order.endsWith("asc");
+      if (this.order.startsWith("time")) {
+        searchArticleByTime(this.keyword, this.page, isAsc).then((resp) =>
+          this.processSearchResult(resp)
+        );
+      } else if (this.order.startsWith("app")) {
+        searchArticleByApproval(this.keyword, this.page, isAsc).then((resp) => {
+          this.processSearchResult(resp);
+        });
+      } else if (this.order.startsWith("rep")) {
+        searchArticleByReplyAmount(this.keyword, this.page, isAsc).then(
+          (resp) => this.processSearchResult(resp)
+        );
+      }
+    },
+    executeUserSearchApi() {
+      searchUserByRegisterTime(
+        this.keyword,
+        this.page,
+        this.order.endsWith("asc")
+      ).then((resp) => this.processSearchResult(resp));
+    },
     processSearchResult(resp) {
       //处理搜索的结果
       //如果搜索有内容，那么正常装载
       if (resp.data.data.length > 0) this.searchResult = resp.data.data;
-      else {
+      else if (this.page > 1) {
         //如果搜索没有内容，且当前不是第一页，返回第一页
         this.page = 1;
         this.onNewSearch();
+        ElNotification({
+          title: "提示",
+          message: "已无更多页，跳转回第一页",
+          type: "warning",
+        });
       }
     },
-  },
+  }, //end of methods
 };
 </script>
 

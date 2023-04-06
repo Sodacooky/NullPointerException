@@ -42,37 +42,29 @@ public class ArticleService extends ServiceImpl<ArticleMapper, Article> {
                 .eq(Article::getPublisherId, userId)
                 .orderByDesc(Article::getPublisherId)
                 .last("limit " + (DBConstant.PAGE_SIZE * (page - 1)) + "," + DBConstant.PAGE_SIZE));
-        //移除text
-        found.forEach(obj -> obj.setText(null));
         return convertToPreviewVO(found);
     }
 
     public List<ArticlePreviewVO> searchByTime(String keyword, Integer page, Boolean isAsc) {
         List<Article> found = this.list(new LambdaQueryWrapper<Article>()
-                .like(Article::getText, keyword)
+                .like(Article::getText, keyword.trim())
                 .or().like(Article::getCategory, keyword)
                 .or().like(Article::getTitle, keyword)
                 .orderBy(true, isAsc, Article::getPublishTime)
                 .last("limit " + (DBConstant.PAGE_SIZE * (page - 1)) + "," + DBConstant.PAGE_SIZE));
-        //移除text
-        found.forEach(obj -> obj.setText(null));
         return convertToPreviewVO(found);
     }
 
 
     public List<ArticlePreviewVO> searchByApproval(String keyword, Integer page, Boolean isAsc) {
         //搜索
-        List<Article> found = this.getBaseMapper().searchByApproval(keyword, page, DBConstant.PAGE_SIZE, isAsc);
-        //移除text
-        found.forEach(obj -> obj.setText(null));
+        List<Article> found = this.getBaseMapper().searchByApproval(keyword.trim(), page, DBConstant.PAGE_SIZE, isAsc);
         return convertToPreviewVO(found);
     }
 
     public List<ArticlePreviewVO> searchByReplyAmount(String keyword, Integer page, Boolean isAsc) {
         //搜索
-        List<Article> found = this.getBaseMapper().searchByReplyAmount(keyword, page, DBConstant.PAGE_SIZE, isAsc);
-        //移除text
-        found.forEach(obj -> obj.setText(null));
+        List<Article> found = this.getBaseMapper().searchByReplyAmount(keyword.trim(), page, DBConstant.PAGE_SIZE, isAsc);
         return convertToPreviewVO(found);
     }
 

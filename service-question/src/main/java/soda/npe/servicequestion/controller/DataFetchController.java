@@ -41,7 +41,7 @@ public class DataFetchController {
     }
 
     /**
-     * 以从新到就的顺序，获取指定用户发表过的回答
+     * 以从新到旧的顺序，获取指定用户发表过的回答
      *
      * @param userId 用户ID
      * @param page   页

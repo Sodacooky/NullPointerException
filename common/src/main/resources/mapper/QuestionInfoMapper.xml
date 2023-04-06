@@ -55,6 +55,29 @@
         limit ${pageSize*(page-1)},#{pageSize}
     </select>
 
+    <select id="searchInfoByAnswerAmount" resultType="soda.npe.common.entity.QuestionInfo">
+        select qi.*
+        from question_info qi
+
+        left join
+        (select question_id, count(id) as amount from question_answer group by question_id) qa_amount
+        on qi.id = qa_amount.question_id
+
+        left join
+        question_answer qa
+        on qi.id = qa.question_id and qa.order_number = 0
+
+        where qi.title like concat('%', #{keyword}, '%')
+        or qi.category like concat('%', #{keyword}, '%')
+        or qa.text like concat('%', #{keyword}, '%')
+
+        order by qa_amount.amount
+        <if test="!isAsc">desc</if>
+
+        limit ${pageSize*(page-1)},#{pageSize}
+    </select>
+
+
     <select id="getWeeklyAnswerTop100" resultType="soda.npe.common.entity.QuestionInfo">
         select qi.*
         from question_info qi
@@ -84,5 +107,6 @@
 
         limit 200
     </select>
+
 
 </mapper>
