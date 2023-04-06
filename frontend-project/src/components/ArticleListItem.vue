@@ -1,5 +1,9 @@
 <template>
-  <div class="item-card" style="padding: 8px 8px 24px 8px">
+  <div
+    class="item-card"
+    style="padding: 8px 8px 24px 8px"
+    @click="$router.push(`/article/${item.id}`)"
+  >
     <!--                文章数据-->
     <div class="question-info">
       <!--                    标题、分类、发布时间-->

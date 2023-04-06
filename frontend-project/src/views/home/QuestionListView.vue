@@ -10,10 +10,7 @@
       v-if="currentPage !== -1"
       style="display: flex; justify-content: center; margin-top: 16px"
     >
-      <el-button
-        type="primary"
-        @click="this.loadLatestQuestion(this.currentPage + 1)"
-      >
+      <el-button @click="this.loadLatestQuestion(this.currentPage + 1)">
         加载更多
       </el-button>
     </div>

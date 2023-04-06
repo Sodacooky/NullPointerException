@@ -19,6 +19,7 @@ import soda.npe.common.mapper.UserQuestionSubscriptionMapper;
 import soda.npe.servicequestion.vo.QuestionInfoPreviewVO;
 import soda.npe.servicequestion.vo.QuestionPublishVO;
 
+import java.time.Duration;
 import java.util.*;
 
 @Service
@@ -189,6 +190,7 @@ public class QuestionInfoService extends ServiceImpl<QuestionInfoMapper, Questio
         }
         redisTemplate.delete("homeWeeklyQuestion");
         redisTemplate.opsForList().leftPushAll("homeWeeklyQuestion", result);
+        redisTemplate.expire("homeWeeklyQuestion", Duration.ofDays(1));
 
         return result;
     }
@@ -237,6 +239,7 @@ public class QuestionInfoService extends ServiceImpl<QuestionInfoMapper, Questio
         }
         redisTemplate.delete("homeMonthlyQuestion");
         redisTemplate.opsForList().leftPushAll("homeMonthlyQuestion", result);
+        redisTemplate.expire("homeMonthlyQuestion", Duration.ofDays(1));
 
         return result;
     }

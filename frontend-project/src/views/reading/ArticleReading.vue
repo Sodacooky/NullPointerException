@@ -1,5 +1,4 @@
 <template>
-  <!--  主体展示文章内容-->
   <el-main style="display: flex; justify-content: center">
     <!--整页内容归该元素下，控制大小-->
     <div class="page-container" style="width: 65%; min-width: 600px">

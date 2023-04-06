@@ -27,8 +27,6 @@
     <div class="reply-text" style="padding-left: 48px">
       {{ item.text }}
     </div>
-    <!--分割线-->
-    <el-divider style="margin-top: 0" />
   </div>
 </template>
 
