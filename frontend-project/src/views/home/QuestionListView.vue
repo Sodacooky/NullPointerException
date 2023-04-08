@@ -3,7 +3,7 @@
   <div v-if="type === 'latest'">
     <!--    问题列表-->
     <div v-for="item in resultData" :key="item.id" class="list">
-      <QuestionListItem :item="item" />
+      <QuestionPreviewItem :item="item" />
     </div>
     <!--加载更多按钮-->
     <div
@@ -23,7 +23,7 @@
   <div v-if="type === 'weekly'">
     <!--    问题列表-->
     <div v-for="(item, index) in resultData" :key="item.id" class="list">
-      <QuestionListItem :is-rank="true" :item="item" :rank-index="index" />
+      <QuestionPreviewItem :is-rank="true" :item="item" :rank-index="index" />
     </div>
   </div>
 
@@ -31,7 +31,7 @@
   <div v-if="type === 'monthly'">
     <!--    问题列表-->
     <div v-for="(item, index) in resultData" :key="item.id" class="list">
-      <QuestionListItem :is-rank="true" :item="item" :rank-index="index" />
+      <QuestionPreviewItem :is-rank="true" :item="item" :rank-index="index" />
     </div>
   </div>
 
@@ -46,11 +46,11 @@ import {
   getMonthlyQuestion,
   getWeeklyQuestion,
 } from "@/api/home";
-import QuestionListItem from "@/components/QuestionListItem.vue";
+import QuestionPreviewItem from "@/components/QuestionPreviewItem.vue";
 
 export default {
   name: "QuestionListView",
-  components: { QuestionListItem },
+  components: { QuestionPreviewItem },
   props: ["type"],
   data() {
     return {

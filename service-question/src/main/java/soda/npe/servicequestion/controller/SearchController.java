@@ -4,7 +4,7 @@ import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import soda.npe.common.controller.RestResponse;
+import soda.npe.common.controller.Response;
 import soda.npe.servicequestion.service.QuestionAnswerService;
 import soda.npe.servicequestion.service.QuestionInfoService;
 
@@ -30,10 +30,10 @@ public class SearchController {
      * @return 当前页下，找到的问题实体列表
      */
     @GetMapping("/infoByTime")
-    public RestResponse infoByTime(String keyword, Integer page, Boolean isAsc) {
+    public Response infoByTime(String keyword, Integer page, Boolean isAsc) {
         if (page == null || page < 1) page = 1;
         if (isAsc == null) isAsc = false;
-        return RestResponse.ok(null, questionInfoService.searchByTime(keyword, page, isAsc));
+        return Response.ok(null, questionInfoService.searchByTime(keyword, page, isAsc));
     }
 
     /**
@@ -45,18 +45,18 @@ public class SearchController {
      * @return 当前页下，找到的问题实体列表
      */
     @GetMapping("/infoBySubscriptionAmount")
-    public RestResponse infoBySubscriptionAmount(String keyword, Integer page, Boolean isAsc) {
+    public Response infoBySubscriptionAmount(String keyword, Integer page, Boolean isAsc) {
         if (page == null || page < 1) page = 1;
         if (isAsc == null) isAsc = false;
-        return RestResponse.ok(null, questionInfoService.searchBySubscriptionAmount(keyword, page, isAsc));
+        return Response.ok(null, questionInfoService.searchBySubscriptionAmount(keyword, page, isAsc));
     }
 
 
     @GetMapping("/infoByAnswerAmount")
-    public RestResponse infoByAnswerAmount(String keyword, Integer page, Boolean isAsc) {
+    public Response infoByAnswerAmount(String keyword, Integer page, Boolean isAsc) {
         if (page == null || page < 1) page = 1;
         if (isAsc == null) isAsc = false;
-        return RestResponse.ok(null, questionInfoService.searchByAnswerAmount(keyword, page, isAsc));
+        return Response.ok(null, questionInfoService.searchByAnswerAmount(keyword, page, isAsc));
     }
 
     /**
@@ -68,10 +68,10 @@ public class SearchController {
      * @return 当前页下，找到的回答实体列表
      */
     @GetMapping("/answerByTime")
-    public RestResponse answerByTime(String keyword, Integer page, Boolean isAsc) {
+    public Response answerByTime(String keyword, Integer page, Boolean isAsc) {
         if (page == null || page < 1) page = 1;
         if (isAsc == null) isAsc = false;
-        return RestResponse.ok(null, questionAnswerService.searchByTime(keyword, page, isAsc));
+        return Response.ok(null, questionAnswerService.searchByTime(keyword, page, isAsc));
     }
 
     /**
@@ -83,10 +83,10 @@ public class SearchController {
      * @return 当前页下，找到的回答实体列表
      */
     @GetMapping("/answerByApproval")
-    public RestResponse answerByApproval(String keyword, Integer page, Boolean isAsc) {
+    public Response answerByApproval(String keyword, Integer page, Boolean isAsc) {
         if (page == null || page < 1) page = 1;
         if (isAsc == null) isAsc = false;
-        return RestResponse.ok(null, questionAnswerService.searchByApproval(keyword, page, isAsc));
+        return Response.ok(null, questionAnswerService.searchByApproval(keyword, page, isAsc));
     }
 
 }

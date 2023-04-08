@@ -3,7 +3,7 @@ package soda.npe.servicearticle.controller;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import soda.npe.common.controller.RestResponse;
+import soda.npe.common.controller.Response;
 import soda.npe.common.entity.Article;
 import soda.npe.servicearticle.service.ApprovalArticleService;
 import soda.npe.servicearticle.service.ArticleReplyService;
@@ -32,10 +32,10 @@ public class DataFetchController {
      * @return Article对象文章列表，该接口会将正文去掉以保证速度
      */
     @GetMapping("/getArticlePublishedBy")
-    public RestResponse getArticlePublishedBy(Long userId, Integer page) {
-        if (userId == null) return RestResponse.fail(1, "未指定用户");
+    public Response getArticlePublishedBy(Long userId, Integer page) {
+        if (userId == null) return Response.fail(1, "未指定用户");
         if (page == null || page < 1) page = 1;
-        return RestResponse.ok(null, articleService.getPublishedBy(userId, page));
+        return Response.ok(null, articleService.getPublishedBy(userId, page));
     }
 
 
@@ -46,11 +46,11 @@ public class DataFetchController {
      * @return Article对象
      */
     @GetMapping("/getArticle")
-    public RestResponse getArticle(Long articleId) {
-        if (articleId == null) return RestResponse.fail(1, "articleId is null");
+    public Response getArticle(Long articleId) {
+        if (articleId == null) return Response.fail(1, "articleId is null");
         Article one = articleService.getById(articleId);
-        if (one == null) return RestResponse.fail(1, "指定ID没有找到对象");
-        return RestResponse.ok(null, one);
+        if (one == null) return Response.fail(1, "指定ID没有找到对象");
+        return Response.ok(null, one);
     }
 
     /**
@@ -61,10 +61,10 @@ public class DataFetchController {
      * @return 回复列表
      */
     @GetMapping("/getReplyOf")
-    public RestResponse getReplyOfAnswer(Long articleId, Integer page) {
-        if (articleId == null) return RestResponse.fail(1, "未指定回答");
+    public Response getReplyOfAnswer(Long articleId, Integer page) {
+        if (articleId == null) return Response.fail(1, "未指定回答");
         if (page == null || page < 1) page = 1;
-        return RestResponse.ok(null, articleReplyService.getOf(articleId, page));
+        return Response.ok(null, articleReplyService.getOf(articleId, page));
     }
 
     /**
@@ -74,9 +74,9 @@ public class DataFetchController {
      * @return 回复数量
      */
     @GetMapping("/getReplyAmountOf")
-    public RestResponse getReplyAmountOf(Long articleId) {
-        if (articleId == null) return RestResponse.fail(1, "questionId is null");
-        return RestResponse.ok(null, articleReplyService.getReplyAmountOf(articleId));
+    public Response getReplyAmountOf(Long articleId) {
+        if (articleId == null) return Response.fail(1, "questionId is null");
+        return Response.ok(null, articleReplyService.getReplyAmountOf(articleId));
     }
 
     /**
@@ -86,9 +86,9 @@ public class DataFetchController {
      * @return 点赞数量
      */
     @GetMapping("/getApprovalAmountOf")
-    public RestResponse getApprovalAmountOf(Long articleId) {
-        if (articleId == null) return RestResponse.fail(1, "questionId is null");
-        return RestResponse.ok(null, approvalArticleService.getApprovalAmountOf(articleId));
+    public Response getApprovalAmountOf(Long articleId) {
+        if (articleId == null) return Response.fail(1, "questionId is null");
+        return Response.ok(null, approvalArticleService.getApprovalAmountOf(articleId));
     }
 
 

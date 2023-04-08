@@ -55,20 +55,20 @@
         <div class="result-list">
           <!--如果搜索的是问题-->
           <div class="question-list" v-if="type === '问题'">
-            <QuestionListItem
+            <QuestionPreviewItem
               v-for="item in searchResult"
               :key="item.id"
               :item="item"
             />
           </div>
-          <div class="question-list" v-if="type === '文章'">
-            <ArticleListItem
+          <div class="article-list" v-if="type === '文章'">
+            <ArticlePreviewItem
               v-for="item in searchResult"
               :key="item.id"
               :item="item"
             />
           </div>
-          <div class="question-list" v-if="type === '用户'">
+          <div class="user-list" v-if="type === '用户'">
             <el-row>
               <UserListItem
                 v-for="item in searchResult"
@@ -125,18 +125,18 @@ import {
   searchQuestionByTime,
   searchUserByRegisterTime,
 } from "@/api/search";
-import QuestionListItem from "@/components/QuestionListItem.vue";
+import QuestionPreviewItem from "@/components/QuestionPreviewItem.vue";
 import { ElNotification } from "element-plus";
-import ArticleListItem from "@/components/ArticleListItem.vue";
+import ArticlePreviewItem from "@/components/ArticlePreviewItem.vue";
 import UserListItem from "@/views/search/component/UserListItem.vue";
 
 export default {
   name: "Index",
   components: {
     UserListItem,
-    ArticleListItem,
+    ArticlePreviewItem,
     ArrowRight,
-    QuestionListItem,
+    QuestionPreviewItem,
     Search,
   },
 

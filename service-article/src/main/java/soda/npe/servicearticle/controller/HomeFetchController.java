@@ -6,7 +6,7 @@ import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import soda.npe.common.controller.RestResponse;
+import soda.npe.common.controller.Response;
 import soda.npe.servicearticle.service.ArticleService;
 
 @RestController
@@ -24,13 +24,13 @@ public class HomeFetchController {
      * @return QuestionInfoPreviewVO列表
      */
     @GetMapping("/latest")
-    public RestResponse latest(Integer page, String queryTime) {
+    public Response latest(Integer page, String queryTime) {
         //check params
         if (page == null || page < 1) page = 1;
-        if (StrUtil.isBlank(queryTime)) return RestResponse.fail(1, "queryTime缺失");
-        if (DateUtil.parse(queryTime) == null) RestResponse.fail(2, "queryTime格式错误");
+        if (StrUtil.isBlank(queryTime)) return Response.fail(1, "queryTime缺失");
+        if (DateUtil.parse(queryTime) == null) Response.fail(2, "queryTime格式错误");
         //do fetch
-        return RestResponse.ok(null, articleService.getHomeLatest(page, DateUtil.parse(queryTime).toJdkDate()));
+        return Response.ok(null, articleService.getHomeLatest(page, DateUtil.parse(queryTime).toJdkDate()));
     }
 
     /**
@@ -39,9 +39,9 @@ public class HomeFetchController {
      * @return QuestionInfoPreviewVO列表
      */
     @GetMapping("/weekly")
-    public RestResponse weekly() {
+    public Response weekly() {
         //do fetch
-        return RestResponse.ok(null, articleService.getHomeWeekly());
+        return Response.ok(null, articleService.getHomeWeekly());
     }
 
     /**
@@ -50,9 +50,9 @@ public class HomeFetchController {
      * @return QuestionInfoPreviewVO列表
      */
     @GetMapping("/monthly")
-    public RestResponse monthly() {
+    public Response monthly() {
         //do fetch
-        return RestResponse.ok(null, articleService.getHomeMonthly());
+        return Response.ok(null, articleService.getHomeMonthly());
     }
 
 }

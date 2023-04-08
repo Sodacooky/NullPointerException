@@ -8,6 +8,7 @@ import soda.npe.common.constant.DBConstant;
 import soda.npe.common.entity.*;
 import soda.npe.common.mapper.*;
 import soda.npe.servicequestion.vo.AnswerPublishVO;
+import soda.npe.servicequestion.vo.QuestionAnswerPreviewVO;
 import soda.npe.servicequestion.vo.QuestionAnswerReadingVO;
 
 import java.util.ArrayList;
@@ -29,12 +30,14 @@ public class QuestionAnswerService extends ServiceImpl<QuestionAnswerMapper, Que
     @Resource
     private ApprovalAnswerMapper approvalAnswerMapper;
 
-    public List<QuestionAnswer> getAnswerPublishedBy(long userId, int page) {
-        return this.list(
+    public List<QuestionAnswerPreviewVO> getAnswerPublishedBy(long userId, int page) {
+        List<QuestionAnswer> qa = this.list(
                 new LambdaQueryWrapper<QuestionAnswer>()
                         .eq(QuestionAnswer::getPublisherId, userId)
+                        .lt(QuestionAnswer::getOrderNumber, 1)
                         .orderByDesc(QuestionAnswer::getPublishTime)
                         .last("limit " + (DBConstant.PAGE_SIZE * (page - 1)) + "," + DBConstant.PAGE_SIZE));
+        return convertToPreviewVO(qa);
     }
 
     public List<QuestionAnswerReadingVO> getByTimeOf(Long questionId, Integer page, Boolean isAsc) {
@@ -119,6 +122,32 @@ public class QuestionAnswerService extends ServiceImpl<QuestionAnswerMapper, Que
             UserInfo foundUserInfo = userInfoMapper.selectById(one.getPublisherId());
             vo.setPublisherNickname(foundUserInfo.getNickname());
             vo.setPublisherAvatar(foundUserInfo.getAvatar());
+            //添加到
+            result.add(vo);
+        }
+        return result;
+    }
+
+    private List<QuestionAnswerPreviewVO> convertToPreviewVO(List<QuestionAnswer> origin) {
+        List<QuestionAnswerPreviewVO> result = new ArrayList<>();
+        for (var one : origin) {
+            QuestionAnswerPreviewVO vo = new QuestionAnswerPreviewVO();
+            //填充公共数据
+            vo.setId(one.getId());
+            vo.setShortText(one.getText().length() > 64 ? one.getText().substring(0, 64) + "..." : one.getText());
+            vo.setPublisherId(one.getPublisherId());
+            vo.setPublishTime(one.getPublishTime());
+            vo.setQuestionId(one.getQuestionId());
+            //填充点赞数量
+            Long approvalAmount = approvalAnswerMapper.selectCount(
+                    new LambdaQueryWrapper<ApprovalAnswer>().eq(ApprovalAnswer::getAnswerId, one.getId()));
+            vo.setApprovalAmount(approvalAmount);
+            //填充用户昵称和头像URL
+            UserInfo foundUserInfo = userInfoMapper.selectById(one.getPublisherId());
+            vo.setPublisherNickname(foundUserInfo.getNickname());
+            vo.setPublisherAvatar(foundUserInfo.getAvatar());
+            //填充问题数据
+            vo.setQuestionTitle(questionInfoMapper.selectById(one.getQuestionId()).getTitle());
             //添加到
             result.add(vo);
         }

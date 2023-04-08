@@ -68,7 +68,7 @@ import { baseUrl } from "@/api/requests";
 import { getUserAvatarUrl } from "@/api/user";
 
 export default {
-  name: "QuestionListItem",
+  name: "QuestionPreviewItem",
   methods: {
     getUserAvatarUrl,
     baseUrl() {

@@ -3,7 +3,7 @@ package soda.npe.servicequestion.controller;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import soda.npe.common.controller.RestResponse;
+import soda.npe.common.controller.Response;
 import soda.npe.common.entity.QuestionInfo;
 import soda.npe.servicequestion.service.QuestionAnswerService;
 import soda.npe.servicequestion.service.QuestionInfoService;
@@ -34,10 +34,10 @@ public class DataFetchController {
      * @return 问题列表
      */
     @GetMapping("/getQuestionInfoPublishedBy")
-    public RestResponse getQuestionInfoPublishedBy(Long userId, Integer page) {
-        if (userId == null) return RestResponse.fail(1, "未指定用户");
+    public Response getQuestionInfoPublishedBy(Long userId, Integer page) {
+        if (userId == null) return Response.fail(1, "未指定用户");
         if (page == null || page < 1) page = 1;
-        return RestResponse.ok(null, questionInfoService.getInfoPublishedBy(userId, page));
+        return Response.ok(null, questionInfoService.getInfoPublishedBy(userId, page));
     }
 
     /**
@@ -48,10 +48,10 @@ public class DataFetchController {
      * @return 回答列表
      */
     @GetMapping("/getAnswerPublishedBy")
-    public RestResponse getAnswerPublishedBy(Long userId, Integer page) {
-        if (userId == null) return RestResponse.fail(1, "未指定用户");
+    public Response getAnswerPublishedBy(Long userId, Integer page) {
+        if (userId == null) return Response.fail(1, "未指定用户");
         if (page == null || page < 1) page = 1;
-        return RestResponse.ok(null, questionAnswerService.getAnswerPublishedBy(userId, page));
+        return Response.ok(null, questionAnswerService.getAnswerPublishedBy(userId, page));
     }
 
     /**
@@ -62,10 +62,10 @@ public class DataFetchController {
      * @return 回复列表
      */
     @GetMapping("/getReplyOfAnswer")
-    public RestResponse getReplyOfAnswer(Long answerId, Integer page) {
-        if (answerId == null) return RestResponse.fail(1, "未指定回答");
+    public Response getReplyOfAnswer(Long answerId, Integer page) {
+        if (answerId == null) return Response.fail(1, "未指定回答");
         if (page == null || page < 1) page = 1;
-        return RestResponse.ok(null, questionReplyService.getOfAnswer(answerId, page));
+        return Response.ok(null, questionReplyService.getOfAnswer(answerId, page));
     }
 
     /**
@@ -75,11 +75,11 @@ public class DataFetchController {
      * @return QuestionInfo对象
      */
     @GetMapping("/getQuestionInfo")
-    public RestResponse getQuestionInfo(Long questionId) {
-        if (questionId == null) return RestResponse.fail(1, "questionId is null");
+    public Response getQuestionInfo(Long questionId) {
+        if (questionId == null) return Response.fail(1, "questionId is null");
         QuestionInfo one = questionInfoService.getById(questionId);
-        if (one == null) return RestResponse.fail(1, "指定ID没有找到对象");
-        return RestResponse.ok(null, one);
+        if (one == null) return Response.fail(1, "指定ID没有找到对象");
+        return Response.ok(null, one);
     }
 
     /**
@@ -89,11 +89,11 @@ public class DataFetchController {
      * @return 正文的Markdown字符串
      */
     @GetMapping("/getQuestionText")
-    public RestResponse getQuestionText(Long questionId) {
-        if (questionId == null) return RestResponse.fail(1, "questionId is null");
+    public Response getQuestionText(Long questionId) {
+        if (questionId == null) return Response.fail(1, "questionId is null");
         String text = questionInfoService.getText(questionId);
-        if (text == null) return RestResponse.fail(1, "没有找到对象");
-        else return RestResponse.ok(null, text);
+        if (text == null) return Response.fail(1, "没有找到对象");
+        else return Response.ok(null, text);
     }
 
     /**
@@ -103,9 +103,9 @@ public class DataFetchController {
      * @return 回答数量
      */
     @GetMapping("/getAnswerAmountOf")
-    public RestResponse getAnswerAmountOf(Long questionId) {
-        if (questionId == null) return RestResponse.fail(1, "questionId is null");
-        return RestResponse.ok(null, questionAnswerService.getAnswerAmountOf(questionId));
+    public Response getAnswerAmountOf(Long questionId) {
+        if (questionId == null) return Response.fail(1, "questionId is null");
+        return Response.ok(null, questionAnswerService.getAnswerAmountOf(questionId));
     }
 
     /**
@@ -115,9 +115,9 @@ public class DataFetchController {
      * @return 订阅人数
      */
     @GetMapping("/getSubscriptionAmountOf")
-    public RestResponse getSubscriptionAmountOf(Long questionId) {
-        if (questionId == null) return RestResponse.fail(1, "questionId is null");
-        return RestResponse.ok(null, userQuestionSubscriptionService.getSubscriptionAmountOf(questionId));
+    public Response getSubscriptionAmountOf(Long questionId) {
+        if (questionId == null) return Response.fail(1, "questionId is null");
+        return Response.ok(null, userQuestionSubscriptionService.getSubscriptionAmountOf(questionId));
     }
 
     /**
@@ -129,10 +129,10 @@ public class DataFetchController {
      * @return 答案实体列表
      */
     @GetMapping("/getAnswerByTimeOf")
-    public RestResponse getAnswerByTimeOf(Long questionId, Integer page, Boolean isAsc) {
-        if (questionId == null) return RestResponse.fail(1, "未指定问题");
+    public Response getAnswerByTimeOf(Long questionId, Integer page, Boolean isAsc) {
+        if (questionId == null) return Response.fail(1, "未指定问题");
         if (page == null || page < 1) page = 1;
-        return RestResponse.ok(null, questionAnswerService.getByTimeOf(questionId, page, isAsc));
+        return Response.ok(null, questionAnswerService.getByTimeOf(questionId, page, isAsc));
     }
 
     /**
@@ -144,10 +144,10 @@ public class DataFetchController {
      * @return 答案实体列表
      */
     @GetMapping("/getAnswerByApprovalOf")
-    public RestResponse getAnswerByApprovalOf(Long questionId, Integer page, Boolean isAsc) {
-        if (questionId == null) return RestResponse.fail(1, "未指定问题");
+    public Response getAnswerByApprovalOf(Long questionId, Integer page, Boolean isAsc) {
+        if (questionId == null) return Response.fail(1, "未指定问题");
         if (page == null || page < 1) page = 1;
-        return RestResponse.ok(null, questionAnswerService.getByApprovalOf(questionId, page, isAsc));
+        return Response.ok(null, questionAnswerService.getByApprovalOf(questionId, page, isAsc));
     }
 
 

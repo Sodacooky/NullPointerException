@@ -4,7 +4,7 @@ import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import soda.npe.common.controller.RestResponse;
+import soda.npe.common.controller.Response;
 import soda.npe.servicearticle.service.ArticleService;
 
 /**
@@ -26,10 +26,10 @@ public class SearchController {
      * @return 当前页下，找到的文章实体列表，均去除了正文
      */
     @GetMapping("/byTime")
-    public RestResponse byTime(String keyword, Integer page, Boolean isAsc) {
+    public Response byTime(String keyword, Integer page, Boolean isAsc) {
         if (page == null || page < 1) page = 1;
         if (isAsc == null) isAsc = false;
-        return RestResponse.ok(null, articleService.searchByTime(keyword, page, isAsc));
+        return Response.ok(null, articleService.searchByTime(keyword, page, isAsc));
     }
 
     /**
@@ -41,10 +41,10 @@ public class SearchController {
      * @return 当前页下，找到的文章实体列表，均去除了正文
      */
     @GetMapping("/byApproval")
-    public RestResponse byApproval(String keyword, Integer page, Boolean isAsc) {
+    public Response byApproval(String keyword, Integer page, Boolean isAsc) {
         if (page == null || page < 1) page = 1;
         if (isAsc == null) isAsc = false;
-        return RestResponse.ok(null, articleService.searchByApproval(keyword, page, isAsc));
+        return Response.ok(null, articleService.searchByApproval(keyword, page, isAsc));
     }
 
     /**
@@ -56,10 +56,10 @@ public class SearchController {
      * @return 当前页下，找到的文章实体列表，均去除了正文
      */
     @GetMapping("/byReplyAmount")
-    public RestResponse byReplyAmount(String keyword, Integer page, Boolean isAsc) {
+    public Response byReplyAmount(String keyword, Integer page, Boolean isAsc) {
         if (page == null || page < 1) page = 1;
         if (isAsc == null) isAsc = false;
-        return RestResponse.ok(null, articleService.searchByReplyAmount(keyword, page, isAsc));
+        return Response.ok(null, articleService.searchByReplyAmount(keyword, page, isAsc));
     }
 
 }

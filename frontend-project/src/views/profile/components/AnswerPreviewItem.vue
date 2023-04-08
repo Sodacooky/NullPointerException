@@ -2,25 +2,14 @@
   <div
     class="item-card"
     style="padding: 8px 8px 24px 8px"
-    @click="$router.push(`/article/${item.id}`)"
+    @click="$router.push(`/question/${item.questionId}`)"
   >
-    <!--                文章数据-->
+    <!--                回答数据-->
     <div class="question-info">
       <!--                    标题、分类、发布时间-->
       <div class="title-and-time">
         <span class="title" style="font-weight: bold">
-          <!--            根据是否为排行榜和排行榜位置渲染排名-->
-          <span
-            v-if="isRank"
-            :style="{ color: rankIndex <= 2 ? 'red' : 'black' }"
-          >
-            #{{ rankIndex + 1 }}
-          </span>
-          {{ item.title }}
-        </span>
-
-        <span class="category-tag" style="margin-left: 4px">
-          <el-tag type="info">{{ item.category }}</el-tag>
+          在 {{ item.questionTitle }} 中回答
         </span>
         <span class="publish-time" style="color: gray; float: right">
           {{ item.publishTime }}
@@ -44,14 +33,11 @@
           {{ item.publisherNickname }}
         </span>
       </span>
-      <!--            回复数量与订阅数量 -->
+      <!--            点赞数量 -->
       <span
         class="interact-info"
         style="display: flex; align-items: center; float: right"
       >
-        <span style="padding-right: 8px">
-          <el-icon><Comment /></el-icon>{{ item.replyAmount }}
-        </span>
         <span style="padding-right: 8px">
           <el-icon><CaretTop /></el-icon>{{ item.approvalAmount }}
         </span>
@@ -61,25 +47,15 @@
 </template>
 
 <script>
-import { baseUrl } from "@/api/requests";
-import { CaretTop, Comment } from "@element-plus/icons-vue";
+import { CaretTop } from "@element-plus/icons-vue";
 import { getUserAvatarUrl } from "@/api/user";
 
 export default {
-  name: "ArticleListItem",
-  methods: {
-    getUserAvatarUrl,
-    baseUrl() {
-      return baseUrl;
-    },
-  },
-  components: { CaretTop, Comment },
-  props: ["item", "isRank", "rankIndex"],
+  name: "AnswerPreviewItem",
+  props: ["item"],
+  methods: { getUserAvatarUrl },
+  components: { CaretTop },
 };
 </script>
 
-<style scoped>
-.item-card:hover {
-  background-color: rgb(248, 248, 248);
-}
-</style>
+<style scoped></style>

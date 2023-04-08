@@ -1,103 +1,160 @@
 <template>
-    <el-container>
-        <el-main>
-            <!--      顶部的信息展示框-->
-            <el-card :body-style="{ padding: '8px' }">
-                <el-row>
-                    <!--          头像-->
-                    <el-col :span="3">
-                        <el-image
-                                fit="fill"
-                                src="https://s3.bmp.ovh/imgs/2022/12/14/18f7342584baa5a4.png"
-                        />
-                    </el-col>
-                    <el-col :span="1"></el-col>
-                    <!--          详细信息-->
-                    <el-col :span="20">
-                        <!--            大大的昵称-->
-                        <div style="font-weight: bold; font-size: larger">Sodacooky</div>
-                        <!--            普通的自我介绍-->
-                        <div>
-                            这是一段自我介绍，他介绍了我自己，所以是一段自我介绍，正因为他是一段自我介绍，所以写的应该是关于我的东西。
-                        </div>
-                        <!--            灰色的注册时间和用户ID-->
-                        <div style="color: gray">
-                            <div>注册时间：2022.1.1 00:00:15</div>
-                        </div>
-                    </el-col>
-                </el-row>
-            </el-card>
-            <!--      展示回答的问题、发布的问题、发布的文章、发表的文章回复-->
-            <div>
-                <div style="margin-top: 8px">
-                    <el-button-group>
-                        <el-button
-                                :type="nowActiveTypeName === 'answer' ? 'primary' : ''"
-                                text
-                                @click="onTypeSwitchButtonClick('answer')"
-                        >
-                            回答
-                        </el-button>
-                        <el-button
-                                :type="nowActiveTypeName === 'question' ? 'primary' : ''"
-                                text
-                                @click="onTypeSwitchButtonClick('question')"
-                        >
-                            提问
-                        </el-button>
-                        <el-button
-                                :type="nowActiveTypeName === 'article' ? 'primary' : ''"
-                                text
-                                @click="onTypeSwitchButtonClick('article')"
-                        >
-                            文章
-                        </el-button>
-                        <el-button
-                                :type="nowActiveTypeName === 'reply' ? 'primary' : ''"
-                                text
-                                @click="onTypeSwitchButtonClick('reply')"
-                        >
-                            文章回复
-                        </el-button>
-                    </el-button-group>
-                </div>
-                <div style="margin-top: 8px">
-                    <ProfileDetail :type="nowActiveTypeName" :user_id="user_id"/>
-                </div>
-            </div>
-        </el-main>
-    </el-container>
+  <el-main style="display: flex; justify-content: center">
+    <div class="page-container" style="width: 50pc; min-width: 600px">
+      <!--      顶部的信息展示框-->
+      <UserInformationCard :user-info="userInfo" />
+
+      <!--类型选择器      -->
+      <div class="list-type-selector" style="margin-top: 16px">
+        <el-radio-group size="large" v-model="type" @change="onTypeChange()">
+          <el-radio-button label="问题" />
+          <el-radio-button label="回答" />
+          <el-radio-button label="文章" />
+        </el-radio-group>
+      </div>
+
+      <!--      展示列表-->
+      <div class="result-list" style="margin-top: 16px">
+        <!--根据类型-->
+        <div class="question-list" v-if="type === '问题'">
+          <QuestionPreviewItem
+            v-for="item in listData"
+            :key="item.id"
+            :item="item"
+          />
+        </div>
+        <div class="answer-list" v-if="type === '回答'">
+          <AnswerPreviewItem
+            v-for="item in listData"
+            :key="item.id"
+            :item="item"
+          />
+        </div>
+        <div class="article-list" v-if="type === '文章'">
+          <ArticlePreviewItem
+            v-for="item in listData"
+            :key="item.id"
+            :item="item"
+          />
+        </div>
+        <!--在家更多按钮          -->
+        <div
+          class="load-more"
+          style="margin-top: 16px; display: flex; justify-content: center"
+        >
+          <el-button v-if="page !== -1" @click="uniFetch()">加载更多</el-button>
+          <el-divider v-if="page === -1">已无更多</el-divider>
+        </div>
+      </div>
+    </div>
+  </el-main>
 </template>
 
 <script>
-import ProfileDetail from "@/views/profile/ProfileDetail.vue";
+import UserInformationCard from "@/views/profile/components/UserInformationCard.vue";
+import {
+  getCurrentUser,
+  getUserAnswer,
+  getUserArticle,
+  getUserInfo,
+  getUserQuestion,
+} from "@/api/user";
+import { ElNotification } from "element-plus";
+import QuestionPreviewItem from "@/components/QuestionPreviewItem.vue";
+import AnswerPreviewItem from "@/views/profile/components/AnswerPreviewItem.vue";
+import ArticlePreviewItem from "@/components/ArticlePreviewItem.vue";
 
 export default {
-    name: "ProfileIndex",
-    components: {ProfileDetail},
-    data() {
-        return {
-            user_id: "self",
-            nowActiveTypeName: "answer",
-        };
+  name: "ProfileIndex",
+  components: {
+    ArticlePreviewItem,
+    AnswerPreviewItem,
+    QuestionPreviewItem,
+    UserInformationCard,
+  },
+  data() {
+    return {
+      userId: -1,
+      userInfo: {},
+      type: "问题",
+      listData: [],
+      page: 0,
+    };
+  },
+  methods: {
+    onTypeChange() {
+      //列表类型改变，清空数据重新加载
+      this.newFetch();
     },
-    methods: {
-        onTypeSwitchButtonClick(toSwitchTypeName) {
-            //判断是否当前页
-            if (toSwitchTypeName !== this.nowActiveTypeName) {
-                //更新传给列表的参数
-                this.nowActiveTypeName = toSwitchTypeName;
+    newFetch() {
+      //清空数据
+      this.page = 1;
+      this.listData = [];
+      this.uniFetch();
+    },
+    uniFetch() {
+      switch (this.type) {
+        case "问题":
+          getUserQuestion(this.userId, this.page).then((resp) => {
+            console.log(resp);
+            if (resp.data.data === null || resp.data.data.length <= 0) {
+              this.page = -1;
+            } else {
+              this.listData = this.listData.concat(resp.data.data);
+              this.page++;
             }
-        },
+          });
+          break;
+        case "回答":
+          getUserAnswer(this.userId, this.page).then((resp) => {
+            if (resp.data.data === null || resp.data.data.length <= 0) {
+              this.page = -1;
+            } else {
+              this.listData = this.listData.concat(resp.data.data);
+              this.page++;
+            }
+          });
+          break;
+        case "文章":
+          getUserArticle(this.userId, this.page).then((resp) => {
+            if (resp.data.data === null || resp.data.data.length <= 0) {
+              this.page = -1;
+            } else {
+              this.listData = this.listData.concat(resp.data.data);
+              this.page++;
+            }
+          });
+          break;
+      }
     },
-    mounted() {
-        if (this.$route.query.user_id !== undefined) {
-            this.user_id = this.$route.query.user_id; //否则使用默认值self
+  }, //end of methods
+  created() {
+    //从query中获取数据
+    this.userId = this.$route.query.userId; //userid无论有没有我们都拿，undefined就表示自己
+    //填充个人信息
+    if (this.userId === undefined) {
+      //如果没有指定用户，那么获取自己的
+      getCurrentUser().then((resp) => {
+        //如果没有登录，会飞到登录页面
+        this.userInfo = resp.data.data;
+      });
+    } else {
+      getUserInfo(this.userId).then((resp) => {
+        if (resp.data.code !== 0) {
+          ElNotification({
+            title: "提示",
+            message: "找不到用户，跳转回首页",
+            type: "error",
+          });
+          this.$router.replace("/home");
+        } else {
+          this.userInfo = resp.data.data;
         }
-        if (this.$route.query.type !== undefined) {
-            this.nowActiveTypeName = this.$route.query.type; //否则使用默认值answer
-        }
-    },
+      });
+    }
+    //获取数据
+    this.newFetch();
+  }, //end of mounted
 };
 </script>
 

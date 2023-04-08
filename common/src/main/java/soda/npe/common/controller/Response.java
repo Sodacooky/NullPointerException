@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RestResponse implements Serializable {
+public class Response implements Serializable {
     //响应状态码，在原有HTTP200成功的基础上，揭示服务的运行结果并辅助DEBUG
     //0为正常，其他值为失败
     private Integer code;
@@ -24,14 +24,14 @@ public class RestResponse implements Serializable {
     //携带的数据
     private Object data;
 
-    public static RestResponse ok(String message, Object data) {
-        return new RestResponse(0, message, data);
+    public static Response ok(String message, Object data) {
+        return new Response(0, message, data);
     }
 
-    public static RestResponse fail(Integer code, String message) {
+    public static Response fail(Integer code, String message) {
         if (code != null) Assert.isTrue(code != 0, "当为失败时code不应该为0");
         else code = -1;
-        return new RestResponse(code, message, null);
+        return new Response(code, message, null);
     }
 
 }

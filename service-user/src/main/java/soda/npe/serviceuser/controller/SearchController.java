@@ -4,7 +4,7 @@ import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import soda.npe.common.controller.RestResponse;
+import soda.npe.common.controller.Response;
 import soda.npe.serviceuser.service.UserInfoService;
 
 /**
@@ -26,10 +26,10 @@ public class SearchController {
      * @return 符合要求的用户实体列表
      */
     @GetMapping("/infoByRegisterTime")
-    public RestResponse infoByRegisterTime(String keyword, Integer page, Boolean isAsc) {
+    public Response infoByRegisterTime(String keyword, Integer page, Boolean isAsc) {
         if (page == null || page < 1) page = 1;
         if (isAsc == null) isAsc = false;
-        return RestResponse.ok(null, userInfoService.searchByRegisterTime(keyword, page, isAsc));
+        return Response.ok(null, userInfoService.searchByRegisterTime(keyword, page, isAsc));
     }
 
 }

@@ -3,7 +3,7 @@
   <div v-if="type === 'latest'">
     <!--    文章列表-->
     <div v-for="item in resultData" :key="item.id" class="list">
-      <ArticleListItem :item="item"></ArticleListItem>
+      <ArticlePreviewItem :item="item"></ArticlePreviewItem>
     </div>
     <!--加载更多按钮-->
     <div
@@ -23,7 +23,7 @@
   <div v-if="type === 'weekly'">
     <!--    文章列表-->
     <div v-for="(item, index) in resultData" :key="item.id" class="list">
-      <ArticleListItem :is-rank="true" :item="item" :rank-index="index" />
+      <ArticlePreviewItem :is-rank="true" :item="item" :rank-index="index" />
     </div>
   </div>
 
@@ -31,7 +31,7 @@
   <div v-if="type === 'monthly'">
     <!--    文章列表-->
     <div v-for="(item, index) in resultData" :key="item.id" class="list">
-      <ArticleListItem :is-rank="true" :item="item" :rank-index="index" />
+      <ArticlePreviewItem :is-rank="true" :item="item" :rank-index="index" />
     </div>
   </div>
 
@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import ArticleListItem from "@/components/ArticleListItem.vue";
+import ArticlePreviewItem from "@/components/ArticlePreviewItem.vue";
 import {
   getLatestArticle,
   getMonthlyArticle,
@@ -50,7 +50,7 @@ import moment from "moment";
 
 export default {
   name: "ArticleListView",
-  components: { ArticleListItem },
+  components: { ArticlePreviewItem },
   props: ["type"],
   data() {
     return {

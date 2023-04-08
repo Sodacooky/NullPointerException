@@ -1,6 +1,10 @@
 <template>
   <el-col :span="12">
-    <div class="item-card" style="padding: 4px 4px 4px 4px; display: flex">
+    <div
+      class="item-card"
+      style="padding: 4px 4px 4px 4px; display: flex"
+      @click="$router.push(`/profile?userId=${item.id}`)"
+    >
       <!--头像        -->
       <div class="avatar">
         <!--.../service-user/avatar/xxx.jpg          -->
