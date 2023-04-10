@@ -27,6 +27,10 @@
     <div class="reply-text" style="padding-left: 48px">
       {{ item.text }}
     </div>
+    <!--举报功能          -->
+    <div style="display: flex; justify-content: right; color: gray">
+      <a>举报</a>
+    </div>
   </div>
 </template>
 

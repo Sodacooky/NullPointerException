@@ -12,6 +12,15 @@
           <span style="font-size: large; margin-left: 8px">
             <el-tag type="info">{{ category }}</el-tag>
           </span>
+          <!--订阅数量与订阅按钮            -->
+          <span style="float: right">
+            <el-tooltip content="订阅问题" placement="bottom">
+              <el-button style="font-size: large; font-weight: bold">
+                <el-icon style="margin-right: 4px"><Star /></el-icon>
+                {{ subscriptionAmount }}
+              </el-button>
+            </el-tooltip>
+          </span>
         </div>
         <!--第二行，日期和作者        -->
         <div class="publisher-date">
@@ -34,6 +43,10 @@
           v-highlight
           v-html="renderedMarkdown"
         ></div>
+        <!--举报功能          -->
+        <div style="display: flex; justify-content: right; color: gray">
+          <a>举报</a>
+        </div>
       </el-card>
 
       <!--回答区        -->
@@ -73,7 +86,12 @@
             <el-option value="app_desc" label="最多点赞" />
             <el-option value="app_asc" label="最少点赞" />
           </el-select>
+          <span style="font-size: small; color: gray; margin-left: 32px">
+            总共回答数量：{{ answerAmount }}
+          </span>
         </div>
+
+        <!--内容          -->
         <QuestionAnswerListItem
           v-for="item in answerListData"
           :key="item.id"
@@ -105,6 +123,7 @@ import {
   getQuestionAnswerByApproval,
   getQuestionAnswerByTime,
   getQuestionInfo,
+  getQuestionSubscriptionAmount,
   getQuestionText,
 } from "@/api/reading";
 import QuestionAnswerListItem from "@/views/reading/components/QuestionAnswerListItem.vue";
@@ -121,7 +140,7 @@ export default {
     },
   },
   components: { QuestionAnswerListItem, ArrowRight },
-  props: ["question_id"],
+  props: ["questionId"],
   data() {
     return {
       //id在props里，以下是文章实体的属性
@@ -130,13 +149,15 @@ export default {
       category: "类别",
       publisherId: 1,
       publishTime: "2001-01-28 00:00:00",
+      //问题相关数据
+      subscriptionAmount: 0,
+      answerAmount: 0,
       //用户实体属性，用于展示作者
       publisherNickname: "哈哈",
       publisherAvatar: "default",
       //回答内容
       answerListData: [],
       answerCurrentPage: 1,
-      answerTotalAmount: 0,
       answerOrder: "time_desc",
     };
   }, //end of data
@@ -149,7 +170,7 @@ export default {
       this.answerCurrentPage++;
       if (this.answerOrder.startsWith("time")) {
         getQuestionAnswerByTime(
-          this.question_id,
+          this.questionId,
           this.answerCurrentPage,
           this.answerOrder.endsWith("asc")
         ).then((resp) => {
@@ -158,7 +179,7 @@ export default {
         });
       } else if (this.answerOrder.startsWith("app")) {
         getQuestionAnswerByApproval(
-          this.question_id,
+          this.questionId,
           this.answerCurrentPage,
           this.answerOrder.endsWith("asc")
         ).then((resp) => {
@@ -178,7 +199,7 @@ export default {
   }, //end of methods
   mounted() {
     //问题的基本信息
-    getQuestionInfo(this.question_id).then((resp) => {
+    getQuestionInfo(this.questionId).then((resp) => {
       if (resp.data.code !== 0) {
         ElNotification({
           title: "加载失败",
@@ -199,12 +220,15 @@ export default {
       });
     });
     //问题的正文
-    getQuestionText(this.question_id).then((resp) => {
+    getQuestionText(this.questionId).then((resp) => {
       this.text = resp.data.data;
     });
     //回答数量
-    getQuestionAnswerAmount(this.question_id).then((resp) => {
-      this.answerTotalAmount = resp.data.data;
+    getQuestionAnswerAmount(this.questionId).then((resp) => {
+      this.answerAmount = resp.data.data;
+    });
+    getQuestionSubscriptionAmount(this.questionId).then((resp) => {
+      this.subscriptionAmount = resp.data.data;
     });
     //加载第一页回答
     this.loadFirstPageAnswer();

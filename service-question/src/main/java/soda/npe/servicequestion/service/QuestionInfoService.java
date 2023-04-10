@@ -123,7 +123,9 @@ public class QuestionInfoService extends ServiceImpl<QuestionInfoMapper, Questio
             vo.setSubscriptionAmount(subscriptionAmount);
             //填充回答数量
             Long answerAmount = questionAnswerMapper.selectCount(
-                    new LambdaQueryWrapper<QuestionAnswer>().eq(QuestionAnswer::getQuestionId, info.getId()));
+                    new LambdaQueryWrapper<QuestionAnswer>()
+                            .lt(QuestionAnswer::getOrderNumber, 1)
+                            .eq(QuestionAnswer::getQuestionId, info.getId()));
             vo.setAnswerAmount(answerAmount);
             //填充用户昵称和头像URL
             UserInfo foundUserInfo = userInfoMapper.selectById(info.getPublisherId());
@@ -190,7 +192,7 @@ public class QuestionInfoService extends ServiceImpl<QuestionInfoMapper, Questio
         }
         redisTemplate.delete("homeWeeklyQuestion");
         redisTemplate.opsForList().leftPushAll("homeWeeklyQuestion", result);
-        redisTemplate.expire("homeWeeklyQuestion", Duration.ofDays(1));
+        redisTemplate.expire("homeWeeklyQuestion", Duration.ofHours(1));
 
         return result;
     }
@@ -239,7 +241,7 @@ public class QuestionInfoService extends ServiceImpl<QuestionInfoMapper, Questio
         }
         redisTemplate.delete("homeMonthlyQuestion");
         redisTemplate.opsForList().leftPushAll("homeMonthlyQuestion", result);
-        redisTemplate.expire("homeMonthlyQuestion", Duration.ofDays(1));
+        redisTemplate.expire("homeMonthlyQuestion", Duration.ofHours(1));
 
         return result;
     }

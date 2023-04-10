@@ -167,7 +167,7 @@ public class ArticleService extends ServiceImpl<ArticleMapper, Article> {
         }
         redisTemplate.delete("homeWeeklyArticle");
         redisTemplate.opsForList().leftPushAll("homeWeeklyArticle", result);
-        redisTemplate.expire("homeWeeklyArticle", Duration.ofDays(1));
+        redisTemplate.expire("homeWeeklyArticle", Duration.ofHours(1));
 
         return result;
     }
@@ -216,8 +216,8 @@ public class ArticleService extends ServiceImpl<ArticleMapper, Article> {
         }
         redisTemplate.delete("homeMonthlyArticle");
         redisTemplate.opsForList().leftPushAll("homeMonthlyArticle", result);
-        redisTemplate.expire("homeMonthlyArticle", Duration.ofDays(1));
-        
+        redisTemplate.expire("homeMonthlyArticle", Duration.ofHours(1));
+
 
         return result;
     }

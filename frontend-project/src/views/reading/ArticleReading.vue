@@ -11,6 +11,15 @@
           <span style="font-size: large; margin-left: 8px">
             <el-tag type="info">{{ category }}</el-tag>
           </span>
+          <!--点赞数量与点赞按钮            -->
+          <span style="float: right">
+            <el-tooltip content="点赞文章" placement="bottom">
+              <el-button style="font-size: large; font-weight: bold">
+                <el-icon style="margin-right: 4px"><CaretTop /></el-icon>
+                {{ approvalAmount }}
+              </el-button>
+            </el-tooltip>
+          </span>
         </div>
         <!--第二行，日期和作者        -->
         <div class="publisher-date">
@@ -33,6 +42,10 @@
           v-highlight
           v-html="renderedMarkdown"
         ></div>
+        <!--举报功能          -->
+        <div style="display: flex; justify-content: right; color: gray">
+          <a>举报</a>
+        </div>
       </el-card>
 
       <!--      评论编写-->
@@ -87,14 +100,18 @@
 <script>
 import { marked } from "marked";
 import ArticleReplyListItem from "@/views/reading/components/ArticleReplyListItem.vue";
-import { getArticle, getArticleReply } from "@/api/reading";
+import {
+  getArticle,
+  getArticleApprovalAmount,
+  getArticleReply,
+} from "@/api/reading";
 import { getUserAvatarUrl, getUserInfo } from "@/api/user";
 import { ElNotification } from "element-plus";
 
 export default {
   name: "ArticleReading",
   components: { ArticleReplyListItem },
-  props: ["article_id"],
+  props: ["articleId"],
   data() {
     return {
       //id在props里，以下是文章实体的属性
@@ -103,6 +120,8 @@ export default {
       category: "",
       publisherId: 0,
       publishTime: "",
+      //文章相关数据
+      approvalAmount: 0,
       //用户实体属性，用于展示作者
       publisherNickname: "",
       publisherAvatar: undefined,
@@ -115,7 +134,7 @@ export default {
     getUserAvatarUrl,
     loadArticleContent() {
       //调用接口，加载文章内容，并加载文章对应的用户信息
-      getArticle(this.article_id).then((resp) => {
+      getArticle(this.articleId).then((resp) => {
         if (resp.data.code !== 0) {
           ElNotification({
             title: "加载失败",
@@ -137,7 +156,7 @@ export default {
       });
     },
     loadMoreReplies() {
-      getArticleReply(this.article_id, this.replyCurrentPage).then((resp) => {
+      getArticleReply(this.articleId, this.replyCurrentPage).then((resp) => {
         if (resp.data.data === undefined || resp.data.data.length <= 0) {
           this.replyCurrentPage = -1;
         } else {
@@ -150,6 +169,9 @@ export default {
   mounted() {
     this.loadArticleContent();
     this.loadMoreReplies();
+    getArticleApprovalAmount(this.articleId).then((resp) => {
+      this.approvalAmount = resp.data.data;
+    });
   },
   computed: {
     renderedMarkdown() {

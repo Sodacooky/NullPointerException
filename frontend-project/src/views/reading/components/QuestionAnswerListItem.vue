@@ -31,6 +31,11 @@
     <div class="main-text" style="padding: 0 4px 0 4px">
       <div class="md" v-highlight v-html="renderedMarkdown"></div>
     </div>
+
+    <!--举报功能          -->
+    <div style="display: flex; justify-content: right; color: gray">
+      <a>举报</a>
+    </div>
   </el-card>
 </template>
 

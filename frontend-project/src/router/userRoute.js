@@ -101,7 +101,7 @@ const registerRoute = {
 
 // 文章详情页面
 const articleReadingRoute = {
-  path: "/article/:article_id",
+  path: "/article/:articleId",
   name: "ArticleReading",
   props: true,
   component: () => import("@/views/reading/ArticleReading.vue"),
@@ -109,7 +109,7 @@ const articleReadingRoute = {
 
 //问题详情页
 const questionReadingRoute = {
-  path: "/question/:question_id",
+  path: "/question/:questionId",
   name: "QuestionReading",
   props: true,
   component: () => import("@/views/reading/QuestionReading.vue"),

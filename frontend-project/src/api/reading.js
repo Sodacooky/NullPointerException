@@ -12,6 +12,12 @@ export function getArticleReply(articleId, page) {
   });
 }
 
+export function getArticleApprovalAmount(articleId) {
+  return requests.get("/service-article/getApprovalAmountOf", {
+    params: { articleId: articleId },
+  });
+}
+
 export function getQuestionInfo(questionId) {
   return requests.get("/service-question/getQuestionInfo", {
     params: { questionId: questionId },
@@ -26,6 +32,12 @@ export function getQuestionText(questionId) {
 
 export function getQuestionAnswerAmount(questionId) {
   return requests.get("/service-question/getAnswerAmountOf", {
+    params: { questionId: questionId },
+  });
+}
+
+export function getQuestionSubscriptionAmount(questionId) {
+  return requests.get("/service-question/getSubscriptionAmountOf", {
     params: { questionId: questionId },
   });
 }
