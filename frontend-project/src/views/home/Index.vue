@@ -63,17 +63,13 @@
           <span>近期热门分类</span>
         </div>
       </template>
-      <el-badge :value="12" class="hot-category-item">
-        <el-button>Java</el-button>
-      </el-badge>
-      <el-badge :value="114514" class="hot-category-item">
-        <el-button>运维</el-button>
-      </el-badge>
-      <el-badge :value="1" class="hot-category-item">
-        <el-button>C++</el-button>
-      </el-badge>
-      <el-badge :value="2" class="hot-category-item">
-        <el-button>互联网产业发展</el-button>
+      <el-badge
+        class="hot-category-item"
+        v-for="item in hotCategories"
+        :key="item.id"
+        :value="item.amount"
+      >
+        <el-button>{{ item.category }}</el-button>
       </el-badge>
     </el-card>
     <!--          广告-->
@@ -84,23 +80,13 @@
         </div>
       </template>
       <el-carousel height="150px">
-        <el-carousel-item
-          style="
-            background-color: gray;
-            text-align: center;
-            vertical-align: center;
-          "
-        >
-          <h3>广告位招租1</h3>
+        <el-carousel-item v-if="ads.length < 1" style="text-align: center">
+          <h3>广告位招租</h3>
         </el-carousel-item>
-        <el-carousel-item
-          style="
-            background-color: gray;
-            text-align: center;
-            vertical-align: center;
-          "
-        >
-          <h3>广告位招租2</h3>
+        <el-carousel-item v-for="item in ads" :key="item.id">
+          <a :href="item.url">
+            <el-image fit="fill" :src="getAdsImageUrl(item.image)"></el-image>
+          </a>
         </el-carousel-item>
       </el-carousel>
     </el-card>
@@ -111,16 +97,21 @@
           <span>网站状况</span>
         </div>
       </template>
-      <div>本日新增问题：114514</div>
-      <div>本日新增文章：666</div>
-      <div>本日登录用户：1245</div>
-      <div>总注册用户数：666666</div>
+      <div>本日新增问题：{{ siteState.todayQuestionAmount }}</div>
+      <div>本日新增文章：{{ siteState.todayArticleAmount }}</div>
+      <div>总注册用户数：{{ siteState.totalUserAmount }}</div>
     </el-card>
   </el-aside>
 </template>
 
 <script>
 import { Search } from "@element-plus/icons-vue";
+import {
+  getAds,
+  getAdsImageUrl,
+  getHotCategories,
+  getSiteState,
+} from "@/api/home";
 
 export default {
   name: "HomeIndex",
@@ -130,9 +121,13 @@ export default {
       activeAnnouncementName: "-1",
       searchText: "",
       activeListRoutePath: "/home/question/latest",
+      siteState: {},
+      ads: [],
+      hotCategories: [],
     };
   },
   methods: {
+    getAdsImageUrl,
     doSearch() {
       if (this.searchText.length <= 0) this.searchText = " ";
       this.$router.push({
@@ -143,6 +138,16 @@ export default {
   },
   mounted() {
     this.activeListRoutePath = this.$route.path;
+    //加载网站数据
+    getSiteState().then((resp) => {
+      this.siteState = resp.data.data;
+    });
+    //加载广告
+    getAds().then((resp) => (this.ads = this.ads.concat(resp.data.data)));
+    //加载热门分类
+    getHotCategories().then(
+      (resp) => (this.hotCategories = this.hotCategories.concat(resp.data.data))
+    );
   },
 };
 </script>

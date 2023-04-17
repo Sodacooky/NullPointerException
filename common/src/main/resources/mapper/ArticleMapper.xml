@@ -83,4 +83,13 @@
         limit 200
     </select>
 
+    <select id="getHotCategories" resultType="map">
+        select a.category, count(a.category) as amount
+        from article a
+        where a.publish_time > #{monthStart}
+        group by a.category
+        order by amount desc
+        limit 8
+    </select>
+
 </mapper>

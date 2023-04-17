@@ -1,11 +1,13 @@
 package soda.npe.common.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Param;
 import soda.npe.common.entity.QuestionInfo;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author sodac
@@ -34,6 +36,8 @@ public interface QuestionInfoMapper extends BaseMapper<QuestionInfo> {
 
     List<QuestionInfo> getMonthlyAnswerTop200(@Param("monthStart") Date monthStart);
 
+    @MapKey("category")
+    Map<String, Map<String, Object>> getHotCategories(@Param("monthStart") Date monthStart);
 }
 
 
