@@ -7,12 +7,10 @@ import jakarta.annotation.Resource;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import soda.npe.common.entity.Advertisement;
+import soda.npe.common.entity.Announcement;
 import soda.npe.common.entity.Article;
 import soda.npe.common.entity.QuestionInfo;
-import soda.npe.common.mapper.AdvertisementMapper;
-import soda.npe.common.mapper.ArticleMapper;
-import soda.npe.common.mapper.QuestionInfoMapper;
-import soda.npe.common.mapper.UserInfoMapper;
+import soda.npe.common.mapper.*;
 import soda.npe.servicemiscellaneous.vo.HotCategoriesVO;
 import soda.npe.servicemiscellaneous.vo.SiteStateVO;
 
@@ -33,6 +31,9 @@ public class HomeMiscService {
 
     @Resource
     private AdvertisementMapper advertisementMapper;
+
+    @Resource
+    private AnnouncementMapper announcementMapper;
 
     @Resource
     private RedisTemplate<String, HotCategoriesVO> redisTemplate;
@@ -110,5 +111,10 @@ public class HomeMiscService {
         redisTemplate.expire("homeHotCategories", Duration.ofHours(1));
         return result;
 
+    }
+
+    public List<Announcement> getAnnouncement() {
+        //只获取前面四个
+        return announcementMapper.selectList(new LambdaQueryWrapper<Announcement>().orderByDesc(Announcement::getTime).last("limit 4"));
     }
 }

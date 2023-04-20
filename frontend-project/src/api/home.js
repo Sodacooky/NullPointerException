@@ -43,3 +43,7 @@ export function getAdsImageUrl(filename) {
 export function getHotCategories() {
   return requests.get("/service-miscellaneous/home/hotCategories");
 }
+
+export function getAnnouncement() {
+  return requests.get("/service-miscellaneous/home/announcement");
+}

@@ -22,7 +22,6 @@
         <module>service-miscellaneous</module>
         <module>service-question</module>
         <module>service-article</module>
-        <module>service-authc</module>
         <module>service-user</module>
     </modules>
 

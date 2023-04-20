@@ -77,4 +77,14 @@ public class HomeMiscController {
         return Response.ok(homeMiscService.getHotCategories());
     }
 
+
+    /**
+     * 获取首页公告
+     *
+     * @return 公告列表
+     */
+    @GetMapping("/announcement")
+    public Response announcement() {
+        return Response.ok(homeMiscService.getAnnouncement());
+    }
 }

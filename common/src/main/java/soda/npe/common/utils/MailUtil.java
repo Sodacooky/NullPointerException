@@ -1,5 +1,6 @@
 package soda.npe.common.utils;
 
+import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.extra.mail.MailAccount;
 import cn.hutool.extra.mail.MailException;
 import org.springframework.stereotype.Component;
@@ -31,4 +32,7 @@ public class MailUtil {
         }
     }
 
+    public void sendEmailAsync(String goalAddress, String title, String content) {
+        ThreadUtil.execAsync(() -> sendEmail(goalAddress, title, content));
+    }
 }

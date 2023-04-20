@@ -36,25 +36,28 @@
   <!--        侧边栏-->
   <el-aside style="width: 20pc; margin-right: 96px">
     <!--          公告-->
-    <el-card class="box-card">
+    <el-card class="box-card" :body-style="{ padding: '0 2px 0 8px' }">
       <template #header>
         <div class="card-header">
           <span>公告</span>
         </div>
       </template>
-      <el-collapse v-model="activeAnnouncementName" accordion>
-        <el-collapse-item name="1" title="公告1">
-          一行简单的公告
-        </el-collapse-item>
-        <el-collapse-item name="2" title="公告2">
-          <div>第一行</div>
-          <div>用DIV分割每一行</div>
-        </el-collapse-item>
-        <el-collapse-item name="3" title="公告3">
-          <span style="color: green">丰富的</span>
-          <span style="color: orange">span</span>
+      <el-collapse
+        v-model="activeAnnouncementName"
+        accordion
+        v-if="announcement.length > 0"
+      >
+        <el-collapse-item
+          v-for="item in announcement"
+          :title="item.title"
+          :name="item.id"
+          :key="item.time"
+        >
+          <div v-html="item.text"></div>
+          <div style="font-size: small; color: gray">{{ item.time }}</div>
         </el-collapse-item>
       </el-collapse>
+      <div v-else>公告栏空空如也...</div>
     </el-card>
     <!--          热门分类-->
     <el-card class="box-card">
@@ -109,6 +112,7 @@ import { Search } from "@element-plus/icons-vue";
 import {
   getAds,
   getAdsImageUrl,
+  getAnnouncement,
   getHotCategories,
   getSiteState,
 } from "@/api/home";
@@ -118,12 +122,13 @@ export default {
   components: { Search },
   data() {
     return {
-      activeAnnouncementName: "-1",
       searchText: "",
       activeListRoutePath: "/home/question/latest",
       siteState: {},
       ads: [],
       hotCategories: [],
+      activeAnnouncementName: "-1",
+      announcement: [],
     };
   },
   methods: {
@@ -142,12 +147,12 @@ export default {
     getSiteState().then((resp) => {
       this.siteState = resp.data.data;
     });
+    //家在公告
+    getAnnouncement().then((resp) => (this.announcement = resp.data.data));
     //加载广告
-    getAds().then((resp) => (this.ads = this.ads.concat(resp.data.data)));
+    getAds().then((resp) => (this.ads = resp.data.data));
     //加载热门分类
-    getHotCategories().then(
-      (resp) => (this.hotCategories = this.hotCategories.concat(resp.data.data))
-    );
+    getHotCategories().then((resp) => (this.hotCategories = resp.data.data));
   },
 };
 </script>

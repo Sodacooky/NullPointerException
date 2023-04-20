@@ -22,4 +22,8 @@ public class UserInfoService extends ServiceImpl<UserInfoMapper, UserInfo> {
                         .last("limit " + (DBConstant.PAGE_SIZE * (page - 1)) + "," + DBConstant.PAGE_SIZE));
     }
 
+    public boolean isNicknameUsed(String nickname) {
+        return this.getOne(new LambdaQueryWrapper<UserInfo>().eq(UserInfo::getNickname, nickname)) != null;
+    }
+
 }

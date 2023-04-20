@@ -92,7 +92,7 @@ public class QuestionAnswerService extends ServiceImpl<QuestionAnswerMapper, Que
         QuestionInfo questionInfo = questionInfoMapper.selectById(questionAnswer.getQuestionId());
         // - 填充实体
         UserNotice userNotice = new UserNotice();
-        userNotice.setTitle("问题 " + questionInfo.getTitle() + " 收到来自 " + replyOwner.getNickname() + " 的回复");
+        userNotice.setTitle("问题 " + questionInfo.getTitle() + " 收到来自 " + replyOwner.getNickname() + " 的回答");
         userNotice.setText(questionAnswer.getText());
         userNotice.setGoalUserId(questionInfo.getPublisherId());
         userNotice.setTime(new Date());
