@@ -5,6 +5,8 @@ server:
 spring:
   application:
     name: gateway
+  profiles:
+    active: common
   cloud:
     gateway:
       discovery:
@@ -19,7 +21,4 @@ spring:
             allowedMethods: "*"
             allowedHeaders: "*" # 允许在请求中携带的头信息
             #allowCredentials: true # 是否允许携带cookie
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8761/eureka/
+

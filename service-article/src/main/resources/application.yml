@@ -3,16 +3,8 @@ server:
 spring:
   application:
     name: service-article
-  datasource:
-    url: jdbc:mysql://localhost:65501/npe
-    username: npe
-    password: 1145141919
-  data:
-    redis:
-      port: 65504
-  jackson:
-    time-zone: Asia/Shanghai
-    date-format: yyyy-MM-dd HH:mm:ss
+  profiles:
+    active: common
 eureka:
   client:
     service-url:
