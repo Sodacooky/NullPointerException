@@ -13,7 +13,7 @@ import soda.npe.servicearticle.vo.ReplyPublishVO;
 
 
 /**
- * 对问题和答案发布、修改、点赞订阅等操作
+ * 对文章的操作
  */
 @RestController
 @RequestMapping("/operation")

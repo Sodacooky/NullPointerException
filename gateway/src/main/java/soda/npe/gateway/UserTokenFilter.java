@@ -1,6 +1,8 @@
 package soda.npe.gateway;
 
+import cn.hutool.core.util.StrUtil;
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
@@ -13,6 +15,7 @@ import soda.npe.common.utils.JwtAuthUtil;
 /**
  * 用户登录拦截Token校验过滤器
  */
+@Slf4j
 @Component
 public class UserTokenFilter implements GlobalFilter, Ordered {
 
@@ -21,19 +24,21 @@ public class UserTokenFilter implements GlobalFilter, Ordered {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+        //SpringCloud Gateway的GetPath()有对应微服务的名称作为前缀！
+
         //判断是否是用户，即非/admin/开头，不是用户方面接口则跳过放行（其实先执行了admin的过滤器
-        if (exchange.getRequest().getPath().toString().startsWith("/admin")) {
+        if (exchange.getRequest().getPath().toString().matches("(.*)/admin/(.*)")) {
             return chain.filter(exchange);
         }
         //判断当前访问的端口是否需要鉴权，目前，我们约定用户需要登录的接口都在/operation下，
-        //并且，SpringCloud Gateway的GetPath()，上面那样，并不会获得对应微服务的名称！
-        if (!exchange.getRequest().getPath().toString().startsWith("/operation")) {
+        if (!exchange.getRequest().getPath().toString().matches("(.*)/operation/(.*)")) {
             //不需要鉴权
             return chain.filter(exchange);
         }
         //鉴权，读取请求中的token
         String jwt = exchange.getRequest().getHeaders().getFirst("Authorization");
-        if (jwt == null || !jwtAuthUtil.validation(jwt)) {
+        if (StrUtil.isBlank(jwt) || !jwtAuthUtil.validation(jwt)) {
+            log.info("拦截了未登录请求 {}", exchange.getRequest().getURI());
             //没有token或者校验失败，设置498并且立刻返回
             // - 设置Response的状态码
             exchange.getResponse().setStatusCode(HttpStatusCode.valueOf(498));
