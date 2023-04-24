@@ -12,7 +12,7 @@
           style="display: flex; align-items: center; font-weight: bold"
         >
           <el-avatar
-            :src="getUserAvatarUrl(item.publisherAvatar)"
+            :src="UserApi.getUserAvatarUrl(item.publisherAvatar)"
             style="margin-right: 8px"
           />
           {{ item.publisherNickname }}
@@ -36,12 +36,16 @@
 
 <script>
 import { baseUrl } from "@/api/requests";
-import { getUserAvatarUrl } from "@/api/user";
+import { UserApi } from "@/api/user";
 
 export default {
   name: "ArticleReplyListItem",
+  computed: {
+    UserApi() {
+      return UserApi;
+    },
+  },
   methods: {
-    getUserAvatarUrl,
     baseUrl() {
       return baseUrl;
     },

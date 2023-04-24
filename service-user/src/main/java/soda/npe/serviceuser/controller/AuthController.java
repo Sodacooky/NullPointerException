@@ -21,6 +21,12 @@ public class AuthController {
     @Resource
     private AuthService authService;
 
+    /**
+     * 一般用户登录
+     *
+     * @param loginVO 包含邮箱和密码
+     * @return 登录成功返回token，失败返回null
+     */
     @PostMapping("/login")
     public Response login(@RequestBody LoginVO loginVO) {
         //validation
@@ -42,8 +48,13 @@ public class AuthController {
         return Response.ok(authService.doLogout(token));
     }
 
+    @GetMapping("/hasLogin")
+    public Response hasLogin(@RequestHeader("Authorization") String token) {
+        return Response.ok(authService.hasLogin(token));
+    }
 
-    @PostMapping("/adminLogin")
+
+    @PostMapping("/admin/login")
     public Response adminLogin(@RequestBody String password) {
         //validation
         if (StrUtil.isBlank(password)) return Response.fail(1, "密码不能为空");
@@ -53,9 +64,14 @@ public class AuthController {
         else return Response.ok(token);
     }
 
-    @GetMapping("/adminLogout")
+    @GetMapping("/admin/logout")
     public Response adminLogout(@RequestHeader("AdminAuthorization") String token) {
-        return Response.ok(authService.doLogout(token));
+        return Response.ok(authService.doLogout(token));//使用user的一样可以
+    }
+
+    @GetMapping("/admin/hasLogin")
+    public Response adminHasLogin(@RequestHeader("AdminAuthorization") String token) {
+        return Response.ok(authService.hasLogin(token));//使用user的一样可以
     }
 
     @PostMapping("/register")

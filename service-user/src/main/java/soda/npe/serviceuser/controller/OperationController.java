@@ -35,4 +35,11 @@ public class OperationController {
         return Response.ok(null, found);
     }
 
+    //上传头像
+
+    //编辑个人资料
+
+    //重置密码
+    
+
 }

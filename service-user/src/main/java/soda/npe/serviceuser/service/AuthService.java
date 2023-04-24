@@ -125,4 +125,8 @@ public class AuthService extends ServiceImpl<UserAuthenticationMapper, UserAuthe
     public boolean isNicknameUsed(String nickname) {
         return this.userInfoMapper.selectOne(new LambdaQueryWrapper<UserInfo>().eq(UserInfo::getNickname, nickname)) != null;
     }
+
+    public boolean hasLogin(String token) {
+        return jwtAuthUtil.validation(token);
+    }
 }

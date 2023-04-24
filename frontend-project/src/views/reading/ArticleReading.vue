@@ -25,7 +25,7 @@
         <div class="publisher-date">
           <el-row>
             <el-col :span="2">
-              <el-avatar :src="getUserAvatarUrl(publisherAvatar)" />
+              <el-avatar :src="UserApi.getUserAvatarUrl(publisherAvatar)" />
             </el-col>
             <el-col :span="22">
               <div class="publisher-info">
@@ -100,13 +100,9 @@
 <script>
 import { marked } from "marked";
 import ArticleReplyListItem from "@/views/reading/components/ArticleReplyListItem.vue";
-import {
-  getArticle,
-  getArticleApprovalAmount,
-  getArticleReply,
-} from "@/api/reading";
-import { getUserAvatarUrl, getUserInfo } from "@/api/user";
 import { ElNotification } from "element-plus";
+import { ReadingApi } from "@/api/reading";
+import { UserApi } from "@/api/user";
 
 export default {
   name: "ArticleReading",
@@ -131,10 +127,9 @@ export default {
     };
   }, //end of data
   methods: {
-    getUserAvatarUrl,
     loadArticleContent() {
       //调用接口，加载文章内容，并加载文章对应的用户信息
-      getArticle(this.articleId).then((resp) => {
+      ReadingApi.getArticle(this.articleId).then((resp) => {
         if (resp.data.code !== 0) {
           ElNotification({
             title: "加载失败",
@@ -149,31 +144,36 @@ export default {
         this.category = resp.data.data.category;
         this.publisherId = resp.data.data.publisherId;
         this.publishTime = resp.data.data.publishTime;
-        getUserInfo(this.publisherId).then((resp2) => {
+        UserApi.getUserInfo(this.publisherId).then((resp2) => {
           this.publisherNickname = resp2.data.data.nickname;
           this.publisherAvatar = resp2.data.data.avatar;
         });
       });
     },
     loadMoreReplies() {
-      getArticleReply(this.articleId, this.replyCurrentPage).then((resp) => {
-        if (resp.data.data === undefined || resp.data.data.length <= 0) {
-          this.replyCurrentPage = -1;
-        } else {
-          this.replyListData = this.replyListData.concat(resp.data.data);
-          this.replyCurrentPage++;
+      ReadingApi.getArticleReply(this.articleId, this.replyCurrentPage).then(
+        (resp) => {
+          if (resp.data.data === undefined || resp.data.data.length <= 0) {
+            this.replyCurrentPage = -1;
+          } else {
+            this.replyListData = this.replyListData.concat(resp.data.data);
+            this.replyCurrentPage++;
+          }
         }
-      });
+      );
     },
-  },
+  }, // methods
   mounted() {
     this.loadArticleContent();
     this.loadMoreReplies();
-    getArticleApprovalAmount(this.articleId).then((resp) => {
+    ReadingApi.getArticleApprovalAmount(this.articleId).then((resp) => {
       this.approvalAmount = resp.data.data;
     });
   },
   computed: {
+    UserApi() {
+      return UserApi;
+    },
     renderedMarkdown() {
       return marked(this.text);
     },

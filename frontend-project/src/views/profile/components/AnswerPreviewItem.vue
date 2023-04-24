@@ -26,7 +26,7 @@
       <span class="user-info">
         <span style="display: flex; align-items: center; float: left">
           <el-avatar
-            :src="getUserAvatarUrl(item.publisherAvatar)"
+            :src="UserApi.getUserAvatarUrl(item.publisherAvatar)"
             size="small"
             style="margin-right: 8px"
           />
@@ -48,12 +48,16 @@
 
 <script>
 import { CaretTop } from "@element-plus/icons-vue";
-import { getUserAvatarUrl } from "@/api/user";
+import { UserApi } from "@/api/user";
 
 export default {
   name: "AnswerPreviewItem",
+  computed: {
+    UserApi() {
+      return UserApi;
+    },
+  },
   props: ["item"],
-  methods: { getUserAvatarUrl },
   components: { CaretTop },
 };
 </script>

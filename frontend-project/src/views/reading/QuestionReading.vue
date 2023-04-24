@@ -26,7 +26,7 @@
         <div class="publisher-date">
           <el-row>
             <el-col :span="2">
-              <el-avatar :src="getUserAvatarUrl(publisherAvatar)" />
+              <el-avatar :src="UserApi.getUserAvatarUrl(publisherAvatar)" />
             </el-col>
             <el-col :span="22">
               <div class="publisher-info">
@@ -114,24 +114,20 @@
 </template>
 
 <script>
-import { getUserAvatarUrl, getUserInfo } from "@/api/user";
+import { UserApi } from "@/api/user";
 import { marked } from "marked";
 import { ArrowRight } from "@element-plus/icons-vue";
 import { ElNotification } from "element-plus";
-import {
-  getQuestionAnswerAmount,
-  getQuestionAnswerByApproval,
-  getQuestionAnswerByTime,
-  getQuestionInfo,
-  getQuestionSubscriptionAmount,
-  getQuestionText,
-} from "@/api/reading";
+import { ReadingApi } from "@/api/reading";
 import QuestionAnswerListItem from "@/views/reading/components/QuestionAnswerListItem.vue";
 import { mavonToolbars } from "@/api/mavonSettings";
 
 export default {
   name: "QuestionReading",
   computed: {
+    UserApi() {
+      return UserApi;
+    },
     mavonToolbars() {
       return mavonToolbars;
     },
@@ -162,14 +158,13 @@ export default {
     };
   }, //end of data
   methods: {
-    getUserAvatarUrl,
     onOrderChange() {
       this.loadFirstPageAnswer();
     },
     loadMoreAnswer() {
       this.answerCurrentPage++;
       if (this.answerOrder.startsWith("time")) {
-        getQuestionAnswerByTime(
+        ReadingApi.getQuestionAnswerByTime(
           this.questionId,
           this.answerCurrentPage,
           this.answerOrder.endsWith("asc")
@@ -178,7 +173,7 @@ export default {
           this.answerListData = this.answerListData.concat(resp.data.data);
         });
       } else if (this.answerOrder.startsWith("app")) {
-        getQuestionAnswerByApproval(
+        ReadingApi.getQuestionAnswerByApproval(
           this.questionId,
           this.answerCurrentPage,
           this.answerOrder.endsWith("asc")
@@ -199,7 +194,7 @@ export default {
   }, //end of methods
   mounted() {
     //问题的基本信息
-    getQuestionInfo(this.questionId).then((resp) => {
+    ReadingApi.getQuestionInfo(this.questionId).then((resp) => {
       if (resp.data.code !== 0) {
         ElNotification({
           title: "加载失败",
@@ -214,20 +209,20 @@ export default {
       this.publisherId = resp.data.data.publisherId;
       this.publishTime = resp.data.data.publishTime;
       //用户信息
-      getUserInfo(this.publisherId).then((resp2) => {
+      UserApi.getUserInfo(this.publisherId).then((resp2) => {
         this.publisherNickname = resp2.data.data.nickname;
         this.publisherAvatar = resp2.data.data.avatar;
       });
     });
     //问题的正文
-    getQuestionText(this.questionId).then((resp) => {
+    ReadingApi.getQuestionText(this.questionId).then((resp) => {
       this.text = resp.data.data;
     });
     //回答数量
-    getQuestionAnswerAmount(this.questionId).then((resp) => {
+    ReadingApi.getQuestionAnswerAmount(this.questionId).then((resp) => {
       this.answerAmount = resp.data.data;
     });
-    getQuestionSubscriptionAmount(this.questionId).then((resp) => {
+    ReadingApi.getQuestionSubscriptionAmount(this.questionId).then((resp) => {
       this.subscriptionAmount = resp.data.data;
     });
     //加载第一页回答

@@ -116,15 +116,7 @@
 
 <script>
 import { ArrowLeft, ArrowRight, Search } from "@element-plus/icons-vue";
-import {
-  searchArticleByApproval,
-  searchArticleByReplyAmount,
-  searchArticleByTime,
-  searchQuestionByAnsAmount,
-  searchQuestionBySubAmount,
-  searchQuestionByTime,
-  searchUserByRegisterTime,
-} from "@/api/search";
+import { SearchApi } from "@/api/search";
 import QuestionPreviewItem from "@/components/QuestionPreviewItem.vue";
 import { ElNotification } from "element-plus";
 import ArticlePreviewItem from "@/components/ArticlePreviewItem.vue";
@@ -263,39 +255,47 @@ export default {
       //根据order和page调用api，下面的两个方法同
       let isAsc = this.order.endsWith("asc");
       if (this.order.startsWith("time")) {
-        searchQuestionByTime(this.keyword, this.page, isAsc).then((resp) =>
-          this.processSearchResult(resp)
+        SearchApi.searchQuestionByTime(this.keyword, this.page, isAsc).then(
+          (resp) => this.processSearchResult(resp)
         );
       } else if (this.order.startsWith("ans")) {
-        searchQuestionByAnsAmount(this.keyword, this.page, isAsc).then(
-          (resp) => {
-            this.processSearchResult(resp);
-          }
-        );
+        SearchApi.searchQuestionByAnsAmount(
+          this.keyword,
+          this.page,
+          isAsc
+        ).then((resp) => {
+          this.processSearchResult(resp);
+        });
       } else if (this.order.startsWith("sub")) {
-        searchQuestionBySubAmount(this.keyword, this.page, isAsc).then((resp) =>
-          this.processSearchResult(resp)
-        );
+        SearchApi.searchQuestionBySubAmount(
+          this.keyword,
+          this.page,
+          isAsc
+        ).then((resp) => this.processSearchResult(resp));
       }
     },
     executeArticleSearchApi() {
       let isAsc = this.order.endsWith("asc");
       if (this.order.startsWith("time")) {
-        searchArticleByTime(this.keyword, this.page, isAsc).then((resp) =>
-          this.processSearchResult(resp)
-        );
-      } else if (this.order.startsWith("app")) {
-        searchArticleByApproval(this.keyword, this.page, isAsc).then((resp) => {
-          this.processSearchResult(resp);
-        });
-      } else if (this.order.startsWith("rep")) {
-        searchArticleByReplyAmount(this.keyword, this.page, isAsc).then(
+        SearchApi.searchArticleByTime(this.keyword, this.page, isAsc).then(
           (resp) => this.processSearchResult(resp)
         );
+      } else if (this.order.startsWith("app")) {
+        SearchApi.searchArticleByApproval(this.keyword, this.page, isAsc).then(
+          (resp) => {
+            this.processSearchResult(resp);
+          }
+        );
+      } else if (this.order.startsWith("rep")) {
+        SearchApi.searchArticleByReplyAmount(
+          this.keyword,
+          this.page,
+          isAsc
+        ).then((resp) => this.processSearchResult(resp));
       }
     },
     executeUserSearchApi() {
-      searchUserByRegisterTime(
+      SearchApi.searchUserByRegisterTime(
         this.keyword,
         this.page,
         this.order.endsWith("asc")

@@ -9,7 +9,7 @@
       <div class="avatar">
         <!--.../service-user/avatar/xxx.jpg          -->
         <el-image
-          :src="getUserAvatarUrl(item.avatar)"
+          :src="UserApi.getUserAvatarUrl(item.avatar)"
           fit="fill"
           style="height: 96px; width: 96px"
         />
@@ -42,10 +42,15 @@
 
 <script>
 import { baseUrl } from "@/api/requests";
-import { getUserAvatarUrl } from "@/api/user";
+import { UserApi } from "@/api/user";
 
 export default {
   name: "UserListItem",
+  computed: {
+    UserApi() {
+      return UserApi;
+    },
+  },
   methods: {
     getUserAvatarUrl,
     baseUrl() {

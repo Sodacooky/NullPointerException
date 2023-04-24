@@ -7,7 +7,7 @@
     <div class="publisher-info">
       <el-row>
         <el-col :span="2">
-          <el-avatar :src="getUserAvatarUrl(item.publisherAvatar)" />
+          <el-avatar :src="UserApi.getUserAvatarUrl(item.publisherAvatar)" />
         </el-col>
         <el-col :span="18">
           <div class="publisher-info">
@@ -20,7 +20,9 @@
             size="large"
             style="font-size: large; font-weight: bold; float: right"
           >
-            <el-icon style="margin-right: 4px"><CaretTop /></el-icon>
+            <el-icon style="margin-right: 4px">
+              <CaretTop />
+            </el-icon>
             {{ item.approvalAmount }}
           </el-button>
         </el-col>
@@ -40,7 +42,7 @@
 </template>
 
 <script>
-import { getUserAvatarUrl } from "@/api/user";
+import { UserApi } from "@/api/user";
 import { CaretTop } from "@element-plus/icons-vue";
 import { marked } from "marked";
 
@@ -49,8 +51,10 @@ export default {
   components: { CaretTop },
 
   props: ["item"],
-  methods: { getUserAvatarUrl }, //end of methods
   computed: {
+    UserApi() {
+      return UserApi;
+    },
     renderedMarkdown() {
       return marked(this.item.text);
     },

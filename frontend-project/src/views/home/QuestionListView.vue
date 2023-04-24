@@ -41,12 +41,8 @@
 
 <script>
 import moment from "moment/moment";
-import {
-  getLatestQuestion,
-  getMonthlyQuestion,
-  getWeeklyQuestion,
-} from "@/api/home";
 import QuestionPreviewItem from "@/components/QuestionPreviewItem.vue";
+import { HomeApi } from "@/api/home";
 
 export default {
   name: "QuestionListView",
@@ -64,7 +60,7 @@ export default {
     loadLatestQuestion(page) {
       if (page === this.currentPage) return; //do nothing
       //do api
-      getLatestQuestion(page, this.queryTime).then((resp) => {
+      HomeApi.getLatestQuestion(page, this.queryTime).then((resp) => {
         if (resp.data.data.length === 0) this.currentPage = -1;
         else {
           this.currentPage = page;
@@ -74,11 +70,15 @@ export default {
     },
     //获取周榜
     loadWeeklyQuestion() {
-      getWeeklyQuestion().then((resp) => (this.resultData = resp.data.data));
+      HomeApi.getWeeklyQuestion().then(
+        (resp) => (this.resultData = resp.data.data)
+      );
     },
     //获取月榜
     loadMonthlyQuestion() {
-      getMonthlyQuestion().then((resp) => (this.resultData = resp.data.data));
+      HomeApi.getMonthlyQuestion().then(
+        (resp) => (this.resultData = resp.data.data)
+      );
     },
     //switch结构的，根据type类型进行不同的初始load
     initResultData(type) {

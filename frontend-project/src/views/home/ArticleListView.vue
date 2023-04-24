@@ -41,12 +41,8 @@
 
 <script>
 import ArticlePreviewItem from "@/components/ArticlePreviewItem.vue";
-import {
-  getLatestArticle,
-  getMonthlyArticle,
-  getWeeklyArticle,
-} from "@/api/home";
 import moment from "moment";
+import { HomeApi } from "@/api/home";
 
 export default {
   name: "ArticleListView",
@@ -64,7 +60,7 @@ export default {
     loadLatestArticle(page) {
       if (page === this.currentPage) return; //do nothing
       //do api
-      getLatestArticle(page, this.queryTime).then((resp) => {
+      HomeApi.getLatestArticle(page, this.queryTime).then((resp) => {
         if (resp.data.data.length === 0) this.currentPage = -1;
         else {
           this.currentPage = page;
@@ -74,11 +70,15 @@ export default {
     },
     //获取周榜
     loadWeeklyArticle() {
-      getWeeklyArticle().then((resp) => (this.resultData = resp.data.data));
+      HomeApi.getWeeklyArticle().then(
+        (resp) => (this.resultData = resp.data.data)
+      );
     },
     //获取月榜
     loadMonthlyArticle() {
-      getMonthlyArticle().then((resp) => (this.resultData = resp.data.data));
+      HomeApi.getMonthlyArticle().then(
+        (resp) => (this.resultData = resp.data.data)
+      );
     },
     //switch结构的，根据type类型进行不同的初始load
     initResultData(type) {

@@ -3,7 +3,7 @@
     <el-row>
       <!--          头像-->
       <el-col :span="3">
-        <el-image fit="fill" :src="getUserAvatarUrl(userInfo.avatar)" />
+        <el-image fit="fill" :src="UserApi.getUserAvatarUrl(userInfo.avatar)" />
       </el-col>
       <!--          详细信息-->
       <el-col :span="20">
@@ -32,11 +32,15 @@
 </template>
 
 <script>
-import { getUserAvatarUrl } from "@/api/user";
+import { UserApi } from "@/api/user";
 
 export default {
   name: "UserInformationCard",
-  methods: { getUserAvatarUrl },
+  computed: {
+    UserApi() {
+      return UserApi;
+    },
+  },
   props: ["userInfo"],
 };
 </script>

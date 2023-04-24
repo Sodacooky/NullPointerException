@@ -52,13 +52,7 @@
 
 <script>
 import UserInformationCard from "@/views/profile/components/UserInformationCard.vue";
-import {
-  getCurrentUser,
-  getUserAnswer,
-  getUserArticle,
-  getUserInfo,
-  getUserQuestion,
-} from "@/api/user";
+import { UserApi } from "@/api/user";
 import { ElNotification } from "element-plus";
 import QuestionPreviewItem from "@/components/QuestionPreviewItem.vue";
 import AnswerPreviewItem from "@/views/profile/components/AnswerPreviewItem.vue";
@@ -95,7 +89,7 @@ export default {
     uniFetch() {
       switch (this.type) {
         case "问题":
-          getUserQuestion(this.userId, this.page).then((resp) => {
+          UserApi.getUserQuestion(this.userId, this.page).then((resp) => {
             console.log(resp);
             if (resp.data.data === null || resp.data.data.length <= 0) {
               this.page = -1;
@@ -106,7 +100,7 @@ export default {
           });
           break;
         case "回答":
-          getUserAnswer(this.userId, this.page).then((resp) => {
+          UserApi.getUserAnswer(this.userId, this.page).then((resp) => {
             if (resp.data.data === null || resp.data.data.length <= 0) {
               this.page = -1;
             } else {
@@ -116,7 +110,7 @@ export default {
           });
           break;
         case "文章":
-          getUserArticle(this.userId, this.page).then((resp) => {
+          UserApi.getUserArticle(this.userId, this.page).then((resp) => {
             if (resp.data.data === null || resp.data.data.length <= 0) {
               this.page = -1;
             } else {
@@ -134,12 +128,12 @@ export default {
     //填充个人信息
     if (this.userId === undefined) {
       //如果没有指定用户，那么获取自己的
-      getCurrentUser().then((resp) => {
+      UserApi.getCurrentUser().then((resp) => {
         //如果没有登录，会飞到登录页面
         this.userInfo = resp.data.data;
       });
     } else {
-      getUserInfo(this.userId).then((resp) => {
+      UserApi.getUserInfo(this.userId).then((resp) => {
         if (resp.data.code !== 0) {
           ElNotification({
             title: "提示",

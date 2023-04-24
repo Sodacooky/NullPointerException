@@ -88,7 +88,10 @@
         </el-carousel-item>
         <el-carousel-item v-for="item in ads" :key="item.id">
           <a :href="item.url">
-            <el-image fit="fill" :src="getAdsImageUrl(item.image)"></el-image>
+            <el-image
+              fit="fill"
+              :src="HomeApi.getAdsImageUrl(item.image)"
+            ></el-image>
           </a>
         </el-carousel-item>
       </el-carousel>
@@ -109,16 +112,15 @@
 
 <script>
 import { Search } from "@element-plus/icons-vue";
-import {
-  getAds,
-  getAdsImageUrl,
-  getAnnouncement,
-  getHotCategories,
-  getSiteState,
-} from "@/api/home";
+import { HomeApi } from "@/api/home";
 
 export default {
   name: "HomeIndex",
+  computed: {
+    HomeApi() {
+      return HomeApi;
+    },
+  },
   components: { Search },
   data() {
     return {
@@ -132,7 +134,6 @@ export default {
     };
   },
   methods: {
-    getAdsImageUrl,
     doSearch() {
       if (this.searchText.length <= 0) this.searchText = " ";
       this.$router.push({
@@ -144,15 +145,19 @@ export default {
   mounted() {
     this.activeListRoutePath = this.$route.path;
     //加载网站数据
-    getSiteState().then((resp) => {
+    HomeApi.getSiteState().then((resp) => {
       this.siteState = resp.data.data;
     });
     //家在公告
-    getAnnouncement().then((resp) => (this.announcement = resp.data.data));
+    HomeApi.getAnnouncement().then(
+      (resp) => (this.announcement = resp.data.data)
+    );
     //加载广告
-    getAds().then((resp) => (this.ads = resp.data.data));
+    HomeApi.getAds().then((resp) => (this.ads = resp.data.data));
     //加载热门分类
-    getHotCategories().then((resp) => (this.hotCategories = resp.data.data));
+    HomeApi.getHotCategories().then(
+      (resp) => (this.hotCategories = resp.data.data)
+    );
   },
 };
 </script>
