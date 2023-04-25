@@ -21,7 +21,7 @@ public class UserAuthentication implements Serializable {
     /**
      * 用户id
      */
-    @TableId(type = IdType.ASSIGN_UUID)
+    @TableId(type = IdType.ASSIGN_ID)
     private Long id;
     /**
      * 用户注册时的邮箱

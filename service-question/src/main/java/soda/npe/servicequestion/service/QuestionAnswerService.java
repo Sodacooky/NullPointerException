@@ -34,7 +34,7 @@ public class QuestionAnswerService extends ServiceImpl<QuestionAnswerMapper, Que
         List<QuestionAnswer> qa = this.list(
                 new LambdaQueryWrapper<QuestionAnswer>()
                         .eq(QuestionAnswer::getPublisherId, userId)
-                        .lt(QuestionAnswer::getOrderNumber, 1)
+                        .gt(QuestionAnswer::getOrderNumber, 1)
                         .orderByDesc(QuestionAnswer::getPublishTime)
                         .last("limit " + (DBConstant.PAGE_SIZE * (page - 1)) + "," + DBConstant.PAGE_SIZE));
         return convertToPreviewVO(qa);

@@ -22,7 +22,7 @@ public class QuestionAnswer implements Serializable {
     /**
      * 回答的ID
      */
-    @TableId(type = IdType.ASSIGN_UUID)
+    @TableId(type = IdType.ASSIGN_ID)
     private Long id;
     /**
      * 问题的ID

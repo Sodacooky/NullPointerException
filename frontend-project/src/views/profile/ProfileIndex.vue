@@ -90,7 +90,6 @@ export default {
       switch (this.type) {
         case "问题":
           UserApi.getUserQuestion(this.userId, this.page).then((resp) => {
-            console.log(resp);
             if (resp.data.data === null || resp.data.data.length <= 0) {
               this.page = -1;
             } else {
@@ -122,17 +121,21 @@ export default {
       }
     },
   }, //end of methods
-  created() {
+  mounted() {
     //从query中获取数据
     this.userId = this.$route.query.userId; //userid无论有没有我们都拿，undefined就表示自己
     //填充个人信息
     if (this.userId === undefined) {
-      //如果没有指定用户，那么获取自己的
+      //如果没有指定用户，那么获取自己的信息
       UserApi.getCurrentUser().then((resp) => {
         //如果没有登录，会飞到登录页面
         this.userInfo = resp.data.data;
+        this.userId = this.userInfo.id;
+        //获取数据
+        this.newFetch();
       });
     } else {
+      //否则获取指定用户的信息
       UserApi.getUserInfo(this.userId).then((resp) => {
         if (resp.data.code !== 0) {
           ElNotification({
@@ -140,14 +143,14 @@ export default {
             message: "找不到用户，跳转回首页",
             type: "error",
           });
-          this.$router.replace("/home");
+          this.$router.replace("/");
         } else {
           this.userInfo = resp.data.data;
+          //获取数据
+          this.newFetch();
         }
       });
     }
-    //获取数据
-    this.newFetch();
   }, //end of mounted
 };
 </script>

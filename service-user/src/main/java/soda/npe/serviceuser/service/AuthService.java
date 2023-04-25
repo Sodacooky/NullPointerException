@@ -98,8 +98,12 @@ public class AuthService extends ServiceImpl<UserAuthenticationMapper, UserAuthe
         //添加一条Redis记录，带有激活账户时使用的magic串，用户需要在一天内激活账户
         stringRedisTemplate.opsForValue().set(magic, userId.toString(), Duration.ofDays(1));
         //将激活链接发送到邮箱，异步地
-        //TODO: 这里先返回magic，后面前端搞定了，再决定以什么形式提供链接
-        mailUtil.sendEmailAsync(registerVO.getEmail(), "NullPointerException注册验证", "点击该链接进行验证：" + magic);
+        //从数据库读取网站的主机名，构建校验URL
+        GlobalData host = globalDataMapper.selectById("host");
+        final String title = "点击链接，完成NullPointerException注册验证";
+        // - http(s)://aaa.bbb:xxx/registerVerify?magic=ccc
+        String content = "点击该链接进行验证：" + host.getValue() + "/registerVerify?magic=" + magic;
+        mailUtil.sendEmailAsync(registerVO.getEmail(), title, content);
         return this.save(userAuthentication);
     }
 
@@ -113,10 +117,12 @@ public class AuthService extends ServiceImpl<UserAuthenticationMapper, UserAuthe
         UserInfo updateInfo = new UserInfo();
         updateInfo.setId(userId);
         updateInfo.setIsBanned(0);
+        //redis中的记录将在一天内删除
         return userInfoMapper.updateById(updateInfo) == 1;
     }
 
     public boolean isEmailUsed(String email) {
+        //假定邮箱格式已经被校验
         return this.getOne(
                 new LambdaQueryWrapper<UserAuthentication>()
                         .eq(UserAuthentication::getEmail, email)) != null;

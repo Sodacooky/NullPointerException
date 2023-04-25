@@ -17,8 +17,10 @@ spring:
         add-to-simple-url-handler-mapping: true # 解决options请求被拦截问题
         corsConfigurations:
           '[/**]':
-            allowedOrigins: "*"
+            allowedOriginPatterns: "*"
             allowedMethods: "*"
             allowedHeaders: "*" # 允许在请求中携带的头信息
-            #allowCredentials: true # 是否允许携带cookie
+            allowCredentials: true # 是否允许携带cookie
+            #allowedOrigins: "*"
+
 

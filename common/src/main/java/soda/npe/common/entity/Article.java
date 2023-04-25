@@ -22,7 +22,7 @@ public class Article implements Serializable {
     /**
      * 文章ID
      */
-    @TableId(type = IdType.ASSIGN_UUID)
+    @TableId(type = IdType.ASSIGN_ID)
     private Long id;
     /**
      * 文章标题

@@ -22,7 +22,7 @@ public class UserInfo implements Serializable {
     /**
      * 用户的ID
      */
-    @TableId(type = IdType.ASSIGN_UUID)
+    @TableId(type = IdType.ASSIGN_ID)
     private Long id;
     /**
      * 昵称，要求系统中唯一

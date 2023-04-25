@@ -4,11 +4,13 @@ import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import soda.npe.common.controller.Response;
 import soda.npe.common.entity.UserInfo;
 import soda.npe.common.utils.JwtAuthUtil;
 import soda.npe.serviceuser.service.UserInfoService;
 
+@RestController
 @RequestMapping("/operation")
 public class OperationController {
 
@@ -40,6 +42,6 @@ public class OperationController {
     //编辑个人资料
 
     //重置密码
-    
+
 
 }

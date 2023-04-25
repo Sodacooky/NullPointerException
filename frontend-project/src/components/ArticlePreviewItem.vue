@@ -37,7 +37,7 @@
       <span class="user-info">
         <span style="display: flex; align-items: center; float: left">
           <el-avatar
-            :src="getUserAvatarUrl(item.publisherAvatar)"
+            :src="UserApi.getUserAvatarUrl(item.publisherAvatar)"
             size="small"
             style="margin-right: 8px"
           />
@@ -63,12 +63,16 @@
 <script>
 import { baseUrl } from "@/api/requests";
 import { CaretTop, Comment } from "@element-plus/icons-vue";
-import { getUserAvatarUrl } from "@/api/user";
+import { UserApi } from "@/api/user";
 
 export default {
   name: "ArticlePreviewItem",
+  computed: {
+    UserApi() {
+      return UserApi;
+    },
+  },
   methods: {
-    getUserAvatarUrl,
     baseUrl() {
       return baseUrl;
     },

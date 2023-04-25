@@ -22,7 +22,7 @@ public class Report implements Serializable {
     /**
      * 举报记录ID
      */
-    @TableId(type = IdType.ASSIGN_UUID)
+    @TableId(type = IdType.ASSIGN_ID)
     private Long id;
     /**
      * 被举报的用户的ID

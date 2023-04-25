@@ -89,14 +89,21 @@ const profileSettingsRoute = {
 const loginRoute = {
   path: "/login",
   name: "UserLogin",
-  component: () => import("@/views/authorization/LoginView.vue"),
+  component: () => import("@/views/authorization/Login.vue"),
 };
 
 //注册页面
 const registerRoute = {
   path: "/register",
   name: "UserRegister",
-  component: () => import("@/views/authorization/RegisterView.vue"),
+  component: () => import("@/views/authorization/Register.vue"),
+};
+
+//注册验证页面
+const registerVerifyRoute = {
+  path: "/registerVerify",
+  name: "UserRegisterVerify",
+  component: () => import("@/views/authorization/RegisterVerify.vue"),
 };
 
 // 文章详情页面
@@ -133,6 +140,7 @@ const userRoute = {
     profileSettingsRoute,
     loginRoute,
     registerRoute,
+    registerVerifyRoute,
     articleReadingRoute,
     questionReadingRoute,
   ],

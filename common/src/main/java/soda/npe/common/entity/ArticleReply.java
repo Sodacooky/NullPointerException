@@ -22,7 +22,7 @@ public class ArticleReply implements Serializable {
     /**
      * 回复ID
      */
-    @TableId(type = IdType.ASSIGN_UUID)
+    @TableId(type = IdType.ASSIGN_ID)
     private Long id;
     /**
      * 回复的目标文章ID，如果回复的是其他回复请保持NULL

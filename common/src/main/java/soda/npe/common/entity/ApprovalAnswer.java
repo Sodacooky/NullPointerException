@@ -22,7 +22,7 @@ public class ApprovalAnswer implements Serializable {
     /**
      * 点赞记录ID
      */
-    @TableId(type = IdType.ASSIGN_UUID)
+    @TableId(type = IdType.ASSIGN_ID)
     private Long id;
     /**
      * 用户ID

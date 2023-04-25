@@ -22,7 +22,7 @@ public class QuestionReply implements Serializable {
     /**
      * 回复的ID
      */
-    @TableId(type = IdType.ASSIGN_UUID)
+    @TableId(type = IdType.ASSIGN_ID)
     private Long id;
     /**
      * 目标问题ID，如果回复的是其他回复请保持为NULL

@@ -22,7 +22,7 @@ public class UserQuestionSubscription implements Serializable {
     /**
      * 订阅ID
      */
-    @TableId(type = IdType.ASSIGN_UUID)
+    @TableId(type = IdType.ASSIGN_ID)
     private Long id;
     /**
      * 订阅人ID
