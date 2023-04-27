@@ -51,7 +51,7 @@
           <el-avatar
             size="small"
             style="margin-right: 4px"
-            :src="getUserAvatarUrl(scope.row.publisherAvatar)"
+            :src="UserApi.getUserAvatarUrl(scope.row.publisherAvatar)"
           />
           {{ scope.row.publisherNickname }}
         </span>
@@ -69,17 +69,19 @@
 
 <script>
 import { ArrowLeft } from "@element-plus/icons-vue";
-import { getUserAvatarUrl } from "@/api/user";
+import { UserApi } from "@/api/user";
 
 export default {
   name: "AnswerManagement",
 
   computed: {
+    UserApi() {
+      return UserApi;
+    },
     ArrowLeft() {
       return ArrowLeft;
     },
   },
-  methods: { getUserAvatarUrl },
   data() {
     return {
       order: "time_desc",

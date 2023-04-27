@@ -2,7 +2,7 @@
 const loginRoute = {
   path: "/admin/login",
   name: "AdminLogin",
-  component: () => import("@/views/adminAuthorization/LoginView.vue"),
+  component: () => import("@/views/adminAuthorization/Login.vue"),
 };
 
 //内容管理

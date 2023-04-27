@@ -5,11 +5,11 @@
 <mapper namespace="soda.npe.common.mapper.GlobalDataMapper">
 
     <resultMap id="BaseResultMap" type="soda.npe.common.entity.GlobalData">
-            <id property="key" column="key" jdbcType="VARCHAR"/>
-            <result property="value" column="value" jdbcType="VARCHAR"/>
+            <id property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="content" column="content" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        key,value
+        name,content
     </sql>
 </mapper>

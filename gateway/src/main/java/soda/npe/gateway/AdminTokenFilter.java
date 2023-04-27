@@ -30,7 +30,7 @@ public class AdminTokenFilter implements GlobalFilter, Ordered {
             return chain.filter(exchange);
         }
         //判断当前访问的端口是否需要鉴权，放行登录接口
-        if (exchange.getRequest().getPath().toString().matches("(.*)/admin/login")) {
+        if (exchange.getRequest().getPath().toString().matches("(.*)/auth/admin/(.*)")) {
             //不需要鉴权
             return chain.filter(exchange);
         }

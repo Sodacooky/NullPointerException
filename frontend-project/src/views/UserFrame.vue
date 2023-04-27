@@ -28,16 +28,16 @@
             index="/publisher/question"
             v-if="currentUserInfo !== null"
           >
-            发布问题</el-menu-item
-          >
+            发布问题
+          </el-menu-item>
           <el-menu-item
             index="/publisher/article"
             v-if="currentUserInfo !== null"
-            >发布文章</el-menu-item
-          >
+            >发布文章
+          </el-menu-item>
           <el-menu-item index="/notice" v-if="currentUserInfo !== null">
-            消息(1)</el-menu-item
-          >
+            消息{{ noticeAmount > 0 ? "(" + noticeAmount + ")" : "" }}
+          </el-menu-item>
           <el-sub-menu index="" v-if="currentUserInfo !== null">
             <template #title>个人相关</template>
             <el-menu-item index="/profile">
@@ -62,6 +62,7 @@
 import { AuthApi } from "@/api/auth";
 import { UserApi } from "@/api/user";
 import { ElNotification } from "element-plus";
+import { NoticeApi } from "@/api/notice";
 
 export default {
   name: "UserFrame",
@@ -70,6 +71,7 @@ export default {
     return {
       currentRoute: "",
       currentUserInfo: null,
+      noticeAmount: 0,
     };
   }, //end of data
   methods: {
@@ -94,9 +96,13 @@ export default {
     AuthApi.hasLogin().then((resp) => {
       if (Boolean(resp.data.data)) {
         //已登录，加载用户数据
-        UserApi.getCurrentUser().then(
-          (resp) => (this.currentUserInfo = resp.data.data)
-        );
+        UserApi.getCurrentUser().then((resp) => {
+          this.currentUserInfo = resp.data.data;
+          //加载消息数量
+          NoticeApi.getAmount().then((resp2) => {
+            this.noticeAmount = resp2.data.data;
+          });
+        });
       } else {
         //否则，清理token
         localStorage.removeItem("token");

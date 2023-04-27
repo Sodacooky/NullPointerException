@@ -69,7 +69,7 @@ public class AuthService extends ServiceImpl<UserAuthenticationMapper, UserAuthe
     public String adminDoLogin(String password) {
         //从数据库读取密码并判断
         GlobalData adminPassword = globalDataMapper.selectById("adminPassword");
-        if (!password.equals(adminPassword.getValue())) return null;
+        if (!password.equals(adminPassword.getContent())) return null;
         //生成管理员的jwt
         HashMap<String, Object> payload = new HashMap<>();
         payload.put("userId", "admin");
@@ -102,7 +102,7 @@ public class AuthService extends ServiceImpl<UserAuthenticationMapper, UserAuthe
         GlobalData host = globalDataMapper.selectById("host");
         final String title = "点击链接，完成NullPointerException注册验证";
         // - http(s)://aaa.bbb:xxx/registerVerify?magic=ccc
-        String content = "点击该链接进行验证：" + host.getValue() + "/registerVerify?magic=" + magic;
+        String content = "点击该链接进行验证：" + host.getContent() + "/registerVerify?magic=" + magic;
         mailUtil.sendEmailAsync(registerVO.getEmail(), title, content);
         return this.save(userAuthentication);
     }

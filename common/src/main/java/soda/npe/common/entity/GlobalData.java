@@ -18,12 +18,12 @@ public class GlobalData implements Serializable {
      * 值名称
      */
     @TableId
-    private String key;
+    private String name;
 
     /**
      * 值的内容
      */
-    private String value;
+    private String content;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
@@ -40,16 +40,16 @@ public class GlobalData implements Serializable {
             return false;
         }
         GlobalData other = (GlobalData) that;
-        return (this.getKey() == null ? other.getKey() == null : this.getKey().equals(other.getKey()))
-            && (this.getValue() == null ? other.getValue() == null : this.getValue().equals(other.getValue()));
+        return (this.getName() == null ? other.getName() == null : this.getName().equals(other.getName()))
+            && (this.getContent() == null ? other.getContent() == null : this.getContent().equals(other.getContent()));
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((getKey() == null) ? 0 : getKey().hashCode());
-        result = prime * result + ((getValue() == null) ? 0 : getValue().hashCode());
+        result = prime * result + ((getName() == null) ? 0 : getName().hashCode());
+        result = prime * result + ((getContent() == null) ? 0 : getContent().hashCode());
         return result;
     }
 
@@ -59,8 +59,8 @@ public class GlobalData implements Serializable {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", key=").append(key);
-        sb.append(", value=").append(value);
+        sb.append(", name=").append(name);
+        sb.append(", content=").append(content);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

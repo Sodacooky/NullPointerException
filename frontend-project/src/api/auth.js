@@ -76,4 +76,22 @@ export class AuthApi {
       params: { magic },
     });
   }
+
+  static adminHasLogin() {
+    if (localStorage.getItem("adminToken") === null) {
+      //如果没有token那肯定没有登录
+      return new Promise((resolve) => {
+        //模拟一个没有登录的请求结果
+        resolve({ data: { data: false } });
+      });
+    } else return requests.get("/service-user/auth/admin/hasLogin");
+  }
+
+  static adminLogin(password) {
+    return requests.post("/service-user/auth/admin/login", { password });
+  }
+
+  static adminLogout() {
+    return requests.get("/service-user/auth/admin/logout");
+  }
 }

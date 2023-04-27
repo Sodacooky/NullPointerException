@@ -13,7 +13,7 @@ import soda.npe.serviceuser.service.UserNoticeService;
  * 获取消息相关的控制器
  */
 @RestController
-@RequestMapping("/notice")
+@RequestMapping("/operation/notice")
 public class NoticeController {
 
     @Resource
@@ -68,6 +68,23 @@ public class NoticeController {
     public Response getAmount(@RequestHeader("Authorization") String token) {
         Long userId = jwtAuthUtil.getPayload(token).getLong("userId");
         return Response.ok(userNoticeService.getNoticeAmount(userId));
+    }
+
+    /**
+     * 标记消息为已读
+     *
+     * @param noticeId 消息ID
+     * @param token    jwt
+     * @return 是否成功，对一条已读的进行标记已读操作视为成功
+     */
+    @GetMapping("/read")
+    public Response read(Long noticeId, @RequestHeader("Authorization") String token) {
+        Long userId = jwtAuthUtil.getPayload(token).getLong("userId");
+        if (userNoticeService.read(noticeId, userId)) {
+            return Response.ok(null);
+        } else {
+            return Response.fail(1, "消息不存在或者不是该消息的接收者");
+        }
     }
 
 }

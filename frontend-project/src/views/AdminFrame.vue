@@ -1,10 +1,18 @@
 <template>
   <el-container>
     <el-aside width="160px">
-      <el-menu :unique-opened="true" :router="true">
-        <el-image src="/logo.png" width="128" />
-        <el-menu-item>
-          <el-icon><Close /></el-icon>退出系统
+      <el-menu
+        :unique-opened="true"
+        :router="true"
+        :default-active="$route.path"
+      >
+        <el-tooltip content="返回用户端" placement="right">
+          <router-link to="/">
+            <img alt="website logo" src="/logo.png" width="128" />
+          </router-link>
+        </el-tooltip>
+        <el-menu-item index="" @click="doLogout()">
+          <el-icon><Close /></el-icon>退出登录
         </el-menu-item>
         <el-sub-menu index="/admin/content/">
           <template #title>
@@ -43,14 +51,71 @@
     </el-aside>
 
     <el-main>
-      <router-view></router-view>
+      <div style="min-width: 1000px">
+        <router-view></router-view>
+      </div>
     </el-main>
   </el-container>
 </template>
 
 <script>
+import { AuthApi } from "@/api/auth";
+
 export default {
   name: "AdminFrame",
+  methods: {
+    doLogout() {
+      //调用登出api
+      AuthApi.adminLogout()
+        .then((resp) => {
+          if (Boolean(resp.data.data)) {
+            //成功
+            this.$notify({ title: "登出成功", type: "success" });
+            this.$router.replace("/admin/"); //强制重定向一下
+          } else {
+            //失败
+            this.$notify({ title: "登出失败", type: "error" });
+          }
+        })
+        .catch((error) => {
+          if (error.response.status === 498) {
+            this.$notify({
+              title: "登出失败",
+              message: "你还没登录",
+              type: "error",
+            });
+          }
+        });
+    },
+    /**
+     * 检测登录状态并拦截
+     */
+    checkLoginState() {
+      //没有token肯定没登录
+      if (localStorage.getItem("adminToken") === null) {
+        this.$router.replace("/admin/login");
+        return;
+      }
+      //当然，拥有token不代表就有效
+      //判断登录状态，如果登陆了那么加载相关数据，如果没有登录那么移除token
+      AuthApi.adminHasLogin().then((resp) => {
+        if (!Boolean(resp.data.data)) {
+          //清理token，并跳转到登录页面
+          localStorage.removeItem("adminToken");
+          this.$router.replace("/admin/login");
+        }
+      });
+    },
+  }, //methods
+  mounted() {
+    this.checkLoginState();
+  },
+  watch: {
+    //监听路由切换，切换路由时检查用户登录状态
+    $route() {
+      this.checkLoginState();
+    },
+  }, // watch
 };
 </script>
 

@@ -3,14 +3,14 @@ import router from "@/router";
 
 export const baseUrl = "http://localhost:8080";
 
-const requests = axios.create({ baseURL: baseUrl });
+const requests = axios.create({ baseURL: baseUrl, withCredentials: true });
 
 // 添加请求拦截器
 requests.interceptors.request.use(
   function (config) {
     //请求发送前
     //检查是否有Token储存着，如果有那么添加到Header
-    if (config.url.startsWith("/admin")) {
+    if (config.url.includes("/admin")) {
       //请求管理员接口
       if (localStorage.getItem("adminToken") !== null) {
         config.headers.AdminAuthorization = localStorage.getItem("adminToken");
@@ -41,12 +41,14 @@ requests.interceptors.response.use(
     if (error.response.status === 498) {
       //如果是498，那么访问的端口需要token而你缺少token或者token过期，鉴权失败
       console.log("Unauthorized detected, redirecting...");
-      if (String(error.response.url).startsWith("/admin")) {
+      if (String(error.request.responseURL).includes("/admin/")) {
         //如果访问的是管理员接口，清除管理员Token，并重定向到管理员登录
+        console.log("Admin Api Auth Failed.");
         localStorage.removeItem("adminToken");
         router.push("/admin/login");
       } else {
         //否则，清除用户Token，并跳到用户登录
+        console.log("User Api Auth Failed.");
         localStorage.removeItem("token");
         router.push("/login");
       }

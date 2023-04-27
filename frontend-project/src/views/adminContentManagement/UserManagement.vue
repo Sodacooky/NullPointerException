@@ -44,7 +44,7 @@
   <el-table :data="tableData">
     <el-table-column label="头像" min-width="32px">
       <template #default="scope">
-        <el-avatar :src="getUserAvatarUrl(scope.row.avatar)" />
+        <el-avatar :src="UserApi.getUserAvatarUrl(scope.row.avatar)" />
       </template>
     </el-table-column>
     <el-table-column label="昵称" min-width="96px" prop="nickname" />
@@ -61,17 +61,19 @@
 </template>
 
 <script>
-import { getUserAvatarUrl } from "@/api/user";
+import { UserApi } from "@/api/user";
 import { ArrowLeft } from "@element-plus/icons-vue";
 
 export default {
   name: "UserManagement",
   computed: {
+    UserApi() {
+      return UserApi;
+    },
     ArrowLeft() {
       return ArrowLeft;
     },
   },
-  methods: { getUserAvatarUrl },
   data() {
     return {
       order: "time_desc",
