@@ -68,7 +68,9 @@ public class QuestionAnswerService extends ServiceImpl<QuestionAnswerMapper, Que
     }
 
     public Long getAnswerAmountOf(Long questionId) {
-        return this.count(new LambdaQueryWrapper<QuestionAnswer>().eq(QuestionAnswer::getQuestionId, questionId));
+        return this.count(new LambdaQueryWrapper<QuestionAnswer>()
+                .eq(QuestionAnswer::getQuestionId, questionId)
+                .gt(QuestionAnswer::getOrderNumber, 1));
     }
 
     public Boolean publish(Long userId, AnswerPublishVO answerPublishVO) {

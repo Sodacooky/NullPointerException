@@ -1,24 +1,36 @@
 <template>
+  <!--空状态    -->
+  <el-empty v-if="noticeData.length < 1" description="没有消息"></el-empty>
+
+  <!--列表-->
   <div v-for="item in noticeData" :key="item.id" class="notice-list">
-    <div class="notice-card" style="padding: 2px 2px 0 2px">
+    <div
+      class="notice-card"
+      style="padding: 8px"
+      @mouseenter="onHoverNotice(item.id)"
+      @click="$router.push(`/question/${item.supplement}`)"
+    >
+      <!--标题        -->
       <div class="article-name" style="font-size: large">
-        回复：{{ item.question_title }}
+        <el-tag v-if="item.isRead === 0" type="info">未读</el-tag>
+        {{ item.title }}
       </div>
       <div class="reply-short" style="color: gray">
-        {{ item.answer_publisher_nickname }}: {{ item.text_short }}
+        {{ item.text }}
       </div>
-      <div class="bottom-info" style="text-align: right">
-        {{ item.publish_time }}
+      <div
+        class="bottom-info"
+        style="font-size: small; font-style: italic; color: gray"
+      >
+        {{ item.time }}
       </div>
-      <el-divider />
     </div>
-  </div>
-  <div style="display: flex; justify-content: center">
-    <el-button>加载更多</el-button>
   </div>
 </template>
 
 <script>
+import { NoticeApi } from "@/api/notice";
+
 export default {
   name: "SubscriptionView",
   data() {
@@ -26,20 +38,23 @@ export default {
       noticeData: [],
     };
   },
+  methods: {
+    onHoverNotice(noticeId) {
+      //发送标记已读请求
+      NoticeApi.read(noticeId).then((resp) => {
+        if (resp.data.code === 0) {
+          //成功则也将本地的标记为已读
+          let found = this.noticeData.find((value) => {
+            return value.id === noticeId;
+          });
+          found.isRead = 1;
+        }
+      });
+    },
+  }, //methods
   mounted() {
-    this.noticeData.push({
-      id: "1",
-      question_title: "问题标题",
-      answer_publisher_nickname: "回复发布者",
-      text_short: "回复正文概要",
-      publish_time: "2022-2-22 22:22:22",
-    });
-    this.noticeData.push({
-      id: "1",
-      question_title: "问题标题",
-      answer_publisher_nickname: "回复发布者2",
-      text_short: "回复正文概要22222222222222..........",
-      publish_time: "2022-2-22 22:22:22",
+    NoticeApi.getQuestionAnswer().then((resp) => {
+      this.noticeData = resp.data.data;
     });
   },
 };
