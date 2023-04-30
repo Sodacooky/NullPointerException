@@ -25,6 +25,7 @@
                 v-model="passwordInput"
                 show-password
                 type="password"
+                @keydown.enter="doLogin()"
               ></el-input>
             </el-form-item>
             <!--登录按钮以及跳转注册按钮              -->

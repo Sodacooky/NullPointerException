@@ -99,7 +99,7 @@ public class HomeMiscService {
                 }
             }
             HotCategoriesVO hotCategoriesVO = new HotCategoriesVO();
-            hotCategoriesVO.setId((long) result.size());
+            hotCategoriesVO.setId(result.size() + 1L);
             hotCategoriesVO.setCategory(biggestCategoryName);
             hotCategoriesVO.setAmount(biggestCategoryAmount);
             result.add(hotCategoriesVO);

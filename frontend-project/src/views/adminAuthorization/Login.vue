@@ -12,6 +12,7 @@
                 v-model.trim="passwordInput"
                 show-password
                 type="password"
+                @keydown.enter="doLogin()"
               ></el-input>
             </el-form-item>
             <el-form-item>
