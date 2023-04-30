@@ -42,7 +42,7 @@ export default {
     onHoverNotice(noticeId) {
       //发送标记已读请求
       NoticeApi.read(noticeId).then((resp) => {
-        if (resp.data.code == 0) {
+        if (resp.data.code === "0") {
           //成功则也将本地的标记为已读
           let found = this.noticeData.find((value) => {
             return value.id === noticeId;

@@ -134,7 +134,7 @@ export default {
         this.confirmPassword,
         this.code
       ).then((resp) => {
-        if (resp.data.code == 0) {
+        if (resp.data.code === "0") {
           this.$notify({
             titleInput: "注册成功",
             message: "一封激活邮件将发送到您的邮箱，请点击其中链接进行激活",
@@ -148,7 +148,7 @@ export default {
             type: "error",
           });
           //如果是验证码不正确，那么要更新验证码以配合后端
-          if (resp.data.code == 3) this.doCodeImageUpdate();
+          if (resp.data.code === "3") this.doCodeImageUpdate();
         }
       }); //doRegister
     },
@@ -163,7 +163,7 @@ export default {
     },
     checkEmail() {
       AuthApi.registerEmailCheck(this.email).then((resp) => {
-        if (resp.data.code != 0) {
+        if (resp.data.code !== "0") {
           this.emailCheckResult = resp.data.message;
         } else {
           this.emailCheckResult = "";
@@ -172,7 +172,7 @@ export default {
     },
     checkNickname() {
       AuthApi.registerNicknameCheck(this.nickname).then((resp) => {
-        if (resp.data.code != 0) {
+        if (resp.data.code !== "0") {
           this.isShowNicknameUsed = true;
         } else {
           this.isShowPasswordMismatch = false;

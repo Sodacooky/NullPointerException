@@ -21,6 +21,7 @@ import soda.npe.servicequestion.vo.QuestionPublishVO;
 
 import java.time.Duration;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class QuestionInfoService extends ServiceImpl<QuestionInfoMapper, QuestionInfo> {
@@ -50,7 +51,8 @@ public class QuestionInfoService extends ServiceImpl<QuestionInfoMapper, Questio
         //取出info的id
         Long infoId = this.getOne(new LambdaQueryWrapper<QuestionInfo>()
                 .eq(QuestionInfo::getPublisherId, userId)
-                .eq(QuestionInfo::getPublishTime, publishDate)).getId();
+                .orderByDesc(QuestionInfo::getPublishTime)
+                .last("limit 1")).getId();
         //然后填写answer作为正文
         QuestionAnswer questionAnswer = new QuestionAnswer();
         questionAnswer.setQuestionId(infoId);
@@ -246,5 +248,8 @@ public class QuestionInfoService extends ServiceImpl<QuestionInfoMapper, Questio
         return result;
     }
 
-
+    public List<String> getCategoriesSuggestion(String input) {
+        List<QuestionInfo> match = list(new LambdaQueryWrapper<QuestionInfo>().likeRight(QuestionInfo::getCategory, input));
+        return match.stream().map(QuestionInfo::getCategory).distinct().collect(Collectors.toList());
+    }
 }

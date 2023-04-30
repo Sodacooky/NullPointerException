@@ -61,13 +61,13 @@ public class HomeMiscService {
         if (Boolean.TRUE.equals(redisTemplate.hasKey("homeHotCategories"))) {
             return redisTemplate.opsForList().range("homeHotCategories", 0, -1);
         }
-        //月开始时间
-        DateTime beginOfMonth = DateUtil.beginOfMonth(new Date());
+        //30天开始时间
+        DateTime beginTime = DateUtil.offsetDay(new Date(), -30);
         // category -> (column -> value)
         //统计月内问题中的分类数量
-        Map<String, Map<String, Object>> hotCategoriesOfQuestion = questionInfoMapper.getHotCategories(beginOfMonth);
+        Map<String, Map<String, Object>> hotCategoriesOfQuestion = questionInfoMapper.getHotCategories(beginTime);
         //统计月内文章中的分类数量
-        Map<String, Map<String, Object>> hotCategoriesOfArticle = articleMapper.getHotCategories(beginOfMonth);
+        Map<String, Map<String, Object>> hotCategoriesOfArticle = articleMapper.getHotCategories(beginTime);
         //合并重复
         // category -> amount
         TreeMap<String, Long> merged = new TreeMap<>();
@@ -112,7 +112,6 @@ public class HomeMiscService {
         result.forEach(v -> redisTemplate.opsForList().rightPush("homeHotCategories", v));
         redisTemplate.expire("homeHotCategories", Duration.ofHours(1));
         return result;
-
     }
 
     public List<Announcement> getAnnouncement() {

@@ -33,7 +33,7 @@
           推荐分类：
           <span v-if="categoriesSuggestion.length < 1">还没有推荐。。。</span>
           <span v-for="item in categoriesSuggestion" :key="item">
-            <el-button style="margin: 4px">
+            <el-button style="margin: 4px" @click="categoryInput = item">
               {{ item }}
             </el-button>
           </span>
@@ -116,7 +116,7 @@ export default {
         this.editorRawText
       ).then((resp) => {
         //如果没有登录，那已经被拦截了
-        if (resp.data.code == 0) {
+        if (resp.data.code === "0") {
           //发布成功
           //弹窗
           this.$notify({
@@ -139,7 +139,7 @@ export default {
     doCategorySuggest() {
       PublishingApi.getArticleCategoriesSuggestion(this.categoryInput).then(
         (resp) => {
-          if (resp.data.code == 0) {
+          if (resp.data.code === "0") {
             this.categoriesSuggestion = resp.data.data;
           } else {
             this.categoriesSuggestion = [];

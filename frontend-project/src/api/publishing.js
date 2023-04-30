@@ -14,4 +14,18 @@ export class PublishingApi {
       text,
     });
   }
+
+  static getQuestionCategoriesSuggestion(input) {
+    return requests.get("/service-question/getCategoriesSuggestion", {
+      params: { input },
+    });
+  }
+
+  static publishQuestion(title, category, text) {
+    return requests.post("/service-question/operation/publishQuestion", {
+      title,
+      category,
+      text,
+    });
+  }
 }

@@ -6,7 +6,11 @@
         <template #header>
           <span style="font-weight: bold; font-size: large">问题信息</span>
         </template>
-        <el-input placeholder="用一句话概括你的问题" style="font-size: large">
+        <el-input
+          placeholder="用一句话概括你的问题"
+          style="font-size: large"
+          v-model="titleInput"
+        >
           <template #prepend>问题标题</template>
         </el-input>
         <div
@@ -14,7 +18,9 @@
           style="color: gray; font-size: small; margin-top: 8px"
         >
           <div>
-            <el-button :icon="Search">点击以当前标题为关键词搜索问题</el-button>
+            <el-button :icon="Search" @click="jumpSearch()"
+              >点击以当前标题为关键词搜索问题
+            </el-button>
           </div>
           <p>
             先搜索，再提问,这样能更快地帮你找到答案。即使没找到，在看了相关或类似的问题之后，你的提问会更准确。
@@ -24,6 +30,8 @@
         <el-input
           placeholder="是什么类型的问题呢"
           style="font-size: large; margin-top: 4px"
+          v-model="categoryInput"
+          @change="doCategorySuggest()"
         >
           <template #prepend>问题分类</template>
         </el-input>
@@ -32,8 +40,9 @@
         </div>
         <div>
           推荐分类：
-          <span v-for="item in suggestCategories" :key="item">
-            <el-button style="margin: 4px">
+          <span v-if="categoriesSuggestion.length < 1">还没有推荐。。。</span>
+          <span v-for="item in categoriesSuggestion" :key="item">
+            <el-button style="margin: 4px" @click="categoryInput = item">
               {{ item }}
             </el-button>
           </span>
@@ -100,6 +109,7 @@
 <script>
 import { mavonToolbars } from "@/api/mavonSettings";
 import { Search } from "@element-plus/icons-vue";
+import { PublishingApi } from "@/api/publishing";
 
 export default {
   name: "QuestionEditor",
@@ -110,16 +120,66 @@ export default {
     mavonToolbars() {
       return mavonToolbars;
     },
-  },
+  }, //computed
   data() {
     return {
       editorRawText: "",
-      suggestCategories: ["Java", "求职", "工作"],
+      titleInput: "",
+      categoryInput: "",
+      categoriesSuggestion: [],
       isAgreeLaw: false,
       isAgreeCopyright: false,
       isAgreeNew: false,
     };
-  },
+  }, //data
+  methods: {
+    //打开一个新标签页进行搜索
+    jumpSearch() {
+      let routeData = this.$router.resolve({
+        path: "/search",
+        query: { keyword: this.titleInput },
+      });
+      window.open(routeData.href, "_blank");
+    },
+    doCategorySuggest() {
+      PublishingApi.getQuestionCategoriesSuggestion(this.categoryInput).then(
+        (resp) => {
+          if (resp.data.code === "0") {
+            this.categoriesSuggestion = resp.data.data;
+          } else {
+            this.categoriesSuggestion = [];
+          }
+        }
+      );
+    },
+    doPublish() {
+      PublishingApi.publishQuestion(
+        this.titleInput,
+        this.categoryInput,
+        this.editorRawText
+      ).then((resp) => {
+        //如果没有登录，那已经被拦截了
+        if (resp.data.code === "0") {
+          //发布成功
+          //弹窗
+          this.$notify({
+            title: "发布成功",
+            message: "正在跳转",
+            type: "success",
+          });
+          //跳转
+          this.$router.replace(`/question/${resp.data.data}`);
+        } else {
+          //发布失败
+          this.$notify({
+            title: "发布失败",
+            message: resp.data.message,
+            type: "error",
+          });
+        }
+      });
+    },
+  }, //methods
 };
 </script>
 

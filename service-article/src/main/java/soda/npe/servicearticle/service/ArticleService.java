@@ -193,7 +193,7 @@ public class ArticleService extends ServiceImpl<ArticleMapper, Article> {
 
         //获取回答数量排序前100的
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DAY_OF_MONTH, -7);
+        calendar.add(Calendar.DAY_OF_MONTH, -30);
         List<Article> replyTop200 = this.getBaseMapper().getMonthlyReplyTop200(calendar.getTime());
 
         //极端情况，如果没有数据，那么我计算个锤子

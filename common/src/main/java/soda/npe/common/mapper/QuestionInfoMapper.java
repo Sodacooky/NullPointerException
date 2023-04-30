@@ -37,7 +37,7 @@ public interface QuestionInfoMapper extends BaseMapper<QuestionInfo> {
     List<QuestionInfo> getMonthlyAnswerTop200(@Param("monthStart") Date monthStart);
 
     @MapKey("category")
-    Map<String, Map<String, Object>> getHotCategories(@Param("monthStart") Date monthStart);
+    Map<String, Map<String, Object>> getHotCategories(@Param("timeStart") Date timeStart);
 }
 
 

@@ -112,7 +112,7 @@
     <select id="getHotCategories" resultType="map">
         select qi.category, count(qi.category) as amount
         from question_info qi
-        where qi.publish_time > #{monthStart}
+        where qi.publish_time > #{timeStart}
         group by qi.category
         order by amount desc
         limit 8

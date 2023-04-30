@@ -194,7 +194,7 @@ export default {
   mounted() {
     //问题的基本信息
     ReadingApi.getQuestionInfo(this.questionId).then((resp) => {
-      if (resp.data.code != 0) {
+      if (resp.data.code !== "0") {
         this.$notify({
           title: "加载失败",
           message: "无法加载文章，正在跳转回首页",

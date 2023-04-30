@@ -129,7 +129,7 @@ export default {
     loadArticleContent() {
       //调用接口，加载文章内容，并加载文章对应的用户信息
       ReadingApi.getArticle(this.articleId).then((resp) => {
-        if (resp.data.code != 0) {
+        if (resp.data.code !== "0") {
           this.$notify({
             title: "加载失败",
             message: "无法加载文章，正在跳转回首页",

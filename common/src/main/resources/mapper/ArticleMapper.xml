@@ -86,7 +86,7 @@
     <select id="getHotCategories" resultType="map">
         select a.category, count(a.category) as amount
         from article a
-        where a.publish_time > #{monthStart}
+        where a.publish_time > #{timeStart}
         group by a.category
         order by amount desc
         limit 8

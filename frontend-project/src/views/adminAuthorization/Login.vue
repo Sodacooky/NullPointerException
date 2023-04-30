@@ -40,7 +40,7 @@ export default {
   methods: {
     doLogin() {
       AuthApi.adminLogin(this.passwordInput).then((resp) => {
-        if (resp.data.code == 0) {
+        if (resp.data.code === "0") {
           //登陆成功
           // - 储存token
           localStorage.setItem("adminToken", resp.data.data);
