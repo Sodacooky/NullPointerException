@@ -71,6 +71,7 @@ public class HomeMiscService {
         //合并重复
         // category -> amount
         TreeMap<String, Long> merged = new TreeMap<>();
+        // fill question
         hotCategoriesOfQuestion.forEach((k, v) -> {
             long thisAmount = (long) v.get("amount");
             if (merged.containsKey(k)) {
@@ -79,6 +80,7 @@ public class HomeMiscService {
                 merged.put(k, thisAmount);
             }
         });
+        // fill article
         hotCategoriesOfArticle.forEach((k, v) -> {
             long thisAmount = (long) v.get("amount");
             if (merged.containsKey(k)) {
@@ -107,7 +109,7 @@ public class HomeMiscService {
         }
         //
         redisTemplate.delete("homeHotCategories");
-        redisTemplate.opsForList().leftPushAll("homeHotCategories", result);
+        result.forEach(v -> redisTemplate.opsForList().rightPush("homeHotCategories", v));
         redisTemplate.expire("homeHotCategories", Duration.ofHours(1));
         return result;
 

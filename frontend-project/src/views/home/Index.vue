@@ -6,7 +6,7 @@
       v-model="searchText"
       placeholder="搜索问题、文章和用户"
       style="font-size: large; margin-bottom: 16px"
-      @keydown.enter="doSearch"
+      @keydown.enter="doSearch()"
     >
       <template #prepend>
         <el-icon>
@@ -69,7 +69,6 @@
       <el-badge
         class="hot-category-item"
         v-for="item in hotCategories"
-        :key="item.id"
         :value="item.amount"
       >
         <el-button>{{ item.category }}</el-button>

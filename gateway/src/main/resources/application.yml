@@ -13,6 +13,7 @@ spring:
         locator:
           enabled: true # 默认没启用
           lower-case-service-id: true # 默认是全大写
+
       globalcors: # 全局的跨域处理
         add-to-simple-url-handler-mapping: true # 解决options请求被拦截问题
         corsConfigurations:
@@ -22,5 +23,3 @@ spring:
             allowedHeaders: "*" # 允许在请求中携带的头信息
             allowCredentials: true # 是否允许携带cookie
             #allowedOrigins: "*"
-
-

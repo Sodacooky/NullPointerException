@@ -10,6 +10,7 @@
         <el-input
           style="font-size: large"
           placeholder="文章不能没有标题，就像人不能没有名字"
+          v-model="titleInput"
         >
           <template #prepend>文章标题</template>
         </el-input>
@@ -20,6 +21,8 @@
         <el-input
           style="font-size: large; margin-top: 4px"
           placeholder="推荐输入后从推荐分类选取"
+          v-model="categoryInput"
+          @change="doCategorySuggest()"
         >
           <template #prepend>文章分类</template>
         </el-input>
@@ -28,7 +31,8 @@
         </div>
         <div>
           推荐分类：
-          <span v-for="item in suggestCategories" :key="item">
+          <span v-if="categoriesSuggestion.length < 1">还没有推荐。。。</span>
+          <span v-for="item in categoriesSuggestion" :key="item">
             <el-button style="margin: 4px">
               {{ item }}
             </el-button>
@@ -85,6 +89,7 @@
 
 <script>
 import { mavonToolbars } from "@/api/mavonSettings";
+import { PublishingApi } from "@/api/publishing";
 
 export default {
   name: "ArticleEditor",
@@ -96,14 +101,51 @@ export default {
   data() {
     return {
       editorRawText: "",
-      suggestCategories: ["Java", "求职", "工作"],
+      titleInput: "",
+      categoryInput: "",
+      categoriesSuggestion: [],
       isAgreeLaw: false,
       isAgreeCopyright: false,
     };
   }, //data
   methods: {
     doPublish() {
-      console.log(this.editorRawText);
+      PublishingApi.publishArticle(
+        this.titleInput,
+        this.categoryInput,
+        this.editorRawText
+      ).then((resp) => {
+        //如果没有登录，那已经被拦截了
+        if (resp.data.code == 0) {
+          //发布成功
+          //弹窗
+          this.$notify({
+            title: "发布成功",
+            message: "正在跳转",
+            type: "success",
+          });
+          //跳转
+          this.$router.replace(`/article/${resp.data.data}`);
+        } else {
+          //发布失败
+          this.$notify({
+            title: "发布失败",
+            message: resp.data.message,
+            type: "error",
+          });
+        }
+      });
+    },
+    doCategorySuggest() {
+      PublishingApi.getArticleCategoriesSuggestion(this.categoryInput).then(
+        (resp) => {
+          if (resp.data.code == 0) {
+            this.categoriesSuggestion = resp.data.data;
+          } else {
+            this.categoriesSuggestion = [];
+          }
+        }
+      );
     },
   }, //methods
 };

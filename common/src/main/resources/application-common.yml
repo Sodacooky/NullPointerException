@@ -9,6 +9,8 @@ spring:
   jackson:
     time-zone: Asia/Shanghai
     date-format: yyyy-MM-dd HH:mm:ss
+    generator:
+      write-numbers-as-strings: true
 eureka:
   client:
     service-url:

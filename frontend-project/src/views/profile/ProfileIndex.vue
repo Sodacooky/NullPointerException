@@ -137,9 +137,9 @@ export default {
     } else {
       //否则获取指定用户的信息
       UserApi.getUserInfo(this.userId).then((resp) => {
-        if (resp.data.code !== 0) {
+        if (resp.data.code != 0) {
           ElNotification({
-            title: "提示",
+            titleInput: "提示",
             message: "找不到用户，跳转回首页",
             type: "error",
           });

@@ -78,12 +78,12 @@ export default {
     doLogout() {
       AuthApi.logout().then((resp) => {
         if (Boolean(resp.data.data) === true) {
-          this.$notify({ title: "登出成功", type: "success" });
+          this.$notify({ titleInput: "登出成功", type: "success" });
           localStorage.removeItem("token");
           this.currentUserInfo = null;
           this.$router.replace("/");
         } else {
-          ElNotification({ title: "登出失败", type: "error" });
+          ElNotification({ titleInput: "登出失败", type: "error" });
         }
       });
     },

@@ -21,6 +21,7 @@ import soda.npe.servicearticle.vo.ArticlePublishVO;
 
 import java.time.Duration;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ArticleService extends ServiceImpl<ArticleMapper, Article> {
@@ -69,16 +70,22 @@ public class ArticleService extends ServiceImpl<ArticleMapper, Article> {
         return convertToPreviewVO(found);
     }
 
-    public Boolean publish(Long userId, ArticlePublishVO articlePublishVO) {
+    public Long publish(Long userId, ArticlePublishVO articlePublishVO) {
         //construct entity, leave id null
         Article article = new Article();
+        Date publishTime = new Date();
         article.setTitle(articlePublishVO.getTitle());
         article.setCategory(articlePublishVO.getCategory());
         article.setText(articlePublishVO.getText());
-        article.setPublishTime(new Date());
+        article.setPublishTime(publishTime);
         article.setPublisherId(userId);
         //store
-        return this.save(article);
+        if (!this.save(article)) return null;
+        //获取ID
+        return this.getOne(new LambdaQueryWrapper<Article>()
+                .eq(Article::getPublisherId, userId)
+                .orderByDesc(Article::getPublishTime)
+                .last("limit 1")).getId();
     }
 
     private List<ArticlePreviewVO> convertToPreviewVO(List<Article> origin) {
@@ -222,4 +229,8 @@ public class ArticleService extends ServiceImpl<ArticleMapper, Article> {
         return result;
     }
 
+    public List<String> getCategoriesSuggestion(String input) {
+        List<Article> match = list(new LambdaQueryWrapper<Article>().likeRight(Article::getCategory, input));
+        return match.stream().map(Article::getCategory).distinct().collect(Collectors.toList());
+    }
 }

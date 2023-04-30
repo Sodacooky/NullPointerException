@@ -47,7 +47,7 @@ export default {
     //有magic，进行请求
     if (this.magic !== null) {
       AuthApi.registerVerify(this.magic).then((resp) => {
-        this.isSuccess = resp.data.code === 0;
+        this.isSuccess = resp.data.code == 0;
       });
     }
   }, //mounted

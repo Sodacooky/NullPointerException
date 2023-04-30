@@ -61,5 +61,5 @@ public class SearchController {
         if (isAsc == null) isAsc = false;
         return Response.ok(null, articleService.searchByReplyAmount(keyword, page, isAsc));
     }
-
+    
 }

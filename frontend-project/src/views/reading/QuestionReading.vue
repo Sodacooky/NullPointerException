@@ -117,7 +117,6 @@
 import { UserApi } from "@/api/user";
 import { marked } from "marked";
 import { ArrowRight } from "@element-plus/icons-vue";
-import { ElNotification } from "element-plus";
 import { ReadingApi } from "@/api/reading";
 import QuestionAnswerListItem from "@/views/reading/components/QuestionAnswerListItem.vue";
 import { mavonToolbars } from "@/api/mavonSettings";
@@ -195,8 +194,8 @@ export default {
   mounted() {
     //问题的基本信息
     ReadingApi.getQuestionInfo(this.questionId).then((resp) => {
-      if (resp.data.code !== 0) {
-        ElNotification({
+      if (resp.data.code != 0) {
+        this.$notify({
           title: "加载失败",
           message: "无法加载文章，正在跳转回首页",
           type: "error",

@@ -1,5 +1,6 @@
 package soda.npe.servicearticle.controller;
 
+import cn.hutool.core.util.StrUtil;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -91,5 +92,16 @@ public class DataFetchController {
         return Response.ok(null, approvalArticleService.getApprovalAmountOf(articleId));
     }
 
+    /**
+     * 用于在发布文章时，提供一个类型推荐
+     *
+     * @param input 输入
+     * @return 0~8个推荐类型
+     */
+    @GetMapping("/getCategoriesSuggestion")
+    public Response getCategoriesSuggestion(String input) {
+        if (StrUtil.isBlank(input)) return Response.fail(1, "未输入");
+        return Response.ok(articleService.getCategoriesSuggestion(input));
+    }
 
 }

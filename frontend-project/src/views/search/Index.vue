@@ -310,7 +310,7 @@ export default {
         this.page = 1;
         this.onNewSearch();
         ElNotification({
-          title: "提示",
+          titleInput: "提示",
           message: "已无更多页，跳转回第一页",
           type: "warning",
         });

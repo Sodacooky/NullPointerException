@@ -51,6 +51,13 @@ public class OperationController {
         else return Response.fail(2, "可能未点赞或文章不存在");
     }
 
+    /**
+     * 发布文章，如果成功返回文章的ID
+     *
+     * @param articlePublishVO title,category,text
+     * @param token            jwt
+     * @return 失败则失败，成功则文章ID
+     */
     @PostMapping("/publishArticle")
     public Response publishArticle(@RequestBody ArticlePublishVO articlePublishVO,
                                    @RequestHeader("Authorization") String token) {
@@ -63,10 +70,11 @@ public class OperationController {
         //能到达这里，token已经是被校验过得了，我们只获取当前用户ID
         Long userId = jwtAuthUtil.getPayload(token).getLong("userId");
         //发布
-        if (!articleService.publish(userId, articlePublishVO)) {
+        Long articleId = articleService.publish(userId, articlePublishVO);
+        if (articleId == null) {
             return Response.fail(3, "发布失败，服务器内部错误");
         } else {
-            return Response.ok(null, null);
+            return Response.ok(articleId);
         }
     }
 

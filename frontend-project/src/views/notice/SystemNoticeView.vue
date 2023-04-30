@@ -48,7 +48,7 @@ export default {
     onActiveNoticeChange() {
       //发送标记已读请求
       NoticeApi.read(this.activeNoticeName).then((resp) => {
-        if (resp.data.code === 0) {
+        if (resp.data.code == 0) {
           //成功则也将本地的标记为已读
           let found = this.noticeData.find((value) => {
             return value.id === this.activeNoticeName;

@@ -40,20 +40,20 @@ export default {
   methods: {
     doLogin() {
       AuthApi.adminLogin(this.passwordInput).then((resp) => {
-        if (resp.data.code === 0) {
+        if (resp.data.code == 0) {
           //登陆成功
           // - 储存token
           localStorage.setItem("adminToken", resp.data.data);
           // - 跳转回首页
           this.$notify({
-            title: "登陆成功",
+            titleInput: "登陆成功",
             type: "success",
           });
           this.$router.replace("/admin/");
         } else {
           //登录失败
           this.$notify({
-            title: "登陆失败",
+            titleInput: "登陆失败",
             message: resp.data.message,
             type: "error",
           });

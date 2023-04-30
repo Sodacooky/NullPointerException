@@ -52,7 +52,6 @@ export default {
     },
   },
   methods: {
-    getUserAvatarUrl,
     baseUrl() {
       return baseUrl;
     },

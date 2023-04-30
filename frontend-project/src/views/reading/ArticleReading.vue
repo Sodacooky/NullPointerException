@@ -100,7 +100,6 @@
 <script>
 import { marked } from "marked";
 import ArticleReplyListItem from "@/views/reading/components/ArticleReplyListItem.vue";
-import { ElNotification } from "element-plus";
 import { ReadingApi } from "@/api/reading";
 import { UserApi } from "@/api/user";
 
@@ -130,13 +129,13 @@ export default {
     loadArticleContent() {
       //调用接口，加载文章内容，并加载文章对应的用户信息
       ReadingApi.getArticle(this.articleId).then((resp) => {
-        if (resp.data.code !== 0) {
-          ElNotification({
+        if (resp.data.code != 0) {
+          this.$notify({
             title: "加载失败",
             message: "无法加载文章，正在跳转回首页",
             type: "error",
           });
-          this.$router.replace("/home");
+          this.$router.replace("/");
           return;
         }
         this.title = resp.data.data.title;
