@@ -57,13 +57,32 @@
         <template #header>
           <span style="font-weight: bold">撰写回复</span>
         </template>
-        <div class="reply-input">
-          <el-input
-            :autosize="{ minRows: 3, maxRows: 6 }"
-            type="textarea"
-          ></el-input>
+        <!--登录后才显示的评论功能          -->
+        <div class="reply-area" v-if="hasLogin">
+          <!--评论编辑框          -->
+          <div class="reply-input">
+            <el-input
+              :autosize="{ minRows: 3, maxRows: 6 }"
+              type="textarea"
+              v-model="replyInput"
+            ></el-input>
+          </div>
+          <!--          确认发布-->
+          <div style="margin-top: 16px">
+            <el-button v-if="isAgreeLaw" @click="doPublishReply()"
+              >回复</el-button
+            >
+            <el-button v-else disabled>回复(需同意社区规范)</el-button>
+            <el-checkbox
+              style="margin-left: 16px"
+              label="我已确认发布的内容符合社区规范"
+              v-model="isAgreeLaw"
+            />
+          </div>
         </div>
-        <el-button style="margin-top: 16px">回复</el-button>
+        <div class="reply-area-no-login" v-else>
+          登录后可用，<router-link to="/login">点击登录</router-link>
+        </div>
       </el-card>
 
       <!--评论内容区-->
@@ -102,6 +121,8 @@ import { marked } from "marked";
 import ArticleReplyListItem from "@/views/reading/components/ArticleReplyListItem.vue";
 import { ReadingApi } from "@/api/reading";
 import { UserApi } from "@/api/user";
+import { PublishingApi } from "@/api/publishing";
+import { AuthApi } from "@/api/auth";
 
 export default {
   name: "ArticleReading",
@@ -123,11 +144,15 @@ export default {
       //回复内容
       replyListData: [],
       replyCurrentPage: 1,
+      //用户回复区域
+      isAgreeLaw: false,
+      replyInput: "",
+      hasLogin: false,
     };
   }, //end of data
   methods: {
+    //调用接口，加载文章内容，并加载文章对应的用户信息
     loadArticleContent() {
-      //调用接口，加载文章内容，并加载文章对应的用户信息
       ReadingApi.getArticle(this.articleId).then((resp) => {
         if (resp.data.code !== "0") {
           this.$notify({
@@ -149,6 +174,7 @@ export default {
         });
       });
     },
+    //文章回复加载，根据当前this.replyCurrentPage加载，并自动修改
     loadMoreReplies() {
       ReadingApi.getArticleReply(this.articleId, this.replyCurrentPage).then(
         (resp) => {
@@ -161,14 +187,45 @@ export default {
         }
       );
     },
+    //文章回复发布
+    doPublishReply() {
+      //调用发送接口
+      PublishingApi.publishArticleReply(this.articleId, this.replyInput).then(
+        (resp) => {
+          if (resp.data.code === "0") {
+            //success
+            // - notice
+            this.$notify({ title: "回复成功", type: "success" });
+            // - reset reply area
+            this.replyInput = "";
+            this.isAgreeLaw = false;
+            // - reload replies
+            this.replyCurrentPage = 1;
+            this.loadMoreReplies();
+          } else {
+            //fail
+            this.$notify({
+              title: "回复失败",
+              message: resp.data.message,
+              type: "error",
+            });
+          }
+        }
+      );
+    },
   }, // methods
   mounted() {
+    //加载内容
     this.loadArticleContent();
+    //加载回复
     this.loadMoreReplies();
+    //加载点赞数量
     ReadingApi.getArticleApprovalAmount(this.articleId).then((resp) => {
       this.approvalAmount = resp.data.data;
     });
-  },
+    //判断登录状态
+    AuthApi.hasLogin().then((resp) => (this.hasLogin = resp.data.data));
+  }, //mounted
   computed: {
     UserApi() {
       return UserApi;

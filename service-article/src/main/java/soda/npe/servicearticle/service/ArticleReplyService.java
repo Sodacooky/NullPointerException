@@ -73,6 +73,8 @@ public class ArticleReplyService extends ServiceImpl<ArticleReplyMapper, Article
         // - 获取消息发送者信息和文章信息
         UserInfo replyOwner = userInfoMapper.selectById(articleReply.getPublisherId());
         Article article = articleMapper.selectById(articleReply.getGoalArticleId());
+        // - 如果回复人就是作者自己，那么跳过
+        if (replyOwner.getId().longValue() == article.getPublisherId()) return true;
         // - 填充消息实体
         UserNotice userNotice = new UserNotice();
         userNotice.setTitle("文章 " + article.getTitle() + " 收到来自 " + replyOwner.getNickname() + " 的回复");

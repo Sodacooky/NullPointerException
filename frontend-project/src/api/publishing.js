@@ -15,6 +15,13 @@ export class PublishingApi {
     });
   }
 
+  static publishArticleReply(articleId, text) {
+    return requests.post("/service-article/operation/publishReply", {
+      articleId,
+      text,
+    });
+  }
+
   static getQuestionCategoriesSuggestion(input) {
     return requests.get("/service-question/getCategoriesSuggestion", {
       params: { input },
