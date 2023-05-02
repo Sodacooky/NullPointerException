@@ -10,7 +10,7 @@ import soda.npe.common.controller.Response;
 import soda.npe.servicearticle.service.ArticleService;
 
 @RestController
-@RequestMapping("/home")
+@RequestMapping("/public/home")
 public class HomeFetchController {
 
     @Resource

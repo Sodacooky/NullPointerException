@@ -11,7 +11,7 @@ import soda.npe.servicemiscellaneous.service.ReportService;
 
 
 @RestController
-@RequestMapping("/report")
+@RequestMapping("/auth/report")
 public class ReportController {
 
     @Resource

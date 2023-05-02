@@ -17,7 +17,7 @@ import java.io.IOException;
  * 首页其他数据展示控制器
  */
 @RestController
-@RequestMapping("/home")
+@RequestMapping("/public/home")
 public class HomeMiscController {
 
     @Resource

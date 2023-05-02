@@ -3,6 +3,7 @@ package soda.npe.servicequestion.controller;
 import cn.hutool.core.util.StrUtil;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import soda.npe.common.controller.Response;
 import soda.npe.common.entity.QuestionInfo;
@@ -15,7 +16,7 @@ import soda.npe.servicequestion.service.UserQuestionSubscriptionService;
  * 处理问题相关的（包括问题、首页的问题列表、问题的回答、回答的回复）内容读取控制器
  */
 @RestController
-//@RequestMapping("/")
+@RequestMapping("/public")
 public class DataFetchController {
     @Resource
     private QuestionAnswerService questionAnswerService;

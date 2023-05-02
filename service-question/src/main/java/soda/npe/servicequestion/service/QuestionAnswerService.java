@@ -70,7 +70,7 @@ public class QuestionAnswerService extends ServiceImpl<QuestionAnswerMapper, Que
     public Long getAnswerAmountOf(Long questionId) {
         return this.count(new LambdaQueryWrapper<QuestionAnswer>()
                 .eq(QuestionAnswer::getQuestionId, questionId)
-                .gt(QuestionAnswer::getOrderNumber, 1));
+                .ge(QuestionAnswer::getOrderNumber, 1));
     }
 
     public Boolean publish(Long userId, AnswerPublishVO answerPublishVO) {
@@ -92,6 +92,8 @@ public class QuestionAnswerService extends ServiceImpl<QuestionAnswerMapper, Que
         // - 获取用户和问题信息
         UserInfo replyOwner = userInfoMapper.selectById(questionAnswer.getPublisherId());
         QuestionInfo questionInfo = questionInfoMapper.selectById(questionAnswer.getQuestionId());
+        // - 自己回答自己不通知
+        if (questionInfo.getPublisherId().longValue() == replyOwner.getId()) return true;
         // - 填充实体
         UserNotice userNotice = new UserNotice();
         userNotice.setTitle("问题 " + questionInfo.getTitle() + " 收到来自 " + replyOwner.getNickname() + " 的回答");

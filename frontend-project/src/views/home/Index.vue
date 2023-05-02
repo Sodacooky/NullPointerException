@@ -57,7 +57,7 @@
           <div style="font-size: small; color: gray">{{ item.time }}</div>
         </el-collapse-item>
       </el-collapse>
-      <div v-else>公告栏空空如也...</div>
+      <div v-else style="padding: 4px">公告栏空空如也...</div>
     </el-card>
     <!--          热门分类-->
     <el-card class="box-card">
@@ -66,13 +66,16 @@
           <span>近期热门分类</span>
         </div>
       </template>
-      <el-badge
-        class="hot-category-item"
-        v-for="item in hotCategories"
-        :value="item.amount"
-      >
-        <el-button>{{ item.category }}</el-button>
-      </el-badge>
+      <div v-if="hotCategories.length > 0">
+        <el-badge
+          class="hot-category-item"
+          v-for="item in hotCategories"
+          :value="item.amount"
+        >
+          <el-button>{{ item.category }}</el-button>
+        </el-badge>
+      </div>
+      <div v-else>近期似乎没有文章</div>
     </el-card>
     <!--          广告-->
     <el-card :body-style="{ padding: '0px' }" class="box-card">
@@ -106,6 +109,12 @@
       <div>本日新增文章：{{ siteState.todayArticleAmount }}</div>
       <div>总注册用户数：{{ siteState.totalUserAmount }}</div>
     </el-card>
+    <!--      管理员入口-->
+    <div style="margin-top: 32px; justify-content: center; display: flex">
+      <span style="font-size: small; color: gray">
+        <router-link to="/admin">点击进入管理后台</router-link>
+      </span>
+    </div>
   </el-aside>
 </template>
 

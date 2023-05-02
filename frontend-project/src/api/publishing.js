@@ -35,4 +35,11 @@ export class PublishingApi {
       text,
     });
   }
+
+  static publishQuestionAnswer(questionId, text) {
+    return requests.post("/service-question/operation/publishAnswer", {
+      questionId,
+      text,
+    });
+  }
 }

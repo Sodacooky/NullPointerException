@@ -11,8 +11,7 @@
       </el-col>
       <el-col :span="1" />
       <el-col :span="6">
-        <el-input v-model="keyword">
-          <template #prepend>关键词：</template>
+        <el-input v-model="keyword" placeholder="关键词">
           <template #append>
             <el-button type="primary">检索</el-button>
           </template>

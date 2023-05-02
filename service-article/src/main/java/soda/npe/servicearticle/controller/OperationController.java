@@ -16,7 +16,7 @@ import soda.npe.servicearticle.vo.ReplyPublishVO;
  * 对文章的操作
  */
 @RestController
-@RequestMapping("/operation")
+@RequestMapping("/auth")
 public class OperationController {
 
     @Resource

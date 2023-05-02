@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import soda.npe.common.controller.Response;
 import soda.npe.serviceuser.service.AuthService;
-import soda.npe.serviceuser.vo.AdminLoginVO;
 import soda.npe.serviceuser.vo.LoginVO;
 import soda.npe.serviceuser.vo.RegisterVO;
 
@@ -19,7 +18,7 @@ import soda.npe.serviceuser.vo.RegisterVO;
  */
 @Slf4j
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/public")
 public class AuthController {
 
     @Resource
@@ -172,43 +171,5 @@ public class AuthController {
         else return Response.fail(2, "验证失败");
     }
 
-
-    /**
-     * 管理员登录
-     *
-     * @param vo 管理员密码
-     * @return 是否成功登录
-     */
-    @PostMapping("/admin/login")
-    public Response adminLogin(@RequestBody AdminLoginVO vo) {
-        //validation
-        if (StrUtil.isBlank(vo.getPassword())) return Response.fail(1, "密码不能为空");
-        //从数据库读取管理员密码，并判断是否可以登录，获取jwt
-        String token = authService.adminDoLogin(vo.getPassword());
-        if (token == null) return Response.fail(2, "密码错误");
-        else return Response.ok(token);
-    }
-
-    /**
-     * 管理员登出
-     *
-     * @param token 管理员jwt
-     * @return 是否成功清除管理员jwt
-     */
-    @GetMapping("/admin/logout")
-    public Response adminLogout(@RequestHeader("AdminAuthorization") String token) {
-        return Response.ok(authService.doLogout(token));//使用user的一样可以
-    }
-
-    /**
-     * 管理员是否登录检测
-     *
-     * @param token 管理员jwt
-     * @return 是否登录
-     */
-    @GetMapping("/admin/hasLogin")
-    public Response adminHasLogin(@RequestHeader("AdminAuthorization") String token) {
-        return Response.ok(authService.hasLogin(token));//使用user的一样可以
-    }
 
 }

@@ -33,7 +33,7 @@ export class ReadingApi {
 
   static getQuestionAnswerAmount(questionId) {
     return requests.get("/service-question/getAnswerAmountOf", {
-      params: { questionId: questionId },
+      params: { questionId },
     });
   }
 

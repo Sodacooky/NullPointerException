@@ -4,10 +4,10 @@ import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import soda.npe.common.controller.Response;
 import soda.npe.common.entity.UserInfo;
-import soda.npe.common.utils.JwtAuthUtil;
 import soda.npe.serviceuser.service.UserInfoService;
 
 import java.io.File;
@@ -18,14 +18,12 @@ import java.io.IOException;
  * 处理用户信息的获取
  */
 @RestController
-//@RequestMapping("/")
+@RequestMapping("/public")
 public class DataFetchController {
 
     @Resource
     private UserInfoService userInfoService;
 
-    @Resource
-    private JwtAuthUtil jwtAuthUtil;
 
     @Value("${npe.avatar-path:./avatar/}")
     private String avatarPath;
@@ -64,14 +62,4 @@ public class DataFetchController {
         }
     }
 
-    /**
-     * 获取是否登录
-     *
-     * @param token jwt
-     * @return 是否成功Boolean
-     */
-    @GetMapping("/getLoginState")
-    public Response getLoginState(String token) {
-        return Response.ok(null, jwtAuthUtil.validation(token));
-    }
 }

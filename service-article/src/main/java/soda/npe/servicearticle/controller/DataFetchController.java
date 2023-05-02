@@ -3,6 +3,7 @@ package soda.npe.servicearticle.controller;
 import cn.hutool.core.util.StrUtil;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import soda.npe.common.controller.Response;
 import soda.npe.common.entity.Article;
@@ -14,7 +15,7 @@ import soda.npe.servicearticle.service.ArticleService;
  * 处理文章相关的内容读取控制器
  */
 @RestController
-//@RequestMapping("/")
+@RequestMapping("/public")
 public class DataFetchController {
 
     @Resource

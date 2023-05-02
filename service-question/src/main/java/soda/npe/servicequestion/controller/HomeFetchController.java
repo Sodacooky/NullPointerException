@@ -13,7 +13,7 @@ import soda.npe.servicequestion.service.QuestionInfoService;
  * 首页问题相关的三个列表的控制器
  */
 @RestController
-@RequestMapping("/home")
+@RequestMapping("/public/home")
 public class HomeFetchController {
 
     @Resource

@@ -11,7 +11,7 @@ import soda.npe.serviceuser.service.UserInfoService;
  * 搜索相关
  */
 @RestController
-@RequestMapping("/search")
+@RequestMapping("/public/search")
 public class SearchController {
 
     @Resource

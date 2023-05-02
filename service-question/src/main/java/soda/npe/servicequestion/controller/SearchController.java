@@ -12,7 +12,7 @@ import soda.npe.servicequestion.service.QuestionInfoService;
  * 处理问题相关的搜索，包括问题搜索和答案搜索
  */
 @RestController
-@RequestMapping("/search")
+@RequestMapping("/public/search")
 public class SearchController {
 
     @Resource

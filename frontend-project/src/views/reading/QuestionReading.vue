@@ -49,21 +49,37 @@
         </div>
       </el-card>
 
-      <!--回答区        -->
+      <!--回答编写-->
       <el-card
-        :body-style="{ padding: '0px 0px 8px 0px' }"
-        class="answer-area"
+        :body-style="{ padding: '0px' }"
+        class="reply-input"
         style="margin-top: 16px"
       >
         <template #header>
           <span style="font-weight: bold">撰写回答</span>
         </template>
-        <div class="reply-input">
-          <mavon-editor :toolbars="mavonToolbars"></mavon-editor>
+        <!--登录后才显示功能          -->
+        <div class="reply-area" v-if="hasLogin">
+          <!--编辑框          -->
+          <div class="reply-input">
+            <mavon-editor v-model="answerInput" />
+          </div>
+          <!--          确认发布-->
+          <div style="padding: 16px">
+            <el-button v-if="isAgreeLaw" @click="doPublishAnswer()">
+              发布回答
+            </el-button>
+            <el-button v-else disabled>发布回答(需同意社区规范)</el-button>
+            <el-checkbox
+              style="margin-left: 16px"
+              label="我已确认发布的内容符合社区规范"
+              v-model="isAgreeLaw"
+            />
+          </div>
         </div>
-        <el-button style="margin-top: 8px; margin-left: 16px">
-          发布回答
-        </el-button>
+        <div class="reply-area-no-login" v-else>
+          登录后可用，<router-link to="/login">点击登录</router-link>
+        </div>
       </el-card>
 
       <!--如果没有数据则显示        -->
@@ -120,6 +136,8 @@ import { ArrowRight } from "@element-plus/icons-vue";
 import { ReadingApi } from "@/api/reading";
 import QuestionAnswerListItem from "@/views/reading/components/QuestionAnswerListItem.vue";
 import { mavonToolbars } from "@/api/mavonSettings";
+import { AuthApi } from "@/api/auth";
+import { PublishingApi } from "@/api/publishing";
 
 export default {
   name: "QuestionReading",
@@ -154,14 +172,19 @@ export default {
       answerListData: [],
       answerCurrentPage: 1,
       answerOrder: "time_desc",
+      //用户回答区域
+      isAgreeLaw: false,
+      answerInput: "",
+      hasLogin: false,
     };
   }, //end of data
   methods: {
+    //改变了答案的排序顺序
     onOrderChange() {
       this.loadFirstPageAnswer();
     },
+    //加载更多答案，根据当前顺序和当前页码加载
     loadMoreAnswer() {
-      this.answerCurrentPage++;
       if (this.answerOrder.startsWith("time")) {
         ReadingApi.getQuestionAnswerByTime(
           this.questionId,
@@ -170,6 +193,7 @@ export default {
         ).then((resp) => {
           if (resp.data.data.length <= 0) this.answerCurrentPage = -1;
           this.answerListData = this.answerListData.concat(resp.data.data);
+          this.answerCurrentPage++;
         });
       } else if (this.answerOrder.startsWith("app")) {
         ReadingApi.getQuestionAnswerByApproval(
@@ -179,16 +203,48 @@ export default {
         ).then((resp) => {
           if (resp.data.data.length <= 0) this.answerCurrentPage = -1;
           this.answerListData = this.answerListData.concat(resp.data.data);
+          this.answerCurrentPage++;
         });
       }
     },
+    //加载第一页回答
     loadFirstPageAnswer() {
-      //加载第一页回答
       //清空
-      this.answerCurrentPage = 0;
+      this.answerCurrentPage = 1;
       this.answerListData = [];
       //加载
       this.loadMoreAnswer();
+    },
+    //发布回答
+    doPublishAnswer() {
+      //调用发送接口
+      PublishingApi.publishQuestionAnswer(
+        this.questionId,
+        this.answerInput
+      ).then((resp) => {
+        if (resp.data.code === "0") {
+          //success
+          // - notice
+          this.$notify({ title: "发布回答成功", type: "success" });
+          // - reset reply area
+          this.answerInput = "";
+          this.isAgreeLaw = false;
+          // - reload replies
+          this.answerCurrentPage = 1;
+          this.answerOrder = "time_desc";
+          this.loadMoreAnswer();
+          ReadingApi.getQuestionAnswerAmount(this.questionId).then((resp) => {
+            this.answerAmount = resp.data.data;
+          });
+        } else {
+          //fail
+          this.$notify({
+            title: "发布回答失败",
+            message: resp.data.message,
+            type: "error",
+          });
+        }
+      });
     },
   }, //end of methods
   mounted() {
@@ -221,11 +277,14 @@ export default {
     ReadingApi.getQuestionAnswerAmount(this.questionId).then((resp) => {
       this.answerAmount = resp.data.data;
     });
+    //订阅数量
     ReadingApi.getQuestionSubscriptionAmount(this.questionId).then((resp) => {
       this.subscriptionAmount = resp.data.data;
     });
     //加载第一页回答
     this.loadFirstPageAnswer();
+    //判断登录状态
+    AuthApi.hasLogin().then((resp) => (this.hasLogin = resp.data.data));
   }, // end of mounted()
 };
 </script>

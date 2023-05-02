@@ -1,17 +1,14 @@
 package soda.npe.serviceuser.controller;
 
 import jakarta.annotation.Resource;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import soda.npe.common.controller.Response;
 import soda.npe.common.entity.UserInfo;
 import soda.npe.common.utils.JwtAuthUtil;
 import soda.npe.serviceuser.service.UserInfoService;
 
 @RestController
-@RequestMapping("/operation")
+@RequestMapping("/auth")
 public class OperationController {
 
     @Resource
@@ -38,10 +35,22 @@ public class OperationController {
     }
 
     //上传头像
+    @PostMapping("/uploadAvatar")
+    public Response uploadAvatar() {
+
+    }
 
     //编辑个人资料
+    @PostMapping("/updateInfo")
+    public Response updateInfo() {
+
+    }
 
     //重置密码
+    @PostMapping("/updatePassword")
+    public Response updatePassword() {
+
+    }
 
 
 }

@@ -46,14 +46,14 @@ export default {
           localStorage.setItem("adminToken", resp.data.data);
           // - 跳转回首页
           this.$notify({
-            titleInput: "登陆成功",
+            title: "登陆成功",
             type: "success",
           });
           this.$router.replace("/admin/");
         } else {
           //登录失败
           this.$notify({
-            titleInput: "登陆失败",
+            title: "登陆失败",
             message: resp.data.message,
             type: "error",
           });

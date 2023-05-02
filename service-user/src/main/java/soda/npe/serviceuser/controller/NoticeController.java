@@ -13,7 +13,7 @@ import soda.npe.serviceuser.service.UserNoticeService;
  * 获取消息相关的控制器
  */
 @RestController
-@RequestMapping("/operation/notice")
+@RequestMapping("/auth/notice")
 public class NoticeController {
 
     @Resource
