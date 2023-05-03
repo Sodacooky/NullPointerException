@@ -107,7 +107,7 @@
 </template>
 
 <script>
-import { mavonToolbars } from "@/api/mavonSettings";
+import { mavonToolbars } from "@/mavonSettings";
 import { Search } from "@element-plus/icons-vue";
 import { PublishingApi } from "@/api/publishing";
 

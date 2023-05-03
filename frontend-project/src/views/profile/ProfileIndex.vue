@@ -37,7 +37,7 @@
             :item="item"
           />
         </div>
-        <!--在家更多按钮          -->
+        <!--更多按钮          -->
         <div
           class="load-more"
           style="margin-top: 16px; display: flex; justify-content: center"
@@ -53,7 +53,6 @@
 <script>
 import UserInformationCard from "@/views/profile/components/UserInformationCard.vue";
 import { UserApi } from "@/api/user";
-import { ElNotification } from "element-plus";
 import QuestionPreviewItem from "@/components/QuestionPreviewItem.vue";
 import AnswerPreviewItem from "@/views/profile/components/AnswerPreviewItem.vue";
 import ArticlePreviewItem from "@/components/ArticlePreviewItem.vue";
@@ -138,8 +137,8 @@ export default {
       //否则获取指定用户的信息
       UserApi.getUserInfo(this.userId).then((resp) => {
         if (resp.data.code !== "0") {
-          ElNotification({
-            titleInput: "提示",
+          this.$notify({
+            title: "提示",
             message: "找不到用户，跳转回首页",
             type: "error",
           });

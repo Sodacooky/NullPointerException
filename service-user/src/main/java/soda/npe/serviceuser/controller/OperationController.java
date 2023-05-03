@@ -37,18 +37,20 @@ public class OperationController {
     //上传头像
     @PostMapping("/uploadAvatar")
     public Response uploadAvatar() {
-
+        return null;
     }
 
     //编辑个人资料
     @PostMapping("/updateInfo")
     public Response updateInfo() {
+        return null;
 
     }
 
     //重置密码
     @PostMapping("/updatePassword")
     public Response updatePassword() {
+        return null;
 
     }
 

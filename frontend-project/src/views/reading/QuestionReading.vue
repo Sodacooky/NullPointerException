@@ -45,7 +45,7 @@
         ></div>
         <!--举报功能          -->
         <div style="display: flex; justify-content: right; color: gray">
-          <a>举报</a>
+          <a @click="openReportQuestionDialog()">举报</a>
         </div>
       </el-card>
 
@@ -77,7 +77,7 @@
             />
           </div>
         </div>
-        <div class="reply-area-no-login" v-else>
+        <div class="reply-area-no-login" v-else style="padding: 16px">
           登录后可用，<router-link to="/login">点击登录</router-link>
         </div>
       </el-card>
@@ -125,6 +125,27 @@
           <el-divider>已经看到底了！</el-divider>
         </div>
       </div>
+
+      <!--举报问题弹窗        -->
+      <el-dialog v-model="isShowQuestionReport">
+        <template #header>
+          <span style="font-weight: bold"> 举报当前问题 </span>
+        </template>
+        <el-input
+          type="textarea"
+          v-model="reportComment"
+          :autosize="{ minRows: 2, maxRows: 4 }"
+          placeholder="请输入举报附加信息（必填）"
+        />
+        <template #footer>
+          <el-button type="primary" @click="doReportQuestion()">
+            确认举报
+          </el-button>
+          <el-button @click="isShowQuestionReport = false">取消</el-button>
+        </template>
+      </el-dialog>
+
+      <!-- page-container -->
     </div>
   </el-main>
 </template>
@@ -135,9 +156,10 @@ import { marked } from "marked";
 import { ArrowRight } from "@element-plus/icons-vue";
 import { ReadingApi } from "@/api/reading";
 import QuestionAnswerListItem from "@/views/reading/components/QuestionAnswerListItem.vue";
-import { mavonToolbars } from "@/api/mavonSettings";
+import { mavonToolbars } from "@/mavonSettings";
 import { AuthApi } from "@/api/auth";
 import { PublishingApi } from "@/api/publishing";
+import { ReportApi } from "@/api/report";
 
 export default {
   name: "QuestionReading",
@@ -176,6 +198,9 @@ export default {
       isAgreeLaw: false,
       answerInput: "",
       hasLogin: false,
+      //举报相关
+      isShowQuestionReport: false,
+      reportComment: "",
     };
   }, //end of data
   methods: {
@@ -185,6 +210,7 @@ export default {
     },
     //加载更多答案，根据当前顺序和当前页码加载
     loadMoreAnswer() {
+      if (this.answerCurrentPage < 0) return;
       if (this.answerOrder.startsWith("time")) {
         ReadingApi.getQuestionAnswerByTime(
           this.questionId,
@@ -192,8 +218,10 @@ export default {
           this.answerOrder.endsWith("asc")
         ).then((resp) => {
           if (resp.data.data.length <= 0) this.answerCurrentPage = -1;
-          this.answerListData = this.answerListData.concat(resp.data.data);
-          this.answerCurrentPage++;
+          else {
+            this.answerListData = this.answerListData.concat(resp.data.data);
+            this.answerCurrentPage++;
+          }
         });
       } else if (this.answerOrder.startsWith("app")) {
         ReadingApi.getQuestionAnswerByApproval(
@@ -202,8 +230,10 @@ export default {
           this.answerOrder.endsWith("asc")
         ).then((resp) => {
           if (resp.data.data.length <= 0) this.answerCurrentPage = -1;
-          this.answerListData = this.answerListData.concat(resp.data.data);
-          this.answerCurrentPage++;
+          else {
+            this.answerListData = this.answerListData.concat(resp.data.data);
+            this.answerCurrentPage++;
+          }
         });
       }
     },
@@ -230,6 +260,7 @@ export default {
           this.answerInput = "";
           this.isAgreeLaw = false;
           // - reload replies
+          this.answerListData = [];
           this.answerCurrentPage = 1;
           this.answerOrder = "time_desc";
           this.loadMoreAnswer();
@@ -245,6 +276,43 @@ export default {
           });
         }
       });
+    },
+    //打开举报问题对话框，判断用户是否登录以及是否举报过
+    openReportQuestionDialog() {
+      //判断登录，这里使用载入页面时获取的登录状态
+      if (this.hasLogin === false) {
+        this.$notify.warning({ title: "请先登录" });
+        return;
+      }
+      //判断是否已经举报过
+      ReportApi.isReported(this.questionId, "REPORT_QUESTION").then((resp) => {
+        if (Boolean(resp.data.data)) {
+          this.$notify.warning({ title: "你已经举报过该内容了" });
+        } else {
+          this.isShowQuestionReport = true;
+        }
+      });
+    },
+    //举报问题
+    doReportQuestion() {
+      if (this.reportComment.length < 1) {
+        this.$notify.error({ title: "附加信息不能为空" });
+        return;
+      }
+      ReportApi.reportQuestion(this.questionId, this.reportComment).then(
+        (resp) => {
+          if (resp.data.code === "0") {
+            this.$notify.success({ title: "举报完成" });
+            this.isShowQuestionReport = false;
+            this.reportComment = "";
+          } else {
+            this.$notify.error({
+              title: "举报失败",
+              message: resp.data.message,
+            });
+          }
+        }
+      );
     },
   }, //end of methods
   mounted() {

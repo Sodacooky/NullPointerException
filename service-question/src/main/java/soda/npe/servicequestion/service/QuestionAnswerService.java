@@ -34,7 +34,7 @@ public class QuestionAnswerService extends ServiceImpl<QuestionAnswerMapper, Que
         List<QuestionAnswer> qa = this.list(
                 new LambdaQueryWrapper<QuestionAnswer>()
                         .eq(QuestionAnswer::getPublisherId, userId)
-                        .gt(QuestionAnswer::getOrderNumber, 1)
+                        .gt(QuestionAnswer::getOrderNumber, 0)
                         .orderByDesc(QuestionAnswer::getPublishTime)
                         .last("limit " + (DBConstant.PAGE_SIZE * (page - 1)) + "," + DBConstant.PAGE_SIZE));
         return convertToPreviewVO(qa);
@@ -44,7 +44,7 @@ public class QuestionAnswerService extends ServiceImpl<QuestionAnswerMapper, Que
         List<QuestionAnswer> qa = this.list(
                 new LambdaQueryWrapper<QuestionAnswer>()
                         .eq(QuestionAnswer::getQuestionId, questionId)
-                        .ge(QuestionAnswer::getOrderNumber, 1)
+                        .gt(QuestionAnswer::getOrderNumber, 0)
                         .orderBy(true, isAsc, QuestionAnswer::getPublishTime)
                         .last("limit " + (DBConstant.PAGE_SIZE * (page - 1)) + "," + DBConstant.PAGE_SIZE));
         return convertToReadingVO(qa);

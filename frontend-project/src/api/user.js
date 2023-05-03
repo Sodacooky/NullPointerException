@@ -2,11 +2,11 @@ import requests, { baseUrl } from "@/api/requests";
 
 export class UserApi {
   static getCurrentUser() {
-    return requests.get("/service-user/operation/getCurrentUser");
+    return requests.get("/service-user/auth/getCurrentUser");
   }
 
   static getUserInfo(userId) {
-    return requests.get("/service-user/getUserInfo", {
+    return requests.get("/service-user/public/getUserInfo", {
       params: { userId: userId },
     });
   }
@@ -15,24 +15,24 @@ export class UserApi {
     if (avatarFilename === undefined || avatarFilename === "default") {
       return "/default.jpg";
     } else {
-      return baseUrl + "/service-user/avatar/" + avatarFilename;
+      return baseUrl + "/service-user/public/avatar/" + avatarFilename;
     }
   }
 
   static getUserQuestion(userId, page) {
-    return requests.get("/service-question/getQuestionInfoPublishedBy", {
+    return requests.get("/service-question/public/getQuestionInfoPublishedBy", {
       params: { userId: userId, page: page },
     });
   }
 
   static getUserAnswer(userId, page) {
-    return requests.get("/service-question/getAnswerPublishedBy", {
+    return requests.get("/service-question/public/getAnswerPublishedBy", {
       params: { userId: userId, page: page },
     });
   }
 
   static getUserArticle(userId, page) {
-    return requests.get("/service-article/getArticlePublishedBy", {
+    return requests.get("/service-article/public/getArticlePublishedBy", {
       params: { userId: userId, page: page },
     });
   }

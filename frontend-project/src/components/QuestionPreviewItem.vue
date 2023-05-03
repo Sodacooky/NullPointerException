@@ -1,9 +1,5 @@
 <template>
-  <div
-    class="item-card"
-    style="padding: 8px 8px 24px 8px"
-    @click="$router.push(`/question/${item.id}`)"
-  >
+  <div class="item-card" style="padding: 8px 8px 24px 8px" @click="doJump()">
     <!--                问题数据-->
     <div class="question-info">
       <!--                    标题、分类、发布时间-->
@@ -77,6 +73,10 @@ export default {
   methods: {
     baseUrl() {
       return baseUrl;
+    },
+    doJump() {
+      let routeData = this.$router.resolve(`/question/${this.item.id}`);
+      window.open(routeData.href, "_blank");
     },
   },
   components: { VideoCameraFilled, Comment, StarFilled },

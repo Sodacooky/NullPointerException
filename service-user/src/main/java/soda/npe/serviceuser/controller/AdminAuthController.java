@@ -8,7 +8,7 @@ import soda.npe.serviceuser.service.AuthService;
 import soda.npe.serviceuser.vo.AdminLoginVO;
 
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/public/admin")
 public class AdminAuthController {
     @Resource
     private AuthService authService;

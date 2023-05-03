@@ -15,7 +15,7 @@ export class AuthApi {
         //模拟一个没有登录的请求结果
         resolve({ data: { data: false } });
       });
-    } else return requests.get("/service-user/auth/hasLogin");
+    } else return requests.get("/service-user/public/hasLogin");
   }
 
   /**
@@ -29,7 +29,7 @@ export class AuthApi {
       //如果储存着有token，移除后再登录
       localStorage.removeItem("token");
     }
-    return requests.post("/service-user/auth/login", { email, password });
+    return requests.post("/service-user/public/login", { email, password });
   }
 
   /**
@@ -37,7 +37,7 @@ export class AuthApi {
    * @returns {Promise<axios.AxiosResponse<any>>} data为true/false
    */
   static logout() {
-    return requests.get("/service-user/auth/logout");
+    return requests.get("/service-user/public/logout");
   }
 
   /**
@@ -50,7 +50,7 @@ export class AuthApi {
    * @returns {Promise<axios.AxiosResponse<any>>}
    */
   static register(email, nickname, password, confirmPassword, code) {
-    return requests.post("/service-user/auth/register", {
+    return requests.post("/service-user/public/register", {
       email,
       nickname,
       password,
@@ -60,19 +60,19 @@ export class AuthApi {
   }
 
   static registerNicknameCheck(nickname) {
-    return requests.get("/service-user/auth/registerNicknameCheck", {
+    return requests.get("/service-user/public/registerNicknameCheck", {
       params: { nickname },
     });
   }
 
   static registerEmailCheck(email) {
-    return requests.get("/service-user/auth/registerEmailCheck", {
+    return requests.get("/service-user/public/registerEmailCheck", {
       params: { email },
     });
   }
 
   static registerVerify(magic) {
-    return requests.get("/service-user/auth/registerVerify", {
+    return requests.get("/service-user/public/registerVerify", {
       params: { magic },
     });
   }
@@ -84,14 +84,14 @@ export class AuthApi {
         //模拟一个没有登录的请求结果
         resolve({ data: { data: false } });
       });
-    } else return requests.get("/service-user/auth/admin/hasLogin");
+    } else return requests.get("/service-user/public/admin/hasLogin");
   }
 
   static adminLogin(password) {
-    return requests.post("/service-user/auth/admin/login", { password });
+    return requests.post("/service-user/public/admin/login", { password });
   }
 
   static adminLogout() {
-    return requests.get("/service-user/auth/admin/logout");
+    return requests.get("/service-user/public/admin/logout");
   }
 }

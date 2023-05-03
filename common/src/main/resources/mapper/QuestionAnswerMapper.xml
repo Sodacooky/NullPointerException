@@ -27,6 +27,7 @@
         on qa.id = app_amount.answer_id
 
         where qa.question_id=#{questionId}
+        and qa.order_number>0
 
         order by app_amount.amount
         <if test="!isAsc">desc</if>

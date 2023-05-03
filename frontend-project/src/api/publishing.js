@@ -2,13 +2,13 @@ import requests from "@/api/requests";
 
 export class PublishingApi {
   static getArticleCategoriesSuggestion(input) {
-    return requests.get("/service-article/getCategoriesSuggestion", {
+    return requests.get("/service-article/public/getCategoriesSuggestion", {
       params: { input },
     });
   }
 
   static publishArticle(title, category, text) {
-    return requests.post("/service-article/operation/publishArticle", {
+    return requests.post("/service-article/auth/publishArticle", {
       title,
       category,
       text,
@@ -16,20 +16,20 @@ export class PublishingApi {
   }
 
   static publishArticleReply(articleId, text) {
-    return requests.post("/service-article/operation/publishReply", {
+    return requests.post("/service-article/auth/publishReply", {
       articleId,
       text,
     });
   }
 
   static getQuestionCategoriesSuggestion(input) {
-    return requests.get("/service-question/getCategoriesSuggestion", {
+    return requests.get("/service-question/public/getCategoriesSuggestion", {
       params: { input },
     });
   }
 
   static publishQuestion(title, category, text) {
-    return requests.post("/service-question/operation/publishQuestion", {
+    return requests.post("/service-question/auth/publishQuestion", {
       title,
       category,
       text,
@@ -37,7 +37,7 @@ export class PublishingApi {
   }
 
   static publishQuestionAnswer(questionId, text) {
-    return requests.post("/service-question/operation/publishAnswer", {
+    return requests.post("/service-question/auth/publishAnswer", {
       questionId,
       text,
     });

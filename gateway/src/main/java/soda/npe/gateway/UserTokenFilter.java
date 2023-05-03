@@ -32,14 +32,13 @@ public class UserTokenFilter implements GlobalFilter, Ordered {
             return chain.filter(exchange);
         }
         //判断当前访问的端口是否需要鉴权，目前，我们约定用户需要登录的接口都在/operation下，
-        if (!exchange.getRequest().getPath().toString().matches("(.*)/operation/(.*)")) {
+        if (exchange.getRequest().getPath().toString().matches("(.*)/public/(.*)")) {
             //不需要鉴权
             return chain.filter(exchange);
         }
         //鉴权，读取请求中的token
         String jwt = exchange.getRequest().getHeaders().getFirst("Authorization");
         if (StrUtil.isBlank(jwt) || !jwtAuthUtil.validation(jwt)) {
-            log.info("拦截了未登录请求 {}", exchange.getRequest().getURI());
             //没有token或者校验失败，设置498并且立刻返回
             // - 设置Response的状态码
             exchange.getResponse().setStatusCode(HttpStatusCode.valueOf(498));

@@ -5,22 +5,22 @@ import requests from "@/api/requests";
  */
 export class NoticeApi {
   static getQuestionAnswer() {
-    return requests.get("/service-user/operation/notice/getQuestionAnswer");
+    return requests.get("/service-user/auth/notice/getQuestionAnswer");
   }
 
   static getArticleReply() {
-    return requests.get("/service-user/operation/notice/getArticleReply");
+    return requests.get("/service-user/auth/notice/getArticleReply");
   }
   static getSystem() {
-    return requests.get("/service-user/operation/notice/getSystem");
+    return requests.get("/service-user/auth/notice/getSystem");
   }
 
   static getAmount() {
-    return requests.get("/service-user/operation/notice/getAmount");
+    return requests.get("/service-user/auth/notice/getAmount");
   }
 
   static read(noticeId) {
-    return requests.get("/service-user/operation/notice/read", {
+    return requests.get("/service-user/auth/notice/read", {
       params: { noticeId },
     });
   }

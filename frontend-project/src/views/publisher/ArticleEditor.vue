@@ -88,7 +88,7 @@
 </template>
 
 <script>
-import { mavonToolbars } from "@/api/mavonSettings";
+import { mavonToolbars } from "@/mavonSettings";
 import { PublishingApi } from "@/api/publishing";
 
 export default {

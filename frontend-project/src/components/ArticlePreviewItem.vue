@@ -1,9 +1,5 @@
 <template>
-  <div
-    class="item-card"
-    style="padding: 8px 8px 24px 8px"
-    @click="$router.push(`/article/${item.id}`)"
-  >
+  <div class="item-card" style="padding: 8px 8px 24px 8px" @click="doJump()">
     <!--                文章数据-->
     <div class="question-info">
       <!--                    标题、分类、发布时间-->
@@ -67,6 +63,7 @@ import { UserApi } from "@/api/user";
 
 export default {
   name: "ArticlePreviewItem",
+  props: ["item", "isRank", "rankIndex"],
   computed: {
     UserApi() {
       return UserApi;
@@ -76,9 +73,12 @@ export default {
     baseUrl() {
       return baseUrl;
     },
-  },
+    doJump() {
+      let routeData = this.$router.resolve(`/article/${this.item.id}`);
+      window.open(routeData.href, "_blank");
+    },
+  }, //methods
   components: { CaretTop, Comment },
-  props: ["item", "isRank", "rankIndex"],
 };
 </script>
 

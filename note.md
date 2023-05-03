@@ -26,7 +26,7 @@
 
 认证相关接口放在public下
 
-管理员所有接口都在/admin下
+管理员所有接口都在/admin下，包括/public/admin /auth/admin
 
 ## service-user
 
@@ -42,7 +42,7 @@
     * /registerNicknameCheck 注册用昵称重复判断
     * /registerEmailCheck 注册用邮箱重复判断
     * /registerVerify 注册激活
- * /admin 管理员认证相关  AuthController **部分接口需要token未提供时返回400错误**
+* /public/admin 管理员认证相关 AuthController **部分接口需要token未提供时返回400错误**
     * /login 登入
     * /logout 登出
     * /hasLogin 是否登入

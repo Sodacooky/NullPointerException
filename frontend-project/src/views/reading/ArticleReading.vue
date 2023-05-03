@@ -44,7 +44,7 @@
         ></div>
         <!--举报功能          -->
         <div style="display: flex; justify-content: right; color: gray">
-          <a>举报</a>
+          <a @click="openReportDialog()">举报</a>
         </div>
       </el-card>
 
@@ -112,6 +112,23 @@
 
         <el-empty v-if="replyListData.length < 1" description="还没有回复" />
       </el-card>
+
+      <!--举报弹窗        -->
+      <el-dialog v-model="isShowReportDialog">
+        <template #header>
+          <span style="font-weight: bold"> 举报当前文章 </span>
+        </template>
+        <el-input
+          type="textarea"
+          v-model="reportComment"
+          :autosize="{ minRows: 2, maxRows: 4 }"
+          placeholder="请输入举报附加信息（必填）"
+        />
+        <template #footer>
+          <el-button type="primary" @click="doReport()"> 确认举报 </el-button>
+          <el-button @click="isShowReportDialog = false">取消</el-button>
+        </template>
+      </el-dialog>
     </div>
   </el-main>
 </template>
@@ -123,6 +140,7 @@ import { ReadingApi } from "@/api/reading";
 import { UserApi } from "@/api/user";
 import { PublishingApi } from "@/api/publishing";
 import { AuthApi } from "@/api/auth";
+import { ReportApi } from "@/api/report";
 
 export default {
   name: "ArticleReading",
@@ -148,6 +166,9 @@ export default {
       isAgreeLaw: false,
       replyInput: "",
       hasLogin: false,
+      //举报相关
+      isShowReportDialog: false,
+      reportComment: "",
     };
   }, //end of data
   methods: {
@@ -200,6 +221,7 @@ export default {
             this.replyInput = "";
             this.isAgreeLaw = false;
             // - reload replies
+            this.replyListData = [];
             this.replyCurrentPage = 1;
             this.loadMoreReplies();
           } else {
@@ -208,6 +230,43 @@ export default {
               title: "回复失败",
               message: resp.data.message,
               type: "error",
+            });
+          }
+        }
+      );
+    },
+    //打开举报问题对话框，判断用户是否登录以及是否举报过
+    openReportDialog() {
+      //判断登录，这里使用载入页面时获取的登录状态
+      if (this.hasLogin === false) {
+        this.$notify.warning({ title: "请先登录" });
+        return;
+      }
+      //判断是否已经举报过
+      ReportApi.isReported(this.articleId, "REPORT_ARTICLE").then((resp) => {
+        if (Boolean(resp.data.data)) {
+          this.$notify.warning({ title: "你已经举报过该内容了" });
+        } else {
+          this.isShowReportDialog = true;
+        }
+      });
+    },
+    //举报问题
+    doReport() {
+      if (this.reportComment.length < 1) {
+        this.$notify.error({ title: "附加信息不能为空" });
+        return;
+      }
+      ReportApi.reportArticle(this.articleId, this.reportComment).then(
+        (resp) => {
+          if (resp.data.code === "0") {
+            this.$notify.success({ title: "举报完成" });
+            this.isShowReportDialog = false;
+            this.reportComment = "";
+          } else {
+            this.$notify.error({
+              title: "举报失败",
+              message: resp.data.message,
             });
           }
         }
