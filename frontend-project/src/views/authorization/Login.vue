@@ -55,7 +55,6 @@
 
 <script>
 import { AuthApi } from "@/api/auth";
-import { ElNotification } from "element-plus";
 
 export default {
   name: "Login",
@@ -69,8 +68,8 @@ export default {
     doLogin() {
       //检查输入框
       if (this.emailInput.length < 1 || this.passwordInput.length < 1) {
-        ElNotification({
-          titleInput: "登陆失败",
+        this.$notify({
+          title: "登陆失败",
           message: "邮箱与密码不能为空",
           type: "error",
         });
@@ -83,7 +82,7 @@ export default {
             localStorage.setItem("token", resp.data.data);
             // - 跳转回首页
             this.$notify({
-              titleInput: "登陆成功",
+              title: "登陆成功",
               message: "正在跳转到首页",
               type: "success",
             });
@@ -91,7 +90,7 @@ export default {
           } else {
             //登录失败
             this.$notify({
-              titleInput: "登陆失败",
+              title: "登陆失败",
               message: "请检查邮箱与密码",
               type: "error",
             });

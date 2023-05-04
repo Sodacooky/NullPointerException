@@ -36,4 +36,23 @@ export class UserApi {
       params: { userId: userId, page: page },
     });
   }
+
+  static getUserAvatarUploadUrl() {
+    return baseUrl + "/service-user/auth/uploadAvatar";
+  }
+
+  static updateInfo(nickname, description) {
+    return requests.post("/service-user/auth/updateInfo", {
+      nickname,
+      description,
+    });
+  }
+
+  static updatePassword(oldPassword, newPassword, confirmNewPassword) {
+    return requests.post("/service-user/auth/updatePassword", {
+      oldPassword,
+      newPassword,
+      confirmNewPassword,
+    });
+  }
 }

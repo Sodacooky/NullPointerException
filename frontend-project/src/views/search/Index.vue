@@ -118,7 +118,6 @@
 import { ArrowLeft, ArrowRight, Search } from "@element-plus/icons-vue";
 import { SearchApi } from "@/api/search";
 import QuestionPreviewItem from "@/components/QuestionPreviewItem.vue";
-import { ElNotification } from "element-plus";
 import ArticlePreviewItem from "@/components/ArticlePreviewItem.vue";
 import UserListItem from "@/views/search/component/UserListItem.vue";
 
@@ -309,8 +308,8 @@ export default {
         //如果搜索没有内容，且当前不是第一页，返回第一页
         this.page = 1;
         this.onNewSearch();
-        ElNotification({
-          titleInput: "提示",
+        this.$notify({
+          title: "提示",
           message: "已无更多页，跳转回第一页",
           type: "warning",
         });

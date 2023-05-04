@@ -70,17 +70,17 @@ export default {
         .then((resp) => {
           if (Boolean(resp.data.data)) {
             //成功
-            this.$notify({ titleInput: "登出成功", type: "success" });
+            this.$notify({ title: "登出成功", type: "success" });
             this.$router.replace("/admin/"); //强制重定向一下
           } else {
             //失败
-            this.$notify({ titleInput: "登出失败", type: "error" });
+            this.$notify({ title: "登出失败", type: "error" });
           }
         })
         .catch((error) => {
           if (error.response.status === 498) {
             this.$notify({
-              titleInput: "登出失败",
+              title: "登出失败",
               message: "你还没登录",
               type: "error",
             });

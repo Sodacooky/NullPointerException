@@ -123,7 +123,7 @@ export default {
         this.emailCheckResult.length > 0
       ) {
         this.$notify({
-          titleInput: "请检查提示项",
+          title: "请检查提示项",
           type: "warning",
         });
       }
@@ -136,14 +136,14 @@ export default {
       ).then((resp) => {
         if (resp.data.code === "0") {
           this.$notify({
-            titleInput: "注册成功",
+            title: "注册成功",
             message: "一封激活邮件将发送到您的邮箱，请点击其中链接进行激活",
             type: "success",
             duration: 100000,
           });
         } else {
           this.$notify({
-            titleInput: "注册失败",
+            title: "注册失败",
             message: resp.data.message,
             type: "error",
           });

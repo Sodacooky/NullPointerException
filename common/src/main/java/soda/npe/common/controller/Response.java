@@ -32,6 +32,10 @@ public class Response implements Serializable {
         return new Response(0, null, data);
     }
 
+    public static Response ok() {
+        return new Response(0, null, null);
+    }
+
     public static Response fail(Integer code, String message) {
         if (code != null) Assert.isTrue(code != 0, "当为失败时code不应该为0");
         else code = -1;

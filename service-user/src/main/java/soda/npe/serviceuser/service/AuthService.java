@@ -135,4 +135,18 @@ public class AuthService extends ServiceImpl<UserAuthenticationMapper, UserAuthe
     public boolean hasLogin(String token) {
         return jwtAuthUtil.validation(token);
     }
+
+    public boolean isPasswordCorrect(Long userId, String password) {
+        return this.getOne(new LambdaQueryWrapper<UserAuthentication>()
+                .eq(UserAuthentication::getId, userId)
+                .eq(UserAuthentication::getPassword, password)) != null;
+    }
+
+    public boolean updatePassword(Long userId, String newPassword) {
+        //更新
+        UserAuthentication userAuthentication = new UserAuthentication();
+        userAuthentication.setId(userId);
+        userAuthentication.setPassword(newPassword);
+        return updateById(userAuthentication);
+    }
 }
