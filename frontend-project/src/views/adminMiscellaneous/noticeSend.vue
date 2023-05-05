@@ -7,16 +7,16 @@
       </el-form-item>
       <el-form-item label="接收者">
         <el-input
-          type="textarea"
           :autosize="{ minRows: 2, maxRows: 4 }"
           placeholder="可以输入多个用户ID或用户昵称，以空格间隔"
+          type="textarea"
         />
       </el-form-item>
       <el-form-item label="正文">
         <el-input
-          type="textarea"
           :autosize="{ minRows: 8, maxRows: 16 }"
           placeholder="通知内容的正文"
+          type="textarea"
         />
       </el-form-item>
       <el-form-item>

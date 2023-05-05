@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import soda.npe.common.controller.Response;
 import soda.npe.common.entity.Article;
+import soda.npe.common.entity.ArticleReply;
 import soda.npe.servicearticle.service.ApprovalArticleService;
 import soda.npe.servicearticle.service.ArticleReplyService;
 import soda.npe.servicearticle.service.ArticleService;
@@ -51,6 +52,14 @@ public class DataFetchController {
     public Response getArticle(Long articleId) {
         if (articleId == null) return Response.fail(1, "articleId is null");
         Article one = articleService.getById(articleId);
+        if (one == null) return Response.fail(1, "指定ID没有找到对象");
+        return Response.ok(null, one);
+    }
+
+    @GetMapping("/getReply")
+    public Response getReply(Long replyId) {
+        if (replyId == null) return Response.fail(1, "replyId is null");
+        ArticleReply one = articleReplyService.getById(replyId);
         if (one == null) return Response.fail(1, "指定ID没有找到对象");
         return Response.ok(null, one);
     }

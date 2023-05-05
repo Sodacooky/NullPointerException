@@ -21,7 +21,9 @@
           <span> 验证完成了，你可以登陆了~ </span>
         </div>
         <div v-else>
-          <el-icon><Loading /></el-icon>
+          <el-icon>
+            <Loading />
+          </el-icon>
         </div>
       </el-card>
     </div>

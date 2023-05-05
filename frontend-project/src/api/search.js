@@ -16,6 +16,12 @@ export class SearchApi {
     );
   }
 
+  static searchQuestionAnswerByTime(keyword, page, isAsc) {
+    return requests.get("/service-question/public/search/answerByTime", {
+      params: { keyword, page, isAsc },
+    });
+  }
+
   static searchQuestionByAnsAmount(keyword, page, isAsc) {
     return requests.get("/service-question/public/search/infoByAnswerAmount", {
       params: { keyword, page, isAsc },
@@ -36,6 +42,12 @@ export class SearchApi {
 
   static searchArticleByReplyAmount(keyword, page, isAsc) {
     return requests.get("/service-article/public/search/byReplyAmount", {
+      params: { keyword, page, isAsc },
+    });
+  }
+
+  static searchArticleReplyByTime(keyword, page, isAsc) {
+    return requests.get("/service-article/public/search/replyByTime", {
       params: { keyword, page, isAsc },
     });
   }

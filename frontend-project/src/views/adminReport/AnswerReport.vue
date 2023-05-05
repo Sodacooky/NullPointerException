@@ -9,16 +9,18 @@
           <el-option label="最新" value="asc" />
         </el-select>
       </el-col>
-      <el-col :span="1"> </el-col>
+      <el-col :span="1"></el-col>
       <el-col :span="10">
         <div class="pager" style="display: flex; align-items: center">
           <el-button-group>
-            <el-button type="default" :icon="ArrowLeft" :disabled="page <= 1">
+            <el-button :disabled="page <= 1" :icon="ArrowLeft" type="default">
               上一页
             </el-button>
             <el-button type="default">
               下一页
-              <el-icon class="el-icon--right"><ArrowRight /> </el-icon>
+              <el-icon class="el-icon--right">
+                <ArrowRight />
+              </el-icon>
             </el-button>
           </el-button-group>
           <span style="margin-left: 8px; max-width: 160px">
@@ -44,9 +46,9 @@
       <template #default="scope">
         <span style="align-items: center; display: flex">
           <el-avatar
+            :src="UserApi.getUserAvatarUrl(scope.row.answerPublisherAvatar)"
             size="small"
             style="margin-right: 4px"
-            :src="UserApi.getUserAvatarUrl(scope.row.answerPublisherAvatar)"
           />
           {{ scope.row.answerPublisherNickname }}
         </span>

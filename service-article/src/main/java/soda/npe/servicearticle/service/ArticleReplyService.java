@@ -13,8 +13,9 @@ import soda.npe.common.mapper.ArticleMapper;
 import soda.npe.common.mapper.ArticleReplyMapper;
 import soda.npe.common.mapper.UserInfoMapper;
 import soda.npe.common.mapper.UserNoticeMapper;
-import soda.npe.servicearticle.vo.ArticleReplyVO;
-import soda.npe.servicearticle.vo.ReplyPublishVO;
+import soda.npe.servicearticle.vo.ArticleReplyPreviewVO;
+import soda.npe.servicearticle.vo.DoArticleReplyVO;
+import soda.npe.servicearticle.vo.DoReplyPublishVO;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,25 +33,25 @@ public class ArticleReplyService extends ServiceImpl<ArticleReplyMapper, Article
     @Resource
     private ArticleMapper articleMapper;
 
-    public List<ArticleReplyVO> getOf(Long articleId, Integer page) {
+    public List<DoArticleReplyVO> getOf(Long articleId, Integer page) {
         //取出回复列表
         List<ArticleReply> originReplys = this.list(new LambdaQueryWrapper<ArticleReply>()
                 .eq(ArticleReply::getGoalArticleId, articleId)
                 .orderByDesc(ArticleReply::getPublishTime)
                 .last("limit " + (DBConstant.PAGE_SIZE * (page - 1)) + "," + DBConstant.PAGE_SIZE));
         //填充用户昵称与头像
-        List<ArticleReplyVO> vos = new ArrayList<>(originReplys.size());
+        List<DoArticleReplyVO> vos = new ArrayList<>(originReplys.size());
         originReplys.forEach(rep -> {
             UserInfo userInfo = userInfoMapper.selectById(rep.getPublisherId());
-            ArticleReplyVO articleReplyVO = new ArticleReplyVO();
-            articleReplyVO.setId(rep.getId());
-            articleReplyVO.setPublisherId(rep.getPublisherId());
-            articleReplyVO.setPublishTime(rep.getPublishTime());
-            articleReplyVO.setGoalArticleId(rep.getGoalArticleId());
-            articleReplyVO.setText(rep.getText());
-            articleReplyVO.setPublisherAvatar(userInfo.getAvatar());
-            articleReplyVO.setPublisherNickname(userInfo.getNickname());
-            vos.add(articleReplyVO);
+            DoArticleReplyVO doArticleReplyVO = new DoArticleReplyVO();
+            doArticleReplyVO.setId(rep.getId());
+            doArticleReplyVO.setPublisherId(rep.getPublisherId());
+            doArticleReplyVO.setPublishTime(rep.getPublishTime());
+            doArticleReplyVO.setGoalArticleId(rep.getGoalArticleId());
+            doArticleReplyVO.setText(rep.getText());
+            doArticleReplyVO.setPublisherAvatar(userInfo.getAvatar());
+            doArticleReplyVO.setPublisherNickname(userInfo.getNickname());
+            vos.add(doArticleReplyVO);
         });
         return vos;
     }
@@ -60,12 +61,12 @@ public class ArticleReplyService extends ServiceImpl<ArticleReplyMapper, Article
         return this.count(new LambdaQueryWrapper<ArticleReply>().eq(ArticleReply::getGoalArticleId, articleId));
     }
 
-    public Boolean publish(Long userId, ReplyPublishVO replyPublishVO) {
+    public Boolean publish(Long userId, DoReplyPublishVO doReplyPublishVO) {
         //构建reply对象
         ArticleReply articleReply = new ArticleReply();
         articleReply.setPublisherId(userId);
-        articleReply.setText(replyPublishVO.getText());
-        articleReply.setGoalArticleId(replyPublishVO.getArticleId());
+        articleReply.setText(doReplyPublishVO.getText());
+        articleReply.setGoalArticleId(doReplyPublishVO.getArticleId());
         articleReply.setPublishTime(new Date());
         //储存
         if (!this.save(articleReply)) return false;
@@ -86,5 +87,69 @@ public class ArticleReplyService extends ServiceImpl<ArticleReplyMapper, Article
         userNotice.setText(articleReply.getText());
         //储存
         return userNoticeMapper.insert(userNotice) == 1;
+    }
+
+    public boolean updateReply(Long id, String text) {
+        ArticleReply articleReply = new ArticleReply();
+        articleReply.setId(id);
+        articleReply.setText(text);
+        return updateById(articleReply);
+    }
+
+    public boolean removeAndNotice(Long replyId) {
+        ArticleReply articleReply = getById(replyId);
+        Article article = articleMapper.selectById(articleReply.getGoalArticleId());
+        //删除
+        if (!removeById(replyId)) return false;
+        //发送消息
+        UserNotice userNotice = new UserNotice();
+        userNotice.setTitle("您在问题 " + article.getTitle() + " 下的一条回复已被管理员删除");
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("管理员已将该答案该回复，请确认你已准守社区的规则。<br/>");
+        stringBuilder.append("您的回复：<br/>");
+        stringBuilder.append(articleReply.getText().length() > 64 ? articleReply.getText().substring(0, 64) + "..." : articleReply.getText());
+        userNotice.setText(stringBuilder.toString());
+        userNotice.setGoalUserId(articleReply.getPublisherId());
+        userNotice.setTime(new Date());
+        userNotice.setType("system");
+        userNotice.setIsRead(0);
+        userNotice.setSupplement(article.getId().toString());
+        return userNoticeMapper.insert(userNotice) == 1;
+    }
+
+    public List<ArticleReplyPreviewVO> searchByTime(String keyword, Integer page, Boolean isAsc) {
+        //获得回复
+        List<ArticleReply> replies = this.list(new LambdaQueryWrapper<ArticleReply>()
+                .like(ArticleReply::getText, keyword.trim())
+                .or().like(ArticleReply::getText, keyword)
+                .orderBy(true, isAsc, ArticleReply::getPublishTime)
+                .last("limit " + (DBConstant.PAGE_SIZE * (page - 1)) + "," + DBConstant.PAGE_SIZE));
+        //转换为vo
+        return convertToPreviewVO(replies);
+    }
+
+    private List<ArticleReplyPreviewVO> convertToPreviewVO(List<ArticleReply> origin) {
+        List<ArticleReplyPreviewVO> result = new ArrayList<>();
+        for (var one : origin) {
+            ArticleReplyPreviewVO vo = new ArticleReplyPreviewVO();
+            //填充公共数据
+            vo.setId(one.getId());
+            vo.setPublisherId(one.getPublisherId());
+            vo.setPublishTime(one.getPublishTime());
+            vo.setGoalArticleId(one.getGoalArticleId());
+            //填充摘要
+            if (one.getText().length() > 64) vo.setShortText(one.getText().substring(0, 64) + "...");
+            else vo.setShortText(one.getText());
+            //填充用户昵称和头像URL
+            UserInfo foundUserInfo = userInfoMapper.selectById(one.getPublisherId());
+            vo.setPublisherNickname(foundUserInfo.getNickname());
+            vo.setPublisherAvatar(foundUserInfo.getAvatar());
+            //填充文章信息
+            Article article = articleMapper.selectById(vo.getGoalArticleId());
+            vo.setGoalArticleTitle(article.getTitle());
+            //添加到
+            result.add(vo);
+        }
+        return result;
     }
 }

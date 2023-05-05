@@ -5,10 +5,10 @@
 <mapper namespace="soda.npe.common.mapper.AnnouncementMapper">
 
     <resultMap id="BaseResultMap" type="soda.npe.common.entity.Announcement">
-            <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="title" column="title" jdbcType="VARCHAR"/>
-            <result property="text" column="text" jdbcType="VARCHAR"/>
-            <result property="time" column="time" jdbcType="TIMESTAMP"/>
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="title" column="title" jdbcType="VARCHAR"/>
+        <result property="text" column="text" jdbcType="VARCHAR"/>
+        <result property="time" column="time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <sql id="Base_Column_List">

@@ -1,32 +1,31 @@
 package soda.npe.common.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import java.io.Serializable;
 import lombok.Data;
+
+import java.io.Serializable;
 
 /**
  * 各种数值，相当于全局变量
+ *
  * @TableName global_data
  */
-@TableName(value ="global_data")
+@TableName(value = "global_data")
 @Data
 public class GlobalData implements Serializable {
+    @TableField(exist = false)
+    private static final long serialVersionUID = 1L;
     /**
      * 值名称
      */
     @TableId
     private String name;
-
     /**
      * 值的内容
      */
     private String content;
-
-    @TableField(exist = false)
-    private static final long serialVersionUID = 1L;
 
     @Override
     public boolean equals(Object that) {
@@ -41,7 +40,7 @@ public class GlobalData implements Serializable {
         }
         GlobalData other = (GlobalData) that;
         return (this.getName() == null ? other.getName() == null : this.getName().equals(other.getName()))
-            && (this.getContent() == null ? other.getContent() == null : this.getContent().equals(other.getContent()));
+                && (this.getContent() == null ? other.getContent() == null : this.getContent().equals(other.getContent()));
     }
 
     @Override

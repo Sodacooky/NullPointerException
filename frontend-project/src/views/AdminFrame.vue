@@ -2,9 +2,9 @@
   <el-container>
     <el-aside width="160px">
       <el-menu
-        :unique-opened="true"
-        :router="true"
         :default-active="$route.path"
+        :router="true"
+        :unique-opened="true"
       >
         <el-tooltip content="返回用户端" placement="right">
           <router-link to="/">
@@ -12,11 +12,17 @@
           </router-link>
         </el-tooltip>
         <el-menu-item index="" @click="doLogout()">
-          <el-icon><Close /></el-icon>退出登录
+          <el-icon>
+            <Close />
+          </el-icon>
+          退出登录
         </el-menu-item>
         <el-sub-menu index="/admin/content/">
           <template #title>
-            <el-icon><Files /></el-icon>内容管理
+            <el-icon>
+              <Files />
+            </el-icon>
+            内容管理
           </template>
           <el-menu-item index="/admin/content/question">问题管理</el-menu-item>
           <el-menu-item index="/admin/content/answer">回答管理</el-menu-item>
@@ -29,7 +35,10 @@
 
         <el-sub-menu index="/admin/report/">
           <template #title>
-            <el-icon><Service /></el-icon>举报处理
+            <el-icon>
+              <Service />
+            </el-icon>
+            举报处理
           </template>
           <el-menu-item index="/admin/report/question">问题举报</el-menu-item>
           <el-menu-item index="/admin/report/answer">回答举报</el-menu-item>
@@ -41,7 +50,10 @@
 
         <el-sub-menu index="/admin/misc/">
           <template #title>
-            <el-icon><Setting /></el-icon>杂项
+            <el-icon>
+              <Setting />
+            </el-icon>
+            杂项
           </template>
           <el-menu-item index="/admin/misc/announce">公告编辑</el-menu-item>
           <el-menu-item index="/admin/misc/ad">推广编辑</el-menu-item>

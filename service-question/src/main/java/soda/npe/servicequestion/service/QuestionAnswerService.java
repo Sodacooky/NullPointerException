@@ -55,16 +55,18 @@ public class QuestionAnswerService extends ServiceImpl<QuestionAnswerMapper, Que
         return convertToReadingVO(qa);
     }
 
-    public List<QuestionAnswer> searchByTime(String keyword, Integer page, Boolean isAsc) {
-        return this.list(
+    public List<QuestionAnswerPreviewVO> searchByTime(String keyword, Integer page, Boolean isAsc) {
+        List<QuestionAnswer> answers = this.list(
                 new LambdaQueryWrapper<QuestionAnswer>()
                         .like(QuestionAnswer::getText, keyword.trim())
+                        .gt(QuestionAnswer::getOrderNumber, 0)
                         .orderBy(true, isAsc, QuestionAnswer::getPublishTime)
                         .last("limit " + (DBConstant.PAGE_SIZE * (page - 1)) + "," + DBConstant.PAGE_SIZE));
+        return convertToPreviewVO(answers);
     }
 
-    public List<QuestionAnswer> searchByApproval(String keyword, Integer page, Boolean isAsc) {
-        return this.getBaseMapper().searchAnswerByApproval(keyword.trim(), page, isAsc);
+    public List<QuestionAnswerPreviewVO> searchByApproval(String keyword, Integer page, Boolean isAsc) {
+        return convertToPreviewVO(this.getBaseMapper().searchAnswerByApproval(keyword.trim(), page, isAsc));
     }
 
     public Long getAnswerAmountOf(Long questionId) {
@@ -156,5 +158,33 @@ public class QuestionAnswerService extends ServiceImpl<QuestionAnswerMapper, Que
             result.add(vo);
         }
         return result;
+    }
+
+    public boolean updateAnswer(Long answerId, String newText) {
+        QuestionAnswer questionAnswer = new QuestionAnswer();
+        questionAnswer.setId(answerId);
+        questionAnswer.setText(newText);
+        return updateById(questionAnswer);
+    }
+
+    public boolean removeAndNotice(Long answerId) {
+        QuestionAnswer answer = getById(answerId);
+        QuestionInfo info = questionInfoMapper.selectById(answer.getQuestionId());
+        //删除
+        if (!removeById(answerId)) return false;
+        //发送消息
+        UserNotice userNotice = new UserNotice();
+        userNotice.setTitle("您在问题 " + info.getTitle() + " 下的一条回答已被管理员删除");
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("管理员已将该答案删除，请确认你已准守社区的规则。<br/>");
+        stringBuilder.append("您的回答：<br/>");
+        stringBuilder.append(answer.getText().length() > 64 ? answer.getText().substring(0, 64) + "..." : answer.getText());
+        userNotice.setText(stringBuilder.toString());
+        userNotice.setGoalUserId(answer.getPublisherId());
+        userNotice.setTime(new Date());
+        userNotice.setType("system");
+        userNotice.setIsRead(0);
+        userNotice.setSupplement(info.getId().toString());
+        return userNoticeMapper.insert(userNotice) == 1;
     }
 }

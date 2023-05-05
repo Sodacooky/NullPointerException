@@ -1,5 +1,5 @@
 //全局mavon工具栏设置
-export const mavonToolbars = {
+export const mavonSettings = {
   bold: true, // 粗体
   italic: true, // 斜体
   header: true, // 标题

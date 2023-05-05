@@ -152,6 +152,12 @@ public class DataFetchController {
         return Response.ok(null, questionAnswerService.getByApprovalOf(questionId, page, isAsc));
     }
 
+    @GetMapping("/getAnswer")
+    public Response getAnswer(Long answerId) {
+        if (answerId == null) return Response.fail(1, "未指定回答");
+        return Response.ok(null, questionAnswerService.getById(answerId));
+    }
+
     /**
      * 用于在发布问题时，提供一个类型推荐
      *

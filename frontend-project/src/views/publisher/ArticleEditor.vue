@@ -8,9 +8,9 @@
         </template>
         <!--          标题-->
         <el-input
-          style="font-size: large"
-          placeholder="文章不能没有标题，就像人不能没有名字"
           v-model="titleInput"
+          placeholder="文章不能没有标题，就像人不能没有名字"
+          style="font-size: large"
         >
           <template #prepend>文章标题</template>
         </el-input>
@@ -19,9 +19,9 @@
         </div>
         <!--          分类-->
         <el-input
-          style="font-size: large; margin-top: 4px"
-          placeholder="推荐输入后从推荐分类选取"
           v-model="categoryInput"
+          placeholder="推荐输入后从推荐分类选取"
+          style="font-size: large; margin-top: 4px"
           @change="doCategorySuggest()"
         >
           <template #prepend>文章分类</template>
@@ -62,15 +62,15 @@
         <div class="agreement-checkbox">
           <div>
             <el-checkbox
-              label="我已知悉发布的文章不能违反国家法律与社区规章制度"
               v-model="isAgreeLaw"
+              label="我已知悉发布的文章不能违反国家法律与社区规章制度"
               size="large"
             />
           </div>
           <div>
             <el-checkbox
-              label="我保证发布的文章不存在非法抄袭等违反著作权行为"
               v-model="isAgreeCopyright"
+              label="我保证发布的文章不存在非法抄袭等违反著作权行为"
               size="large"
             />
           </div>
@@ -88,14 +88,14 @@
 </template>
 
 <script>
-import { mavonToolbars } from "@/mavonSettings";
+import { mavonSettings } from "@/mavonSettings";
 import { PublishingApi } from "@/api/publishing";
 
 export default {
   name: "ArticleEditor",
   computed: {
     mavonToolbars() {
-      return mavonToolbars;
+      return mavonSettings;
     },
   },
   data() {

@@ -36,17 +36,17 @@
             <el-form-item label="密码">
               <el-input
                 v-model.trim="password"
+                placeholder="登录使用的密码，至少8位"
                 show-password
                 type="password"
-                placeholder="登录使用的密码，至少8位"
               ></el-input>
             </el-form-item>
             <el-form-item label="确认密码">
               <el-input
                 v-model.trim="confirmPassword"
+                placeholder="再次输入上面的密码"
                 show-password
                 type="password"
-                placeholder="再次输入上面的密码"
                 @change="checkPassword()"
               ></el-input>
               <div v-if="passwordCheckResult.length > 0">
@@ -62,17 +62,19 @@
               <el-tooltip content="点击更换" placement="left">
                 <el-image
                   :src="codeImageUrl"
-                  @click="doCodeImageUpdate()"
                   style="margin-top: 2px"
+                  @click="doCodeImageUpdate()"
                 />
               </el-tooltip>
             </el-form-item>
             <!--操作区              -->
             <el-form-item style="display: flex; justify-content: space-between">
-              <el-button type="primary" @click="doRegister()"> 注册 </el-button>
+              <el-button type="primary" @click="doRegister()"> 注册</el-button>
               <el-button @click="toLogin()">
                 已有账号?前往登录
-                <el-icon><Position /> </el-icon>
+                <el-icon>
+                  <Position />
+                </el-icon>
               </el-button>
             </el-form-item>
           </el-form>

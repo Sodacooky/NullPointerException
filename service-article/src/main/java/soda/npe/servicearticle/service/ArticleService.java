@@ -8,16 +8,11 @@ import jakarta.annotation.Resource;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import soda.npe.common.constant.DBConstant;
-import soda.npe.common.entity.ApprovalArticle;
-import soda.npe.common.entity.Article;
-import soda.npe.common.entity.ArticleReply;
-import soda.npe.common.entity.UserInfo;
-import soda.npe.common.mapper.ApprovalArticleMapper;
-import soda.npe.common.mapper.ArticleMapper;
-import soda.npe.common.mapper.ArticleReplyMapper;
-import soda.npe.common.mapper.UserInfoMapper;
+import soda.npe.common.entity.*;
+import soda.npe.common.mapper.*;
 import soda.npe.servicearticle.vo.ArticlePreviewVO;
-import soda.npe.servicearticle.vo.ArticlePublishVO;
+import soda.npe.servicearticle.vo.DoArticlePublishVO;
+import soda.npe.servicearticle.vo.ModifyArticleVO;
 
 import java.time.Duration;
 import java.util.*;
@@ -34,6 +29,9 @@ public class ArticleService extends ServiceImpl<ArticleMapper, Article> {
 
     @Resource
     private ApprovalArticleMapper approvalArticleMapper;
+
+    @Resource
+    private UserNoticeMapper userNoticeMapper;
 
     @Resource
     private RedisTemplate<String, ArticlePreviewVO> redisTemplate;
@@ -70,13 +68,13 @@ public class ArticleService extends ServiceImpl<ArticleMapper, Article> {
         return convertToPreviewVO(found);
     }
 
-    public Long publish(Long userId, ArticlePublishVO articlePublishVO) {
+    public Long publish(Long userId, DoArticlePublishVO doArticlePublishVO) {
         //construct entity, leave id null
         Article article = new Article();
         Date publishTime = new Date();
-        article.setTitle(articlePublishVO.getTitle());
-        article.setCategory(articlePublishVO.getCategory());
-        article.setText(articlePublishVO.getText());
+        article.setTitle(doArticlePublishVO.getTitle());
+        article.setCategory(doArticlePublishVO.getCategory());
+        article.setText(doArticlePublishVO.getText());
         article.setPublishTime(publishTime);
         article.setPublisherId(userId);
         //store
@@ -99,7 +97,7 @@ public class ArticleService extends ServiceImpl<ArticleMapper, Article> {
             vo.setPublisherId(one.getPublisherId());
             vo.setPublishTime(one.getPublishTime());
             //填充正文摘要
-            if (one.getText().length() > 128) vo.setShortText(one.getText().substring(0, 128) + "...");
+            if (one.getText().length() > 64) vo.setShortText(one.getText().substring(0, 64) + "...");
             else vo.setShortText(one.getText());
             //填充点赞数量
             Long approvalAmount = approvalArticleMapper.selectCount(
@@ -232,5 +230,32 @@ public class ArticleService extends ServiceImpl<ArticleMapper, Article> {
     public List<String> getCategoriesSuggestion(String input) {
         List<Article> match = list(new LambdaQueryWrapper<Article>().likeRight(Article::getCategory, input));
         return match.stream().map(Article::getCategory).distinct().collect(Collectors.toList());
+    }
+
+    public boolean updateQuestionInfo(ModifyArticleVO vo) {
+        //修改info里面的标题和分类
+        Article article = new Article();
+        article.setId(vo.getId());
+        article.setTitle(vo.getTitle());
+        article.setText(vo.getText());
+        article.setCategory(vo.getCategory());
+        return updateById(article);
+    }
+
+    public boolean removeWithReply(Long articleId) {
+        //获取要删除的文章信息，用于构建消息
+        Article info = getById(articleId);
+        //然后删除文章
+        if (!removeById(articleId)) return false;
+        //然后发送一条消息给用户
+        UserNotice userNotice = new UserNotice();
+        userNotice.setTitle("文章 " + info.getTitle() + " 已被管理员删除");
+        userNotice.setText("管理员已将该文章连同回复一起删除，请确认你已准守社区的规则。");
+        userNotice.setGoalUserId(info.getPublisherId());
+        userNotice.setTime(new Date());
+        userNotice.setType("system");
+        userNotice.setIsRead(0);
+        return userNoticeMapper.insert(userNotice) == 1;
+        //文章相关回复已被级联删除
     }
 }

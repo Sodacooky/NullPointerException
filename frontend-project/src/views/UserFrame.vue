@@ -4,9 +4,9 @@
       <!--      顶栏-->
       <el-header>
         <el-menu
+          :default-active="$route.path"
           :ellipsis="false"
           :router="true"
-          :default-active="$route.path"
           mode="horizontal"
         >
           <!--    LOGO-->
@@ -20,25 +20,25 @@
 
           <!--    右侧的菜单-->
           <!--未登录用户显示的菜单内容            -->
-          <el-menu-item index="/login" v-if="currentUserInfo === null">
+          <el-menu-item v-if="currentUserInfo === null" index="/login">
             未登录，点击登录
           </el-menu-item>
           <!--已登录用户显示的菜单内容            -->
           <el-menu-item
-            index="/publisher/question"
             v-if="currentUserInfo !== null"
+            index="/publisher/question"
           >
             发布问题
           </el-menu-item>
           <el-menu-item
-            index="/publisher/article"
             v-if="currentUserInfo !== null"
+            index="/publisher/article"
             >发布文章
           </el-menu-item>
-          <el-menu-item index="/notice" v-if="currentUserInfo !== null">
+          <el-menu-item v-if="currentUserInfo !== null" index="/notice">
             消息{{ noticeAmount > 0 ? "(" + noticeAmount + ")" : "" }}
           </el-menu-item>
-          <el-sub-menu index="" v-if="currentUserInfo !== null">
+          <el-sub-menu v-if="currentUserInfo !== null" index="">
             <template #title>个人相关</template>
             <el-menu-item index="/profile">
               当前用户：{{ currentUserInfo.nickname }}

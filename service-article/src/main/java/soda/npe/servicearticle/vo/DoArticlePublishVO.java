@@ -8,7 +8,7 @@ import java.io.Serializable;
  * 文章发布时使用的VO，包括标题、分类、正文
  */
 @Data
-public class ArticlePublishVO implements Serializable {
+public class DoArticlePublishVO implements Serializable {
 
     private String title;
 

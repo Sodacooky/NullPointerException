@@ -31,7 +31,7 @@
 
     <!--正文      -->
     <div class="main-text" style="padding: 0 4px 0 4px">
-      <div class="md" v-highlight v-html="renderedMarkdown"></div>
+      <div v-highlight class="md" v-html="renderedMarkdown"></div>
     </div>
 
     <!--举报功能          -->
@@ -45,10 +45,10 @@
         <span style="font-weight: bold"> 举报该回答 </span>
       </template>
       <el-input
-        type="textarea"
         v-model="reportComment"
         :autosize="{ minRows: 2, maxRows: 4 }"
         placeholder="请输入举报附加信息（必填）"
+        type="textarea"
       />
       <template #footer>
         <el-button type="primary" @click="doReportAnswer()">

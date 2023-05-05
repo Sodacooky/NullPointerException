@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.32, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.33, for Linux (x86_64)
 --
--- Host: 127.0.0.1    Database: npe
+-- Host: localhost    Database: npe
 -- ------------------------------------------------------
--- Server version	8.0.32
+-- Server version	8.0.33
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -63,6 +63,7 @@ CREATE TABLE `announcement` (
 
 LOCK TABLES `announcement` WRITE;
 /*!40000 ALTER TABLE `announcement` DISABLE KEYS */;
+INSERT INTO `announcement` VALUES (114514,'运营辣','NullPointerException网站现在开始试运行啦！','2023-04-17 16:27:57'),(6666666666,'社区整治公告','任何用户发布的内容都需要遵循互联网基本规则，如发现不良内容可以点击举报。','2023-04-17 16:39:56');
 /*!40000 ALTER TABLE `announcement` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -81,8 +82,8 @@ CREATE TABLE `approval_answer` (
   PRIMARY KEY (`id`),
   KEY `approval_answer_question_answer_id_fk` (`answer_id`),
   KEY `approval_answer_user_info_id_fk` (`user_id`),
-  CONSTRAINT `approval_answer_question_answer_id_fk` FOREIGN KEY (`answer_id`) REFERENCES `question_answer` (`id`),
-  CONSTRAINT `approval_answer_user_info_id_fk` FOREIGN KEY (`user_id`) REFERENCES `user_info` (`id`)
+  CONSTRAINT `approval_answer_question_answer_id_fk` FOREIGN KEY (`answer_id`) REFERENCES `question_answer` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `approval_answer_user_info_id_fk` FOREIGN KEY (`user_id`) REFERENCES `user_info` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用户对回答赞的记录';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -108,10 +109,10 @@ CREATE TABLE `approval_article` (
   `article_id` bigint NOT NULL COMMENT '文章ID',
   `time` datetime NOT NULL COMMENT '点赞时间',
   PRIMARY KEY (`id`),
-  KEY `approval_article_article_id_fk` (`article_id`),
   KEY `approval_article_user_info_id_fk` (`user_id`),
-  CONSTRAINT `approval_article_article_id_fk` FOREIGN KEY (`article_id`) REFERENCES `article` (`id`),
-  CONSTRAINT `approval_article_user_info_id_fk` FOREIGN KEY (`user_id`) REFERENCES `user_info` (`id`)
+  KEY `approval_article_article_id_fk` (`article_id`),
+  CONSTRAINT `approval_article_article_id_fk` FOREIGN KEY (`article_id`) REFERENCES `article` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `approval_article_user_info_id_fk` FOREIGN KEY (`user_id`) REFERENCES `user_info` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用户对文章赞的记录';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -140,7 +141,7 @@ CREATE TABLE `article` (
   `publish_time` datetime NOT NULL COMMENT '发布时间',
   PRIMARY KEY (`id`),
   KEY `article_user_info_id_fk` (`publisher_id`),
-  CONSTRAINT `article_user_info_id_fk` FOREIGN KEY (`publisher_id`) REFERENCES `user_info` (`id`)
+  CONSTRAINT `article_user_info_id_fk` FOREIGN KEY (`publisher_id`) REFERENCES `user_info` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='文章';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -150,7 +151,7 @@ CREATE TABLE `article` (
 
 LOCK TABLES `article` WRITE;
 /*!40000 ALTER TABLE `article` DISABLE KEYS */;
-INSERT INTO `article` VALUES (1,'试试发文章功能','# 标题\n\n* 列表项目1\n* 列表项目2\n\n我的代码如下：\n```java\nif (articlePublishVO == null) {\n    return RestResponse.fail(1, \"缺少参数\");\n}\n```\n\n> 你看懂了吗','其他',3,'2023-04-07 21:21:12');
+INSERT INTO `article` VALUES (1,'试试发文章功能','# 标题\n\n* 列表项目1\n* 列表项目2\n\n我的代码如下：\n```java\nif (articlePublishVO == null) {\n    return RestResponse.fail(1, \"缺少参数\");\n}\n```\n\n> 你看懂了吗','其他',3,'2023-04-07 21:21:12'),(1652699489386921985,'标题','写点什么','测试',1650889078710849537,'2023-04-30 23:40:39');
 /*!40000 ALTER TABLE `article` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -170,8 +171,8 @@ CREATE TABLE `article_reply` (
   PRIMARY KEY (`id`),
   KEY `article_reply_article_id_fk` (`goal_article_id`),
   KEY `article_reply_user_info_id_fk` (`publisher_id`),
-  CONSTRAINT `article_reply_article_id_fk` FOREIGN KEY (`goal_article_id`) REFERENCES `article` (`id`),
-  CONSTRAINT `article_reply_user_info_id_fk` FOREIGN KEY (`publisher_id`) REFERENCES `user_info` (`id`)
+  CONSTRAINT `article_reply_article_id_fk` FOREIGN KEY (`goal_article_id`) REFERENCES `article` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `article_reply_user_info_id_fk` FOREIGN KEY (`publisher_id`) REFERENCES `user_info` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='文章回复';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -181,8 +182,32 @@ CREATE TABLE `article_reply` (
 
 LOCK TABLES `article_reply` WRITE;
 /*!40000 ALTER TABLE `article_reply` DISABLE KEYS */;
-INSERT INTO `article_reply` VALUES (1,1,'回复~',2,'2023-04-08 19:23:39'),(2,1,'我也回复！',2,'2023-04-08 22:36:34');
+INSERT INTO `article_reply` VALUES (2,1,'我也回复！',2,'2023-04-08 22:36:34');
 /*!40000 ALTER TABLE `article_reply` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `global_data`
+--
+
+DROP TABLE IF EXISTS `global_data`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `global_data` (
+  `name` varchar(256) NOT NULL COMMENT '值名称',
+  `content` varchar(1024) NOT NULL COMMENT '值的内容',
+  PRIMARY KEY (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='各种数值，相当于全局变量';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `global_data`
+--
+
+LOCK TABLES `global_data` WRITE;
+/*!40000 ALTER TABLE `global_data` DISABLE KEYS */;
+INSERT INTO `global_data` VALUES ('adminPassword','114514'),('backendFullHost','http://localhost:8080'),('host','http://localhost:5371');
+/*!40000 ALTER TABLE `global_data` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -202,8 +227,8 @@ CREATE TABLE `question_answer` (
   PRIMARY KEY (`id`),
   KEY `question_answer_question_info_id_fk` (`question_id`),
   KEY `question_answer_user_info_id_fk` (`publisher_id`),
-  CONSTRAINT `question_answer_question_info_id_fk` FOREIGN KEY (`question_id`) REFERENCES `question_info` (`id`),
-  CONSTRAINT `question_answer_user_info_id_fk` FOREIGN KEY (`publisher_id`) REFERENCES `user_info` (`id`)
+  CONSTRAINT `question_answer_question_info_id_fk` FOREIGN KEY (`question_id`) REFERENCES `question_info` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `question_answer_user_info_id_fk` FOREIGN KEY (`publisher_id`) REFERENCES `user_info` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='对问题的回答，包括一楼的问题详细内容';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -213,7 +238,7 @@ CREATE TABLE `question_answer` (
 
 LOCK TABLES `question_answer` WRITE;
 /*!40000 ALTER TABLE `question_answer` DISABLE KEYS */;
-INSERT INTO `question_answer` VALUES (1,1,'正文吶诺达',0,1,'2023-04-05 13:28:28'),(2,2,'就是说，同类网站那么多，你这个做得那么拉，有意义么',0,3,'2023-04-06 13:28:51'),(3,2,'问就是毕业设计',1,2,'2023-04-06 13:28:51'),(4,2,'# 再回答一波',2,2,'2023-04-07 00:12:20');
+INSERT INTO `question_answer` VALUES (2,2,'就是说，同类网站那么多，你这个做得那么拉，有意义么',0,3,'2023-04-06 13:28:51'),(3,2,'问就是毕业设计',1,2,'2023-04-06 13:28:51');
 /*!40000 ALTER TABLE `question_answer` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -232,7 +257,7 @@ CREATE TABLE `question_info` (
   `category` varchar(64) NOT NULL COMMENT '问题的分类',
   PRIMARY KEY (`id`),
   KEY `question_header_user_info_id_fk` (`publisher_id`),
-  CONSTRAINT `question_header_user_info_id_fk` FOREIGN KEY (`publisher_id`) REFERENCES `user_info` (`id`)
+  CONSTRAINT `question_header_user_info_id_fk` FOREIGN KEY (`publisher_id`) REFERENCES `user_info` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='问题的信息';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -242,7 +267,7 @@ CREATE TABLE `question_info` (
 
 LOCK TABLES `question_info` WRITE;
 /*!40000 ALTER TABLE `question_info` DISABLE KEYS */;
-INSERT INTO `question_info` VALUES (1,'测试问题1 网站',1,'2023-04-05 13:28:28','其他'),(2,'这个网站存在的意义是什么',3,'2023-04-06 13:28:51','社区');
+INSERT INTO `question_info` VALUES (2,'这个网站存在的意义是什么',3,'2023-04-06 13:28:51','社区');
 /*!40000 ALTER TABLE `question_info` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -262,8 +287,8 @@ CREATE TABLE `question_reply` (
   PRIMARY KEY (`id`),
   KEY `question_reply_question_answer_id_fk` (`goal_answer_id`),
   KEY `question_reply_user_info_id_fk` (`publisher_id`),
-  CONSTRAINT `question_reply_question_answer_id_fk` FOREIGN KEY (`goal_answer_id`) REFERENCES `question_answer` (`id`),
-  CONSTRAINT `question_reply_user_info_id_fk` FOREIGN KEY (`publisher_id`) REFERENCES `user_info` (`id`)
+  CONSTRAINT `question_reply_question_answer_id_fk` FOREIGN KEY (`goal_answer_id`) REFERENCES `question_answer` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `question_reply_user_info_id_fk` FOREIGN KEY (`publisher_id`) REFERENCES `user_info` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='对问题中的回答或其他回复的回复';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -303,13 +328,13 @@ CREATE TABLE `report` (
   KEY `report_question_reply_id_fk` (`goal_question_reply_id`),
   KEY `report_user_info_id_fk` (`reporter_id`),
   KEY `report_user_info_id_fk2` (`goal_user_id`),
-  CONSTRAINT `report_article_id_fk` FOREIGN KEY (`goal_article_id`) REFERENCES `article` (`id`),
-  CONSTRAINT `report_article_reply_id_fk` FOREIGN KEY (`goal_article_reply_id`) REFERENCES `article_reply` (`id`),
-  CONSTRAINT `report_question_answer_id_fk` FOREIGN KEY (`goal_question_answer_id`) REFERENCES `question_answer` (`id`),
-  CONSTRAINT `report_question_info_id_fk` FOREIGN KEY (`goal_question_id`) REFERENCES `question_info` (`id`),
-  CONSTRAINT `report_question_reply_id_fk` FOREIGN KEY (`goal_question_reply_id`) REFERENCES `question_reply` (`id`),
-  CONSTRAINT `report_user_info_id_fk` FOREIGN KEY (`reporter_id`) REFERENCES `user_info` (`id`),
-  CONSTRAINT `report_user_info_id_fk2` FOREIGN KEY (`goal_user_id`) REFERENCES `user_info` (`id`)
+  CONSTRAINT `report_article_id_fk` FOREIGN KEY (`goal_article_id`) REFERENCES `article` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `report_article_reply_id_fk` FOREIGN KEY (`goal_article_reply_id`) REFERENCES `article_reply` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `report_question_answer_id_fk` FOREIGN KEY (`goal_question_answer_id`) REFERENCES `question_answer` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `report_question_info_id_fk` FOREIGN KEY (`goal_question_id`) REFERENCES `question_info` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `report_question_reply_id_fk` FOREIGN KEY (`goal_question_reply_id`) REFERENCES `question_reply` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `report_user_info_id_fk` FOREIGN KEY (`reporter_id`) REFERENCES `user_info` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `report_user_info_id_fk2` FOREIGN KEY (`goal_user_id`) REFERENCES `user_info` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用户举报';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -319,6 +344,7 @@ CREATE TABLE `report` (
 
 LOCK TABLES `report` WRITE;
 /*!40000 ALTER TABLE `report` DISABLE KEYS */;
+INSERT INTO `report` VALUES (1653836413749264385,3,NULL,NULL,NULL,NULL,NULL,'2023-05-04 02:58:22','11',0,1650889078710849537);
 /*!40000 ALTER TABLE `report` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -334,7 +360,7 @@ CREATE TABLE `user_authentication` (
   `email` varchar(64) NOT NULL COMMENT '用户注册时的邮箱',
   `password` varchar(64) NOT NULL COMMENT '用户登录密码',
   PRIMARY KEY (`id`),
-  CONSTRAINT `user_authentication_user_info_id_fk` FOREIGN KEY (`id`) REFERENCES `user_info` (`id`)
+  CONSTRAINT `user_authentication_user_info_id_fk` FOREIGN KEY (`id`) REFERENCES `user_info` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用户登录关键信息';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -344,7 +370,7 @@ CREATE TABLE `user_authentication` (
 
 LOCK TABLES `user_authentication` WRITE;
 /*!40000 ALTER TABLE `user_authentication` DISABLE KEYS */;
-INSERT INTO `user_authentication` VALUES (1,'test@test.cn','114514'),(2,'test2@test.cn','114514'),(3,'test3@test.cn','114514');
+INSERT INTO `user_authentication` VALUES (1,'test@test.cn','114514'),(2,'test2@test.cn','114514'),(3,'test3@test.cn','114514'),(1650889078710849537,'523379653@qq.com','1145141919');
 /*!40000 ALTER TABLE `user_authentication` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -373,7 +399,7 @@ CREATE TABLE `user_info` (
 
 LOCK TABLES `user_info` WRITE;
 /*!40000 ALTER TABLE `user_info` DISABLE KEYS */;
-INSERT INTO `user_info` VALUES (1,'TestUser1','测试用户1','default','2023-03-29 13:27:13',0),(2,'测试用户2','哈哈','default','2023-03-29 13:27:26',0),(3,'小明','无','a','2023-03-29 13:27:33',0);
+INSERT INTO `user_info` VALUES (1,'TestUser1','测试用户1','default','2023-03-29 13:27:13',0),(2,'测试用户2','哈哈','default','2023-03-29 13:27:26',0),(3,'小明','我就是小明','default','2023-03-29 13:27:33',0),(1650889078710849537,'Sodacooky','哥只是一个传说','default','2023-04-25 23:46:43',0);
 /*!40000 ALTER TABLE `user_info` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -395,7 +421,7 @@ CREATE TABLE `user_notice` (
   `supplement` varchar(256) DEFAULT NULL COMMENT '附带的内容，可能是要跳转到的ID',
   PRIMARY KEY (`id`),
   KEY `user_notice_user_info_id_fk` (`goal_user_id`),
-  CONSTRAINT `user_notice_user_info_id_fk` FOREIGN KEY (`goal_user_id`) REFERENCES `user_info` (`id`)
+  CONSTRAINT `user_notice_user_info_id_fk` FOREIGN KEY (`goal_user_id`) REFERENCES `user_info` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用户收到的通知';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -405,6 +431,7 @@ CREATE TABLE `user_notice` (
 
 LOCK TABLES `user_notice` WRITE;
 /*!40000 ALTER TABLE `user_notice` DISABLE KEYS */;
+INSERT INTO `user_notice` VALUES (1,1650889078710849537,'system','欢迎来到NullPointerException!','期待你为社区带来的改变！','2023-04-27 17:42:57',1,NULL),(1654424302270877698,1,'system','问题 测试问题1 网站 已被管理员删除','管理员已将该问题连同答案一起删除，请确认你已准守社区的规则。','2023-05-05 17:54:26',0,NULL),(1654428321815035906,2,'system','您在问题 这个网站存在的意义是什么 下的一条回答已被管理员删除','管理员已将该答案删除，请确认你已准守社区的规则。<br/>您的回答：<br/># 再回答一波','2023-05-05 18:10:24',0,'2'),(1654440282271301633,1650889078710849537,'system','问题 1 已被管理员删除','管理员已将该问题连同答案一起删除，请确认你已准守社区的规则。','2023-05-05 18:57:56',0,NULL),(1654440305629396994,1650889078710849537,'system','文章 标题 已被管理员删除','管理员已将该文章连同回复一起删除，请确认你已准守社区的规则。','2023-05-05 18:58:02',0,NULL),(1654453029855846402,1650889078710849537,'system','文章 2222 已被管理员删除','管理员已将该文章连同回复一起删除，请确认你已准守社区的规则。','2023-05-05 19:48:35',0,NULL),(1654453075221438466,2,'system','您在问题 试试发文章功能 下的一条回复已被管理员删除','管理员已将该答案该回复，请确认你已准守社区的规则。<br/>您的回复：<br/>回复~','2023-05-05 19:48:46',0,'1');
 /*!40000 ALTER TABLE `user_notice` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -424,7 +451,7 @@ CREATE TABLE `user_question_subscription` (
   KEY `user_question_subscription_question_info_id_fk` (`question_id`),
   KEY `user_question_subscription_user_info_id_fk` (`user_id`),
   CONSTRAINT `user_question_subscription_question_info_id_fk` FOREIGN KEY (`question_id`) REFERENCES `question_info` (`id`),
-  CONSTRAINT `user_question_subscription_user_info_id_fk` FOREIGN KEY (`user_id`) REFERENCES `user_info` (`id`)
+  CONSTRAINT `user_question_subscription_user_info_id_fk` FOREIGN KEY (`user_id`) REFERENCES `user_info` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用户关注的问题';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -446,4 +473,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-04-17 12:39:32
+-- Dump completed on 2023-05-05 20:34:38

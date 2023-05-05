@@ -54,4 +54,16 @@ export class ReadingApi {
       params: { questionId: questionId, page: page, isAsc: isAsc },
     });
   }
+
+  static getOneQuestionAnswer(answerId) {
+    return requests.get("/service-question/public/getAnswer", {
+      params: { answerId },
+    });
+  }
+
+  static getOneArticleReply(replyId) {
+    return requests.get("/service-article/public/getReply", {
+      params: { replyId },
+    });
+  }
 }

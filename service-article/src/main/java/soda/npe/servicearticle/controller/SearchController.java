@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import soda.npe.common.controller.Response;
+import soda.npe.servicearticle.service.ArticleReplyService;
 import soda.npe.servicearticle.service.ArticleService;
 
 /**
@@ -16,6 +17,9 @@ public class SearchController {
 
     @Resource
     private ArticleService articleService;
+
+    @Resource
+    private ArticleReplyService articleReplyService;
 
     /**
      * 按照时间顺序搜索文章，从文章的标题、标签、正文中匹配
@@ -60,6 +64,13 @@ public class SearchController {
         if (page == null || page < 1) page = 1;
         if (isAsc == null) isAsc = false;
         return Response.ok(null, articleService.searchByReplyAmount(keyword, page, isAsc));
+    }
+
+    @GetMapping("/replyByTime")
+    public Response replyByTime(String keyword, Integer page, Boolean isAsc) {
+        if (page == null || page < 1) page = 1;
+        if (isAsc == null) isAsc = false;
+        return Response.ok(null, articleReplyService.searchByTime(keyword, page, isAsc));
     }
 
 }

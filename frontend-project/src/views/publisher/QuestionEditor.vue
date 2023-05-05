@@ -7,9 +7,9 @@
           <span style="font-weight: bold; font-size: large">问题信息</span>
         </template>
         <el-input
+          v-model="titleInput"
           placeholder="用一句话概括你的问题"
           style="font-size: large"
-          v-model="titleInput"
         >
           <template #prepend>问题标题</template>
         </el-input>
@@ -28,9 +28,9 @@
           <p>太多重复、相似的问题将会降低社区的整体质量~</p>
         </div>
         <el-input
+          v-model="categoryInput"
           placeholder="是什么类型的问题呢"
           style="font-size: large; margin-top: 4px"
-          v-model="categoryInput"
           @change="doCategorySuggest()"
         >
           <template #prepend>问题分类</template>
@@ -71,22 +71,22 @@
         <div class="agreement-checkbox">
           <div>
             <el-checkbox
-              label="我已知悉发布的内容不能违反国家法律与社区规章制度"
               v-model="isAgreeLaw"
+              label="我已知悉发布的内容不能违反国家法律与社区规章制度"
               size="large"
             />
           </div>
           <div>
             <el-checkbox
-              label="我保证发布的内容不存在非法抄袭等违反著作权行为"
               v-model="isAgreeCopyright"
+              label="我保证发布的内容不存在非法抄袭等违反著作权行为"
               size="large"
             />
           </div>
           <div>
             <el-checkbox
-              label="我保证发布的问题不存在重复、相似的问题，除非相似问题没有人回答过,并且符合网站内容"
               v-model="isAgreeNew"
+              label="我保证发布的问题不存在重复、相似的问题，除非相似问题没有人回答过,并且符合网站内容"
               size="large"
             />
           </div>
@@ -107,7 +107,7 @@
 </template>
 
 <script>
-import { mavonToolbars } from "@/mavonSettings";
+import { mavonSettings } from "@/mavonSettings";
 import { Search } from "@element-plus/icons-vue";
 import { PublishingApi } from "@/api/publishing";
 
@@ -118,7 +118,7 @@ export default {
       return Search;
     },
     mavonToolbars() {
-      return mavonToolbars;
+      return mavonSettings;
     },
   }, //computed
   data() {

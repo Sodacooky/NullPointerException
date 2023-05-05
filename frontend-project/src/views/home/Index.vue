@@ -36,22 +36,22 @@
   <!--        侧边栏-->
   <el-aside style="width: 20pc; margin-right: 96px">
     <!--          公告-->
-    <el-card class="box-card" :body-style="{ padding: '0 2px 0 8px' }">
+    <el-card :body-style="{ padding: '0 2px 0 8px' }" class="box-card">
       <template #header>
         <div class="card-header">
           <span>公告</span>
         </div>
       </template>
       <el-collapse
+        v-if="announcement.length > 0"
         v-model="activeAnnouncementName"
         accordion
-        v-if="announcement.length > 0"
       >
         <el-collapse-item
           v-for="item in announcement"
-          :title="item.title"
-          :name="item.id"
           :key="item.time"
+          :name="item.id"
+          :title="item.title"
         >
           <div v-html="item.text"></div>
           <div style="font-size: small; color: gray">{{ item.time }}</div>
@@ -68,9 +68,9 @@
       </template>
       <div v-if="hotCategories.length > 0">
         <el-badge
-          class="hot-category-item"
           v-for="item in hotCategories"
           :value="item.amount"
+          class="hot-category-item"
         >
           <el-button>{{ item.category }}</el-button>
         </el-badge>
@@ -91,8 +91,8 @@
         <el-carousel-item v-for="item in ads" :key="item.id">
           <a :href="item.url">
             <el-image
-              fit="fill"
               :src="HomeApi.getAdsImageUrl(item.image)"
+              fit="fill"
             ></el-image>
           </a>
         </el-carousel-item>
@@ -109,11 +109,17 @@
       <div>本日新增文章：{{ siteState.todayArticleAmount }}</div>
       <div>总注册用户数：{{ siteState.totalUserAmount }}</div>
     </el-card>
-    <!--      管理员入口-->
-    <div style="margin-top: 32px; justify-content: center; display: flex">
-      <span style="font-size: small; color: gray">
+    <!--网站联系方式等信息注脚-->
+    <div style="margin-top: 32px; font-size: small">
+      <!--联系方式        -->
+      <div style="color: gray; text-align: center">
+        <p>NullPointerException</p>
+        <p>联系邮箱: 523379653@qq.com</p>
+      </div>
+      <!--进入后台        -->
+      <div style="color: gray; justify-content: center; display: flex">
         <router-link to="/admin">点击进入管理后台</router-link>
-      </span>
+      </div>
     </div>
   </el-aside>
 </template>

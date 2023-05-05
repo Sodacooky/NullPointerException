@@ -62,4 +62,12 @@ public class DataFetchController {
         }
     }
 
+    @GetMapping("isBanned")
+    public Response isBan(Long userId) {
+        //判断用户ID存在
+        if (userId == null || userInfoService.getById(userId) == null) {
+            return Response.fail(1, "用户ID未指定或不存在");
+        }
+        return Response.ok(userInfoService.getById(userId).getIsBanned() == 1);
+    }
 }

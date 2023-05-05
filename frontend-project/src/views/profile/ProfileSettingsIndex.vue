@@ -10,17 +10,17 @@
             <!--          头像展示与头像上传-->
             <el-form-item label="头像">
               <el-image
-                fit="fill"
-                :src="UserApi.getUserAvatarUrl(userInfo.avatar)"
                 :show-file-list="false"
+                :src="UserApi.getUserAvatarUrl(userInfo.avatar)"
+                fit="fill"
                 style="width: 128px"
               />
               <el-upload
-                :limit="1"
                 :action="UserApi.getUserAvatarUploadUrl()"
-                :headers="headers"
-                :on-success="handleOnSuccess"
                 :before-upload="handleBeforeUpload"
+                :headers="headers"
+                :limit="1"
+                :on-success="handleOnSuccess"
                 style="margin-left: 32px"
               >
                 <el-button type="primary">点击上传新头像</el-button>
@@ -36,16 +36,16 @@
             <!--个人信息，昵称、自我描述修改              -->
             <el-form-item label="昵称">
               <el-input
-                style="width: 400px"
                 v-model="userInfo.nickname"
+                style="width: 400px"
               ></el-input>
             </el-form-item>
             <el-form-item label="自我介绍">
               <el-input
+                v-model="userInfo.description"
                 :autosize="{ minRows: 2, maxRows: 4 }"
                 style="width: 400px"
                 type="textarea"
-                v-model="userInfo.description"
               />
             </el-form-item>
             <el-form-item>
@@ -56,23 +56,23 @@
             <!--密码重置              -->
             <el-form-item label="原密码">
               <el-input
+                v-model="oldPassword"
                 style="width: 400px"
                 type="password"
-                v-model="oldPassword"
               ></el-input>
             </el-form-item>
             <el-form-item label="新密码">
               <el-input
+                v-model="newPassword"
                 style="width: 400px"
                 type="password"
-                v-model="newPassword"
               ></el-input>
             </el-form-item>
             <el-form-item label="确认新密码">
               <el-input
+                v-model="confirmNewPassword"
                 style="width: 400px"
                 type="password"
-                v-model="confirmNewPassword"
               ></el-input>
             </el-form-item>
             <el-form-item>

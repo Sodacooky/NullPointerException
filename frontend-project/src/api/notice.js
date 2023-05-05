@@ -11,6 +11,7 @@ export class NoticeApi {
   static getArticleReply() {
     return requests.get("/service-user/auth/notice/getArticleReply");
   }
+
   static getSystem() {
     return requests.get("/service-user/auth/notice/getSystem");
   }

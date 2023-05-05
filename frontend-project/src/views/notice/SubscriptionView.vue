@@ -7,8 +7,8 @@
     <div
       class="notice-card"
       style="padding: 8px"
-      @mouseenter="onHoverNotice(item.id)"
       @click="$router.push(`/question/${item.supplement}`)"
+      @mouseenter="onHoverNotice(item.id)"
     >
       <!--标题        -->
       <div class="article-name" style="font-size: large">

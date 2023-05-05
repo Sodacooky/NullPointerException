@@ -1,4 +1,4 @@
-import { createApp } from "vue";
+import {createApp} from "vue";
 
 //import element plus
 import ElementPlus from "element-plus";

@@ -31,15 +31,15 @@
               <div class="publisher-info">
                 <a style="font-weight: bold">{{ publisherNickname }}</a>
               </div>
-              <div style="color: gray">发布于：{{ publishTime }}</div></el-col
-            >
+              <div style="color: gray">发布于：{{ publishTime }}</div>
+            </el-col>
           </el-row>
         </div>
         <!--正文          -->
         <div
+          v-highlight
           class="text"
           style="margin-top: 16px"
-          v-highlight
           v-html="renderedMarkdown"
         ></div>
         <!--举报功能          -->
@@ -58,30 +58,31 @@
           <span style="font-weight: bold">撰写回复</span>
         </template>
         <!--登录后才显示的评论功能          -->
-        <div class="reply-area" v-if="hasLogin">
+        <div v-if="hasLogin" class="reply-area">
           <!--评论编辑框          -->
           <div class="reply-input">
             <el-input
+              v-model="replyInput"
               :autosize="{ minRows: 3, maxRows: 6 }"
               type="textarea"
-              v-model="replyInput"
             ></el-input>
           </div>
           <!--          确认发布-->
           <div style="margin-top: 16px">
             <el-button v-if="isAgreeLaw" @click="doPublishReply()"
-              >回复</el-button
-            >
+              >回复
+            </el-button>
             <el-button v-else disabled>回复(需同意社区规范)</el-button>
             <el-checkbox
-              style="margin-left: 16px"
-              label="我已确认发布的内容符合社区规范"
               v-model="isAgreeLaw"
+              label="我已确认发布的内容符合社区规范"
+              style="margin-left: 16px"
             />
           </div>
         </div>
-        <div class="reply-area-no-login" v-else>
-          登录后可用，<router-link to="/login">点击登录</router-link>
+        <div v-else class="reply-area-no-login">
+          登录后可用，
+          <router-link to="/login">点击登录</router-link>
         </div>
       </el-card>
 
@@ -119,13 +120,13 @@
           <span style="font-weight: bold"> 举报当前文章 </span>
         </template>
         <el-input
-          type="textarea"
           v-model="reportComment"
           :autosize="{ minRows: 2, maxRows: 4 }"
           placeholder="请输入举报附加信息（必填）"
+          type="textarea"
         />
         <template #footer>
-          <el-button type="primary" @click="doReport()"> 确认举报 </el-button>
+          <el-button type="primary" @click="doReport()"> 确认举报</el-button>
           <el-button @click="isShowReportDialog = false">取消</el-button>
         </template>
       </el-dialog>

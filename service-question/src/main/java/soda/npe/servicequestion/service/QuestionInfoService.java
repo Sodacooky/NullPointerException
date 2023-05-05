@@ -3,19 +3,15 @@ package soda.npe.servicequestion.service;
 import cn.hutool.core.date.DateBetween;
 import cn.hutool.core.date.DateUnit;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import soda.npe.common.constant.DBConstant;
-import soda.npe.common.entity.QuestionAnswer;
-import soda.npe.common.entity.QuestionInfo;
-import soda.npe.common.entity.UserInfo;
-import soda.npe.common.entity.UserQuestionSubscription;
-import soda.npe.common.mapper.QuestionAnswerMapper;
-import soda.npe.common.mapper.QuestionInfoMapper;
-import soda.npe.common.mapper.UserInfoMapper;
-import soda.npe.common.mapper.UserQuestionSubscriptionMapper;
+import soda.npe.common.entity.*;
+import soda.npe.common.mapper.*;
+import soda.npe.servicequestion.vo.ModifyQuestionInfoVO;
 import soda.npe.servicequestion.vo.QuestionInfoPreviewVO;
 import soda.npe.servicequestion.vo.QuestionPublishVO;
 
@@ -31,6 +27,9 @@ public class QuestionInfoService extends ServiceImpl<QuestionInfoMapper, Questio
 
     @Resource
     private UserQuestionSubscriptionMapper userQuestionSubscriptionMapper;
+
+    @Resource
+    private UserNoticeMapper userNoticeMapper;
 
     @Resource
     private UserInfoMapper userInfoMapper;
@@ -251,5 +250,37 @@ public class QuestionInfoService extends ServiceImpl<QuestionInfoMapper, Questio
     public List<String> getCategoriesSuggestion(String input) {
         List<QuestionInfo> match = list(new LambdaQueryWrapper<QuestionInfo>().likeRight(QuestionInfo::getCategory, input));
         return match.stream().map(QuestionInfo::getCategory).distinct().collect(Collectors.toList());
+    }
+
+    public boolean updateQuestionInfo(ModifyQuestionInfoVO vo) {
+        //修改info里面的标题和分类
+        QuestionInfo info = new QuestionInfo();
+        info.setId(vo.getId());
+        info.setTitle(vo.getTitle());
+        info.setCategory(vo.getCategory());
+        if (!updateById(info)) return false;
+        //修改问题正文
+        LambdaUpdateWrapper<QuestionAnswer> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.eq(QuestionAnswer::getQuestionId, vo.getId())
+                .eq(QuestionAnswer::getOrderNumber, 0)
+                .set(QuestionAnswer::getText, vo.getText());
+        return questionAnswerMapper.update(null, wrapper) == 1;
+    }
+
+    public boolean removeInfoAndAnswer(Long questionId) {
+        //获取要删除的问题信息，用于构建消息
+        QuestionInfo info = getById(questionId);
+        //然后删除问题INFO
+        if (!removeById(questionId)) return false;
+        //然后发送一条消息给用户
+        UserNotice userNotice = new UserNotice();
+        userNotice.setTitle("问题 " + info.getTitle() + " 已被管理员删除");
+        userNotice.setText("管理员已将该问题连同答案一起删除，请确认你已准守社区的规则。");
+        userNotice.setGoalUserId(info.getPublisherId());
+        userNotice.setTime(new Date());
+        userNotice.setType("system");
+        userNotice.setIsRead(0);
+        return userNoticeMapper.insert(userNotice) == 1;
+        //事务回滚？不存在的！
     }
 }

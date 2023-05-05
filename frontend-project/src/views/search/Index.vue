@@ -30,7 +30,7 @@
       >
         <!--搜索类型选择器      -->
         <span>
-          <el-radio-group size="large" v-model="type" @change="onTypeChange()">
+          <el-radio-group v-model="type" size="large" @change="onTypeChange()">
             <el-radio-button label="问题" />
             <el-radio-button label="文章" />
             <el-radio-button label="用户" />
@@ -38,7 +38,7 @@
         </span>
         <!--搜索顺序选择器-->
         <span>
-          <el-select size="large" v-model="order" @change="onOrderChange()">
+          <el-select v-model="order" size="large" @change="onOrderChange()">
             <el-option
               v-for="item in nowAvailableOrderList"
               :key="item.value"
@@ -54,21 +54,21 @@
         <!--数据列表        -->
         <div class="result-list">
           <!--如果搜索的是问题-->
-          <div class="question-list" v-if="type === '问题'">
+          <div v-if="type === '问题'" class="question-list">
             <QuestionPreviewItem
               v-for="item in searchResult"
               :key="item.id"
               :item="item"
             />
           </div>
-          <div class="article-list" v-if="type === '文章'">
+          <div v-if="type === '文章'" class="article-list">
             <ArticlePreviewItem
               v-for="item in searchResult"
               :key="item.id"
               :item="item"
             />
           </div>
-          <div class="user-list" v-if="type === '用户'">
+          <div v-if="type === '用户'" class="user-list">
             <el-row>
               <UserListItem
                 v-for="item in searchResult"
@@ -91,16 +91,18 @@
         >
           <el-button-group>
             <el-button
-              type="default"
-              :icon="ArrowLeft"
-              @click="onPrevPageBtnClick()"
               :disabled="page <= 1"
+              :icon="ArrowLeft"
+              type="default"
+              @click="onPrevPageBtnClick()"
             >
               上一页
             </el-button>
             <el-button type="default" @click="onNextPageBtnClick()">
               下一页
-              <el-icon class="el-icon--right"><ArrowRight /> </el-icon>
+              <el-icon class="el-icon--right">
+                <ArrowRight />
+              </el-icon>
             </el-button>
           </el-button-group>
           <span style="margin-left: 8px; max-width: 160px">

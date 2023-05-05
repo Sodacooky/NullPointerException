@@ -6,7 +6,7 @@
 
       <!--类型选择器      -->
       <div class="list-type-selector" style="margin-top: 16px">
-        <el-radio-group size="large" v-model="type" @change="onTypeChange()">
+        <el-radio-group v-model="type" size="large" @change="onTypeChange()">
           <el-radio-button label="问题" />
           <el-radio-button label="回答" />
           <el-radio-button label="文章" />
@@ -16,21 +16,21 @@
       <!--      展示列表-->
       <div class="result-list" style="margin-top: 16px">
         <!--根据类型-->
-        <div class="question-list" v-if="type === '问题'">
+        <div v-if="type === '问题'" class="question-list">
           <QuestionPreviewItem
             v-for="item in listData"
             :key="item.id"
             :item="item"
           />
         </div>
-        <div class="answer-list" v-if="type === '回答'">
+        <div v-if="type === '回答'" class="answer-list">
           <AnswerPreviewItem
             v-for="item in listData"
             :key="item.id"
             :item="item"
           />
         </div>
-        <div class="article-list" v-if="type === '文章'">
+        <div v-if="type === '文章'" class="article-list">
           <ArticlePreviewItem
             v-for="item in listData"
             :key="item.id"

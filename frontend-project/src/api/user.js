@@ -55,4 +55,10 @@ export class UserApi {
       confirmNewPassword,
     });
   }
+
+  static isBanned(userId) {
+    return requests.get("/service-article/public/isBanned", {
+      params: { userId },
+    });
+  }
 }

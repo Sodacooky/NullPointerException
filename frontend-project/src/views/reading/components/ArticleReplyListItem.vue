@@ -37,13 +37,13 @@
         <span style="font-weight: bold"> 举报该回复 </span>
       </template>
       <el-input
-        type="textarea"
         v-model="reportComment"
         :autosize="{ minRows: 2, maxRows: 4 }"
         placeholder="请输入举报附加信息（必填）"
+        type="textarea"
       />
       <template #footer>
-        <el-button type="primary" @click="doReport()"> 确认举报 </el-button>
+        <el-button type="primary" @click="doReport()"> 确认举报</el-button>
         <el-button @click="isShowReportDialog = false">取消</el-button>
       </template>
     </el-dialog>

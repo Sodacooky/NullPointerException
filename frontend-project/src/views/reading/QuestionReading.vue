@@ -32,15 +32,15 @@
               <div class="publisher-info">
                 <a style="font-weight: bold">{{ publisherNickname }}</a>
               </div>
-              <div style="color: gray">发布于：{{ publishTime }}</div></el-col
-            >
+              <div style="color: gray">发布于：{{ publishTime }}</div>
+            </el-col>
           </el-row>
         </div>
         <!--正文          -->
         <div
+          v-highlight
           class="text"
           style="margin-top: 16px"
-          v-highlight
           v-html="renderedMarkdown"
         ></div>
         <!--举报功能          -->
@@ -59,10 +59,10 @@
           <span style="font-weight: bold">撰写回答</span>
         </template>
         <!--登录后才显示功能          -->
-        <div class="reply-area" v-if="hasLogin">
+        <div v-if="hasLogin" class="reply-area">
           <!--编辑框          -->
           <div class="reply-input">
-            <mavon-editor v-model="answerInput" />
+            <mavon-editor v-model="answerInput" :toolbars="mavonToolbars" />
           </div>
           <!--          确认发布-->
           <div style="padding: 16px">
@@ -71,14 +71,15 @@
             </el-button>
             <el-button v-else disabled>发布回答(需同意社区规范)</el-button>
             <el-checkbox
-              style="margin-left: 16px"
-              label="我已确认发布的内容符合社区规范"
               v-model="isAgreeLaw"
+              label="我已确认发布的内容符合社区规范"
+              style="margin-left: 16px"
             />
           </div>
         </div>
-        <div class="reply-area-no-login" v-else style="padding: 16px">
-          登录后可用，<router-link to="/login">点击登录</router-link>
+        <div v-else class="reply-area-no-login" style="padding: 16px">
+          登录后可用，
+          <router-link to="/login">点击登录</router-link>
         </div>
       </el-card>
 
@@ -92,15 +93,15 @@
       <div v-if="answerListData.length > 0" class="answer-list">
         <!--回答列表顺序选择        -->
         <div
-          class="order-select"
           id="order-select"
+          class="order-select"
           style="margin-top: 16px; margin-bottom: 16px"
         >
           <el-select v-model="answerOrder" @change="onOrderChange()">
-            <el-option value="time_desc" label="最新发布" />
-            <el-option value="time_asc" label="最早发布" />
-            <el-option value="app_desc" label="最多点赞" />
-            <el-option value="app_asc" label="最少点赞" />
+            <el-option label="最新发布" value="time_desc" />
+            <el-option label="最早发布" value="time_asc" />
+            <el-option label="最多点赞" value="app_desc" />
+            <el-option label="最少点赞" value="app_asc" />
           </el-select>
           <span style="font-size: small; color: gray; margin-left: 32px">
             总共回答数量：{{ answerAmount }}
@@ -119,7 +120,7 @@
           v-if="answerCurrentPage !== -1"
           style="display: flex; justify-content: center; margin-top: 16px"
         >
-          <el-button @click="loadMoreAnswer()"> 加载更多 </el-button>
+          <el-button @click="loadMoreAnswer()"> 加载更多</el-button>
         </div>
         <div v-else>
           <el-divider>已经看到底了！</el-divider>
@@ -132,10 +133,10 @@
           <span style="font-weight: bold"> 举报当前问题 </span>
         </template>
         <el-input
-          type="textarea"
           v-model="reportComment"
           :autosize="{ minRows: 2, maxRows: 4 }"
           placeholder="请输入举报附加信息（必填）"
+          type="textarea"
         />
         <template #footer>
           <el-button type="primary" @click="doReportQuestion()">
@@ -156,7 +157,7 @@ import { marked } from "marked";
 import { ArrowRight } from "@element-plus/icons-vue";
 import { ReadingApi } from "@/api/reading";
 import QuestionAnswerListItem from "@/views/reading/components/QuestionAnswerListItem.vue";
-import { mavonToolbars } from "@/mavonSettings";
+import { mavonSettings } from "@/mavonSettings";
 import { AuthApi } from "@/api/auth";
 import { PublishingApi } from "@/api/publishing";
 import { ReportApi } from "@/api/report";
@@ -168,7 +169,7 @@ export default {
       return UserApi;
     },
     mavonToolbars() {
-      return mavonToolbars;
+      return mavonSettings;
     },
     renderedMarkdown() {
       return marked(this.text);

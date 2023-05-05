@@ -32,7 +32,10 @@
             <el-form-item>
               <el-button type="primary" @click="doLogin()">登录</el-button>
               <el-button @click="toRegister()">
-                注册新账号<el-icon><Position /> </el-icon>
+                注册新账号
+                <el-icon>
+                  <Position />
+                </el-icon>
               </el-button>
             </el-form-item>
           </el-form>

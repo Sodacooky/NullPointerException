@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import soda.npe.common.constant.DBConstant;
 import soda.npe.common.entity.UserInfo;
 import soda.npe.common.mapper.UserInfoMapper;
+import soda.npe.serviceuser.vo.ModifyUserVO;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -67,6 +68,29 @@ public class UserInfoService extends ServiceImpl<UserInfoMapper, UserInfo> {
         userInfo.setId(userId);
         userInfo.setNickname(nickname);
         userInfo.setDescription(description);
+        return this.updateById(userInfo);
+    }
+
+    public boolean updateInfoAndAvatar(ModifyUserVO vo) {
+        UserInfo userInfo = new UserInfo();
+        userInfo.setId(vo.getId());
+        userInfo.setNickname(vo.getNickname());
+        userInfo.setDescription(vo.getDescription());
+        userInfo.setAvatar(vo.getAvatar());
+        return this.updateById(userInfo);
+    }
+
+    public boolean doBan(Long userId) {
+        UserInfo userInfo = new UserInfo();
+        userInfo.setId(userId);
+        userInfo.setIsBanned(1);
+        return this.updateById(userInfo);
+    }
+
+    public boolean doUnban(Long userId) {
+        UserInfo userInfo = new UserInfo();
+        userInfo.setId(userId);
+        userInfo.setIsBanned(0);
         return this.updateById(userInfo);
     }
 }

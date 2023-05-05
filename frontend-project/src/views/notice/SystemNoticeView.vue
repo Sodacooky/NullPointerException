@@ -4,10 +4,10 @@
 
   <!--手风琴折叠消息列表    -->
   <el-collapse
-    :accordion="true"
     v-for="item in noticeData"
     :key="item.id"
     v-model="activeNoticeName"
+    :accordion="true"
     @change="onActiveNoticeChange()"
   >
     <!--每一条      -->

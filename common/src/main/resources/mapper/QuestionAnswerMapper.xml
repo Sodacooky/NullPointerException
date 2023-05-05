@@ -44,6 +44,7 @@
         on qa.id = app_amount.answer_id
 
         where qa.text like concat('%',#{keyword},'%')
+        and qa.order_number>0
 
         order by app_amount.amount
         <if test="!isAsc">desc</if>
