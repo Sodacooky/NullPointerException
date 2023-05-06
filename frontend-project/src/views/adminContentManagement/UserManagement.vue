@@ -99,15 +99,6 @@
       <el-form-item label="注册时间">
         {{ detailDialogData.registerTime }}
       </el-form-item>
-      <el-form-item label="头像文件">
-        <el-input v-model="detailDialogData.avatar">
-          <template #append>
-            <el-button @click="detailDialogData.avatar = 'default'">
-              重置
-            </el-button>
-          </template>
-        </el-input>
-      </el-form-item>
       <el-form-item label="被封禁">
         <el-tag
           v-if="detailDialogData.isBanned === '0'"
@@ -117,6 +108,21 @@
           否
         </el-tag>
         <el-tag v-else size="large" type="danger">是</el-tag>
+      </el-form-item>
+      <el-form-item label="头像文件">
+        <el-input v-model="detailDialogData.avatar">
+          <template #append>
+            <el-button @click="detailDialogData.avatar = 'default'">
+              重置
+            </el-button>
+          </template>
+        </el-input>
+      </el-form-item>
+      <el-form-item label="当前头像">
+        <el-image
+          :src="UserApi.getUserAvatarUrl(detailDialogData.avatar)"
+          style="width: 256px"
+        />
       </el-form-item>
     </el-form>
     <template #footer>

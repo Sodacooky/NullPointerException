@@ -89,7 +89,7 @@
           <h3>广告位招租</h3>
         </el-carousel-item>
         <el-carousel-item v-for="item in ads" :key="item.id">
-          <a :href="item.url">
+          <a :href="item.url" target="_blank">
             <el-image
               :src="HomeApi.getAdsImageUrl(item.image)"
               fit="fill"

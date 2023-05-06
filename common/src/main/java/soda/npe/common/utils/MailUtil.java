@@ -19,7 +19,7 @@ public class MailUtil {
         mailAccount.setAuth(true);
         mailAccount.setFrom("hibin_org@qq.com");
         mailAccount.setUser("hibin_org@qq.com");
-        mailAccount.setPass("***");
+        mailAccount.setPass("yblvgpvvklendggd");
     }
 
     public boolean sendEmail(String goalAddress, String title, String content) {

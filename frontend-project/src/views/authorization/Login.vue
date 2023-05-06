@@ -94,7 +94,7 @@ export default {
             //登录失败
             this.$notify({
               title: "登陆失败",
-              message: "请检查邮箱与密码",
+              message: resp.data.message,
               type: "error",
             });
           }

@@ -39,6 +39,7 @@
                 placeholder="登录使用的密码，至少8位"
                 show-password
                 type="password"
+                @change="checkPassword()"
               ></el-input>
             </el-form-item>
             <el-form-item label="确认密码">
@@ -51,7 +52,7 @@
               ></el-input>
               <div v-if="passwordCheckResult.length > 0">
                 <span style="color: red; font-size: small">
-                  两次密码不一致
+                  {{ passwordCheckResult }}
                 </span>
               </div>
             </el-form-item>
@@ -155,12 +156,11 @@ export default {
       }); //doRegister
     },
     checkPassword() {
-      if (this.password !== this.confirmPassword) {
-        this.passwordCheckResult = "两次密码不一致";
+      this.passwordCheckResult = "";
+      if (String(this.password) !== String(this.confirmPassword)) {
+        this.passwordCheckResult = "两次密码不一致  ";
       } else if (this.password.length < 8) {
-        this.passwordCheckResult = "密码太短";
-      } else {
-        this.passwordCheckResult = "";
+        this.passwordCheckResult = "密码太短  ";
       }
     },
     checkEmail() {
@@ -186,11 +186,11 @@ export default {
     },
     doCodeImageUpdate() {
       this.codeImageUrl =
-        baseUrl + "/service-user/auth/registerCodeImage?magic=" + Date.now();
+        baseUrl + "/service-user/public/registerCodeImage?magic=" + Date.now();
     },
   }, //methods
   mounted() {
-    this.codeImageUrl = baseUrl + "/service-user/auth/registerCodeImage";
+    this.codeImageUrl = baseUrl + "/service-user/public/registerCodeImage";
   },
 };
 </script>
