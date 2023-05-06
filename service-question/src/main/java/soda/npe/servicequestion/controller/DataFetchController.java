@@ -9,7 +9,6 @@ import soda.npe.common.controller.Response;
 import soda.npe.common.entity.QuestionInfo;
 import soda.npe.servicequestion.service.QuestionAnswerService;
 import soda.npe.servicequestion.service.QuestionInfoService;
-import soda.npe.servicequestion.service.QuestionReplyService;
 import soda.npe.servicequestion.service.UserQuestionSubscriptionService;
 
 /**
@@ -22,9 +21,6 @@ public class DataFetchController {
     private QuestionAnswerService questionAnswerService;
     @Resource
     private QuestionInfoService questionInfoService;
-    @Resource
-    private QuestionReplyService questionReplyService;
-
     @Resource
     private UserQuestionSubscriptionService userQuestionSubscriptionService;
 
@@ -56,19 +52,6 @@ public class DataFetchController {
         return Response.ok(null, questionAnswerService.getAnswerPublishedBy(userId, page));
     }
 
-    /**
-     * 获取回答下的回复
-     *
-     * @param answerId 回答ID
-     * @param page     页
-     * @return 回复列表
-     */
-    @GetMapping("/getReplyOfAnswer")
-    public Response getReplyOfAnswer(Long answerId, Integer page) {
-        if (answerId == null) return Response.fail(1, "未指定回答");
-        if (page == null || page < 1) page = 1;
-        return Response.ok(null, questionReplyService.getOfAnswer(answerId, page));
-    }
 
     /**
      * 获取问题的基本信息，如作者、发布时间、标题等

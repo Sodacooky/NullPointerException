@@ -10,7 +10,6 @@
         <result property="goalArticleId" column="goal_article_id" jdbcType="BIGINT"/>
         <result property="goalArticleReplyId" column="goal_article_reply_id" jdbcType="BIGINT"/>
         <result property="goalQuestionId" column="goal_question_id" jdbcType="BIGINT"/>
-        <result property="goalQuestionReplyId" column="goal_question_reply_id" jdbcType="BIGINT"/>
         <result property="goalQuestionAnswerId" column="goal_question_answer_id" jdbcType="BIGINT"/>
         <result property="time" column="time" jdbcType="TIMESTAMP"/>
         <result property="comment" column="comment" jdbcType="VARCHAR"/>
@@ -20,7 +19,7 @@
 
     <sql id="Base_Column_List">
         id,goal_user_id,goal_article_id,
-        goal_article_reply_id,goal_question_id,goal_question_reply_id,
+        goal_article_reply_id,goal_question_id,
         goal_question_answer_id,time,comment,
         is_processed,reporter_id
     </sql>

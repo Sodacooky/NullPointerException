@@ -37,7 +37,7 @@ CREATE TABLE `advertisement` (
 
 LOCK TABLES `advertisement` WRITE;
 /*!40000 ALTER TABLE `advertisement` DISABLE KEYS */;
-INSERT INTO `advertisement` VALUES (1,'https://baidu.com','1','2023-04-14 20:57:44'),(2,'https://im.qq.com','2','2023-04-14 20:58:02');
+INSERT INTO `advertisement` VALUES (1654814633004941313,'https://www.bilibili.com/video/BV1GM411G7D7/','51d9fc39-028c-4a9f-9ab9-8df24b8e088d','2023-05-06 19:45:28'),(1654815704624447490,'https://www.bilibili.com/video/BV1Qo4y1473Z/','8e075788-5d1f-4f88-9d25-537dae844b88','2023-05-06 19:49:44');
 /*!40000 ALTER TABLE `advertisement` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -206,7 +206,7 @@ CREATE TABLE `global_data` (
 
 LOCK TABLES `global_data` WRITE;
 /*!40000 ALTER TABLE `global_data` DISABLE KEYS */;
-INSERT INTO `global_data` VALUES ('adminPassword','114514'),('backendFullHost','http://localhost:8080'),('host','http://localhost:5371');
+INSERT INTO `global_data` VALUES ('adminPassword','114514'),('backendHost','http://localhost:8080'),('host','http://localhost:5371');
 /*!40000 ALTER TABLE `global_data` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -272,36 +272,6 @@ INSERT INTO `question_info` VALUES (2,'这个网站存在的意义是什么',3,'
 UNLOCK TABLES;
 
 --
--- Table structure for table `question_reply`
---
-
-DROP TABLE IF EXISTS `question_reply`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `question_reply` (
-  `id` bigint NOT NULL COMMENT '回复的ID',
-  `goal_answer_id` bigint DEFAULT NULL COMMENT '目标问题ID，如果回复的是其他回复请保持为NULL',
-  `text` mediumtext NOT NULL COMMENT '回复内容正文',
-  `publisher_id` bigint NOT NULL COMMENT '回复发布者ID',
-  `publish_time` datetime NOT NULL COMMENT '回复发布时间',
-  PRIMARY KEY (`id`),
-  KEY `question_reply_question_answer_id_fk` (`goal_answer_id`),
-  KEY `question_reply_user_info_id_fk` (`publisher_id`),
-  CONSTRAINT `question_reply_question_answer_id_fk` FOREIGN KEY (`goal_answer_id`) REFERENCES `question_answer` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `question_reply_user_info_id_fk` FOREIGN KEY (`publisher_id`) REFERENCES `user_info` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='对问题中的回答或其他回复的回复';
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `question_reply`
---
-
-LOCK TABLES `question_reply` WRITE;
-/*!40000 ALTER TABLE `question_reply` DISABLE KEYS */;
-/*!40000 ALTER TABLE `question_reply` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `report`
 --
 
@@ -314,7 +284,6 @@ CREATE TABLE `report` (
   `goal_article_id` bigint DEFAULT NULL COMMENT '被举报的文章ID',
   `goal_article_reply_id` bigint DEFAULT NULL COMMENT '被举报的文章回复ID',
   `goal_question_id` bigint DEFAULT NULL COMMENT '被举报的问题ID',
-  `goal_question_reply_id` bigint DEFAULT NULL COMMENT '被举报的问答回复ID',
   `goal_question_answer_id` bigint DEFAULT NULL COMMENT '被举报的回答ID',
   `time` datetime NOT NULL COMMENT '举报时间',
   `comment` text NOT NULL COMMENT '举报附加信息',
@@ -325,14 +294,12 @@ CREATE TABLE `report` (
   KEY `report_article_reply_id_fk` (`goal_article_reply_id`),
   KEY `report_question_answer_id_fk` (`goal_question_answer_id`),
   KEY `report_question_info_id_fk` (`goal_question_id`),
-  KEY `report_question_reply_id_fk` (`goal_question_reply_id`),
   KEY `report_user_info_id_fk` (`reporter_id`),
   KEY `report_user_info_id_fk2` (`goal_user_id`),
   CONSTRAINT `report_article_id_fk` FOREIGN KEY (`goal_article_id`) REFERENCES `article` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `report_article_reply_id_fk` FOREIGN KEY (`goal_article_reply_id`) REFERENCES `article_reply` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `report_question_answer_id_fk` FOREIGN KEY (`goal_question_answer_id`) REFERENCES `question_answer` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `report_question_info_id_fk` FOREIGN KEY (`goal_question_id`) REFERENCES `question_info` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `report_question_reply_id_fk` FOREIGN KEY (`goal_question_reply_id`) REFERENCES `question_reply` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `report_user_info_id_fk` FOREIGN KEY (`reporter_id`) REFERENCES `user_info` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `report_user_info_id_fk2` FOREIGN KEY (`goal_user_id`) REFERENCES `user_info` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用户举报';
@@ -344,7 +311,7 @@ CREATE TABLE `report` (
 
 LOCK TABLES `report` WRITE;
 /*!40000 ALTER TABLE `report` DISABLE KEYS */;
-INSERT INTO `report` VALUES (1653836413749264385,3,NULL,NULL,NULL,NULL,NULL,'2023-05-04 02:58:22','11',0,1650889078710849537);
+INSERT INTO `report` VALUES (1653836413749264385,3,NULL,NULL,NULL,NULL,'2023-05-04 02:58:22','11',0,1650889078710849537);
 /*!40000 ALTER TABLE `report` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -473,4 +440,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-05-05 20:34:38
+-- Dump completed on 2023-05-06 22:23:56

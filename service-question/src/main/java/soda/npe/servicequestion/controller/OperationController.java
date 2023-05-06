@@ -5,10 +5,12 @@ import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 import soda.npe.common.controller.Response;
 import soda.npe.common.utils.JwtAuthUtil;
-import soda.npe.servicequestion.service.*;
+import soda.npe.servicequestion.service.ApprovalAnswerService;
+import soda.npe.servicequestion.service.QuestionAnswerService;
+import soda.npe.servicequestion.service.QuestionInfoService;
+import soda.npe.servicequestion.service.UserQuestionSubscriptionService;
 import soda.npe.servicequestion.vo.AnswerPublishVO;
 import soda.npe.servicequestion.vo.QuestionPublishVO;
-import soda.npe.servicequestion.vo.ReplyPublishVO;
 
 
 /**
@@ -32,9 +34,6 @@ public class OperationController {
 
     @Resource
     private QuestionAnswerService questionAnswerService;
-
-    @Resource
-    private QuestionReplyService questionReplyService;
 
     /**
      * 用户订阅问题，从Header中获取JWT并识别当前用户
@@ -152,32 +151,6 @@ public class OperationController {
         Long userId = jwtAuthUtil.getPayload(token).getLong("userId");
         //发布
         if (!questionAnswerService.publish(userId, answerPublishVO)) {
-            return Response.fail(3, "发布失败，服务器内部错误");
-        } else {
-            return Response.ok(null, null);
-        }
-    }
-
-    /**
-     * 发布回复
-     *
-     * @param replyPublishVO 回复发布的内容，包括目标回答ID、回复内容
-     * @param token          header中的jwt
-     * @return 是否成功
-     */
-    @PostMapping("/publishReply")
-    public Response publishReply(@RequestBody ReplyPublishVO replyPublishVO,
-                                 @RequestHeader("Authorization") String token) {
-        if (replyPublishVO == null) {
-            return Response.fail(1, "缺少参数");
-        }
-        if (StrUtil.isBlank(replyPublishVO.getText()) || replyPublishVO.getAnswerId() == null) {
-            return Response.fail(2, "存在为空参数");
-        }
-        //能到达这里，token已经是被校验过得了，我们只获取当前用户ID
-        Long userId = jwtAuthUtil.getPayload(token).getLong("userId");
-        //发布
-        if (!questionReplyService.publish(userId, replyPublishVO)) {
             return Response.fail(3, "发布失败，服务器内部错误");
         } else {
             return Response.ok(null, null);

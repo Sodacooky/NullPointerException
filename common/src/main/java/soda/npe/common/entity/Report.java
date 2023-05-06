@@ -41,10 +41,6 @@ public class Report implements Serializable {
      */
     private Long goalQuestionId;
     /**
-     * 被举报的问答回复ID
-     */
-    private Long goalQuestionReplyId;
-    /**
      * 被举报的回答ID
      */
     private Long goalQuestionAnswerId;
@@ -82,7 +78,6 @@ public class Report implements Serializable {
                 && (this.getGoalArticleId() == null ? other.getGoalArticleId() == null : this.getGoalArticleId().equals(other.getGoalArticleId()))
                 && (this.getGoalArticleReplyId() == null ? other.getGoalArticleReplyId() == null : this.getGoalArticleReplyId().equals(other.getGoalArticleReplyId()))
                 && (this.getGoalQuestionId() == null ? other.getGoalQuestionId() == null : this.getGoalQuestionId().equals(other.getGoalQuestionId()))
-                && (this.getGoalQuestionReplyId() == null ? other.getGoalQuestionReplyId() == null : this.getGoalQuestionReplyId().equals(other.getGoalQuestionReplyId()))
                 && (this.getGoalQuestionAnswerId() == null ? other.getGoalQuestionAnswerId() == null : this.getGoalQuestionAnswerId().equals(other.getGoalQuestionAnswerId()))
                 && (this.getTime() == null ? other.getTime() == null : this.getTime().equals(other.getTime()))
                 && (this.getComment() == null ? other.getComment() == null : this.getComment().equals(other.getComment()))
@@ -99,7 +94,6 @@ public class Report implements Serializable {
         result = prime * result + ((getGoalArticleId() == null) ? 0 : getGoalArticleId().hashCode());
         result = prime * result + ((getGoalArticleReplyId() == null) ? 0 : getGoalArticleReplyId().hashCode());
         result = prime * result + ((getGoalQuestionId() == null) ? 0 : getGoalQuestionId().hashCode());
-        result = prime * result + ((getGoalQuestionReplyId() == null) ? 0 : getGoalQuestionReplyId().hashCode());
         result = prime * result + ((getGoalQuestionAnswerId() == null) ? 0 : getGoalQuestionAnswerId().hashCode());
         result = prime * result + ((getTime() == null) ? 0 : getTime().hashCode());
         result = prime * result + ((getComment() == null) ? 0 : getComment().hashCode());
@@ -119,7 +113,6 @@ public class Report implements Serializable {
         sb.append(", goalArticleId=").append(goalArticleId);
         sb.append(", goalArticleReplyId=").append(goalArticleReplyId);
         sb.append(", goalQuestionId=").append(goalQuestionId);
-        sb.append(", goalQuestionReplyId=").append(goalQuestionReplyId);
         sb.append(", goalQuestionAnswerId=").append(goalQuestionAnswerId);
         sb.append(", time=").append(time);
         sb.append(", comment=").append(comment);
