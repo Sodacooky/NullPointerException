@@ -1,5 +1,5 @@
 <template>
-  <h1>回答举报处理</h1>
+  <h1>用户举报处理</h1>
   <div class="query-area">
     <el-row>
       <el-col :span="4">
@@ -45,32 +45,22 @@
 
   <!--结果表格  -->
   <el-table :data="tableData">
-    <el-table-column label="标题" min-width="128px" prop="goalQuestionTitle" />
-    <el-table-column
-      label="正文摘要"
-      min-width="256px"
-      prop="goalQuestionAnswerShortText"
-    />
-
-    <el-table-column label="发布用户" min-width="128px">
+    <el-table-column label="头像" min-width="32px">
       <template #default="scope">
-        <span style="align-items: center; display: flex">
-          <el-avatar
-            :src="UserApi.getUserAvatarUrl(scope.row.goalOwnerAvatar)"
-            size="small"
-            style="margin-right: 4px"
-          />
-          {{ scope.row.goalOwnerNickname }}
-        </span>
+        <el-avatar :src="UserApi.getUserAvatarUrl(scope.row.goalUserAvatar)" />
       </template>
     </el-table-column>
+    <el-table-column label="昵称" min-width="96px" prop="goalUserNickname" />
+    <el-table-column
+      label="自我介绍"
+      min-width="160px"
+      prop="goalUserDescription"
+    />
 
     <el-table-column label="操作" min-width="96px">
       <template #default="scope">
         <el-button
-          @click="
-            openDetailDialog(scope.row.id, scope.row.goalQuestionAnswerId)
-          "
+          @click="openDetailDialog(scope.row.id, scope.row.goalUserId)"
         >
           详情与处理
         </el-button>
@@ -84,26 +74,48 @@
     class="question-detail-dialog"
     width="800px"
   >
-    <template #header><span style="font-weight: bold">回答详情</span></template>
+    <template #header><span style="font-weight: bold">用户详情</span></template>
     <el-form label-position="right" label-width="96">
-      <el-form-item label="回答ID">
+      <el-form-item label="ID">
         {{ detailDialogData.id }}
       </el-form-item>
-      <el-form-item label="问题ID">
-        {{ detailDialogData.questionId }}
+      <el-form-item label="昵称">
+        <el-input v-model="detailDialogData.nickname" />
       </el-form-item>
-      <el-form-item label="正文">
+      <el-form-item label="简介">
         <el-input
-          v-model="detailDialogData.text"
-          :autosize="{ minRows: 4, maxRows: 8 }"
+          v-model="detailDialogData.description"
+          :autosize="{ minRows: 3, maxRows: 6 }"
           type="textarea"
         />
       </el-form-item>
-      <el-form-item label="发布者ID">
-        {{ detailDialogData.publisherId }}
+      <el-form-item label="注册时间">
+        {{ detailDialogData.registerTime }}
       </el-form-item>
-      <el-form-item label="发布时间">
-        {{ detailDialogData.publishTime }}
+      <el-form-item label="被封禁">
+        <el-tag
+          v-if="detailDialogData.isBanned === '0'"
+          size="large"
+          type="success"
+        >
+          否
+        </el-tag>
+        <el-tag v-else size="large" type="danger">是</el-tag>
+      </el-form-item>
+      <el-form-item label="头像文件">
+        <el-input v-model="detailDialogData.avatar">
+          <template #append>
+            <el-button @click="detailDialogData.avatar = 'default'">
+              重置
+            </el-button>
+          </template>
+        </el-input>
+      </el-form-item>
+      <el-form-item label="当前头像">
+        <el-image
+          :src="UserApi.getUserAvatarUrl(detailDialogData.avatar)"
+          style="width: 256px"
+        />
       </el-form-item>
       <el-form-item label="举报者ID">
         {{ detailDialogData.reporterId }}
@@ -127,13 +139,23 @@
       </el-form-item>
     </el-form>
     <template #footer>
-      <el-button type="primary" @click="doAnswerUpdate()">更改</el-button>
-      <el-button type="danger" @click="doRemove()">删除</el-button>
+      <el-button type="primary" @click="doInfoUpdate()">更改</el-button>
+      <el-button
+        v-if="detailDialogData.isBanned === '0'"
+        type="danger"
+        @click="doBan(detailDialogData.id)"
+      >
+        封禁
+      </el-button>
+      <el-button v-else type="warning" @click="doUnban(detailDialogData.id)">
+        解封
+      </el-button>
       <el-button
         v-if="detailDialogData.isProcessed === '0'"
         @click="doSetProcessed()"
-        >标记为已处理（忽略举报）</el-button
       >
+        标记为已处理（忽略举报）
+      </el-button>
     </template>
   </el-dialog>
 </template>
@@ -142,11 +164,10 @@
 import { UserApi } from "@/api/user";
 import { ArrowLeft } from "@element-plus/icons-vue";
 import { AdminReportApi } from "@/api/adminReport";
-import { ReadingApi } from "@/api/reading";
 import { AdminContentManageApi } from "@/api/adminContentManage";
 
 export default {
-  name: "AnswerReport",
+  name: "ArticleReport",
   computed: {
     UserApi() {
       return UserApi;
@@ -167,7 +188,7 @@ export default {
   }, //data
   methods: {
     fetch() {
-      AdminReportApi.getAnswerReport(
+      AdminReportApi.getUserReport(
         this.page,
         this.order.includes("asc"),
         this.isShowProcessed
@@ -192,9 +213,9 @@ export default {
       this.page--;
       this.fetch();
     },
-    openDetailDialog(reportId, answerId) {
+    openDetailDialog(reportId, userId) {
       this.isShowDetailDialog = true;
-      ReadingApi.getOneQuestionAnswer(answerId).then((resp) => {
+      UserApi.getUserInfo(userId).then((resp) => {
         this.detailDialogData = resp.data.data;
         //填充举报信息
         AdminReportApi.getReport(reportId).then((resp) => {
@@ -206,10 +227,12 @@ export default {
         });
       });
     },
-    doAnswerUpdate() {
-      AdminContentManageApi.modifyQuestionAnswer(
+    doInfoUpdate() {
+      AdminContentManageApi.modifyUser(
         this.detailDialogData.id,
-        this.detailDialogData.text
+        this.detailDialogData.nickname,
+        this.detailDialogData.description,
+        this.detailDialogData.avatar
       ).then((resp) => {
         if (resp.data.code === "0") {
           this.$notify.success("操作成功");
@@ -219,31 +242,24 @@ export default {
         }
       });
     },
-    doRemove() {
-      this.$confirm("删除这条回答？", "确定删除", {
-        confirmButtonText: "是的，删除",
-        cancelButtonText: "取消",
-        type: "warning",
-      })
-        .then(() => {
-          //确认删除
-          AdminContentManageApi.removeQuestionAnswer(
-            this.detailDialogData.id
-          ).then((resp) => {
-            if (resp.data.code === "0") {
-              this.$notify.success("操作成功");
-            } else {
-              this.$notify.error({
-                title: "操作失败",
-                message: resp.data.message,
-              });
-            }
-          });
-        })
-        .catch(() => {
-          //取消
-          this.$notify.info("操作取消");
-        });
+    doBan() {
+      AdminContentManageApi.banUser(this.detailDialogData.id).then((resp) => {
+        if (resp.data.code === "0") {
+          this.$notify.success("操作成功");
+        } else {
+          this.$notify.error({ title: "操作失败", message: resp.data.message });
+        }
+      });
+      this.doSetProcessed();
+    },
+    doUnban() {
+      AdminContentManageApi.unbanUser(this.detailDialogData.id).then((resp) => {
+        if (resp.data.code === "0") {
+          this.$notify.success("操作成功");
+        } else {
+          this.$notify.error({ title: "操作失败", message: resp.data.message });
+        }
+      });
     },
     doSetProcessed() {
       AdminReportApi.setProcessed(this.detailDialogData.reportId).then(

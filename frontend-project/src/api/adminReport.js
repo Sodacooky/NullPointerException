@@ -53,4 +53,16 @@ export class AdminReportApi {
       },
     });
   }
+
+  static getReport(reportId) {
+    return requests.get("/service-miscellaneous/auth/admin/getReport", {
+      params: { reportId },
+    });
+  }
+
+  static setProcessed(reportId) {
+    return requests.get("/service-miscellaneous/auth/admin/setProcessed", {
+      params: { reportId },
+    });
+  }
 }

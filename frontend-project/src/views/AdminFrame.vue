@@ -46,6 +46,7 @@
           <el-menu-item index="/admin/report/articleReply">
             文章回复举报
           </el-menu-item>
+          <el-menu-item index="/admin/report/user">用户举报</el-menu-item>
         </el-sub-menu>
 
         <el-sub-menu index="/admin/misc/">

@@ -64,7 +64,7 @@ public class AdminOperationController {
     public Response removeReply(Long replyId) {
         //判断回答ID存在
         if (replyId == null || articleReplyService.getById(replyId) == null) {
-            return Response.fail(1, "回答ID未指定或不存在");
+            return Response.fail(1, "回复ID未指定或不存在");
         }
         //执行删除
         if (articleReplyService.removeAndNotice(replyId)) return Response.ok();

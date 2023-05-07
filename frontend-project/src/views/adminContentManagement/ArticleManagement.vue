@@ -86,7 +86,7 @@
   <el-dialog v-model="isShowDetailDialog" class="question-detail-dialog">
     <template #header><span style="font-weight: bold">文章详情</span></template>
     <el-form label-position="right" label-width="72">
-      <el-form-item label="问题ID">
+      <el-form-item label="文章ID">
         {{ detailDialogData.id }}
       </el-form-item>
       <el-form-item label="标题">

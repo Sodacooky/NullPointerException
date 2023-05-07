@@ -89,11 +89,11 @@
       <span style="font-weight: bold">文章回复详情</span>
     </template>
     <el-form label-position="right" label-width="72">
-      <el-form-item label="回答ID">
+      <el-form-item label="回复ID">
         {{ detailDialogData.id }}
       </el-form-item>
-      <el-form-item label="问题ID">
-        {{ detailDialogData.questionId }}
+      <el-form-item label="文章ID">
+        {{ detailDialogData.goalArticleId }}
       </el-form-item>
       <el-form-item label="正文">
         <el-input
@@ -167,9 +167,9 @@ export default {
         }
       });
     },
-    openDetailDialog(answerId) {
+    openDetailDialog(replyId) {
       this.isShowDetailDialog = true;
-      ReadingApi.getArticleReply(answerId).then((resp) => {
+      ReadingApi.getOneArticleReply(replyId).then((resp) => {
         this.detailDialogData = resp.data.data;
       });
     },

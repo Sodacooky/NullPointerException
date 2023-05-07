@@ -58,6 +58,11 @@ const articleReplyReport = {
   name: "ArticleReplyReport",
   component: () => import("@/views/adminReport/ArticleReplyReport.vue"),
 };
+const userReport = {
+  path: "/admin/report/user",
+  name: "UserReport",
+  component: () => import("@/views/adminReport/UserReport.vue"),
+};
 //end of 举报处理
 
 //杂项
@@ -97,6 +102,7 @@ const adminRoute = {
     articleReport,
     answerReport,
     articleReplyReport,
+    userReport,
     //杂项
     noticeSend,
     advertisementEdit,
