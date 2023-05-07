@@ -84,7 +84,7 @@
           <span>推广</span>
         </div>
       </template>
-      <el-carousel height="150px">
+      <el-carousel height="180px">
         <el-carousel-item v-if="ads.length < 1" style="text-align: center">
           <h3>广告位招租</h3>
         </el-carousel-item>

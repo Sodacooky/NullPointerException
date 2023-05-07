@@ -4,19 +4,24 @@
     <el-row>
       <el-col :span="4">
         <!--顺序选择  -->
-        <el-select v-model="order">
+        <el-select v-model="order" @change="doNewFetch()">
           <el-option label="最早" value="desc" />
           <el-option label="最新" value="asc" />
         </el-select>
       </el-col>
-      <el-col :span="1"></el-col>
-      <el-col :span="10">
+      <el-col :span="1" />
+      <el-col :span="9">
         <div class="pager" style="display: flex; align-items: center">
           <el-button-group>
-            <el-button :disabled="page <= 1" :icon="ArrowLeft" type="default">
+            <el-button
+              :disabled="page <= 1"
+              :icon="ArrowLeft"
+              type="default"
+              @click="doGoPrevPage()"
+            >
               上一页
             </el-button>
-            <el-button type="default">
+            <el-button type="default" @click="doGoNextPage()">
               下一页
               <el-icon class="el-icon--right">
                 <ArrowRight />
@@ -24,33 +29,42 @@
             </el-button>
           </el-button-group>
           <span style="margin-left: 8px; max-width: 160px">
-            <el-input v-model="page" type="number">
+            <el-input v-model="page" type="number" @change="fetch()">
               <template #prepend>当前页</template>
             </el-input>
           </span>
         </div>
+      </el-col>
+      <el-col :span="4">
+        <el-checkbox v-model="isShowProcessed" @change="doNewFetch()">
+          展示已处理的</el-checkbox
+        >
       </el-col>
     </el-row>
   </div>
 
   <!--结果表格  -->
   <el-table :data="tableData">
-    <el-table-column label="文章标题" min-width="128px" prop="articleTitle" />
     <el-table-column
-      label="回复摘要"
+      label="文章标题"
+      min-width="128px"
+      prop="goalArticleTitle"
+    />
+    <el-table-column
+      label="正文摘要"
       min-width="256px"
-      prop="articleReplyShortText"
+      prop="goalArticleReplyShortText"
     />
 
     <el-table-column label="发布用户" min-width="128px">
       <template #default="scope">
         <span style="align-items: center; display: flex">
           <el-avatar
-            :src="UserApi.getUserAvatarUrl(scope.row.replyPublisherAvatar)"
+            :src="UserApi.getUserAvatarUrl(scope.row.goalOwnerAvatar)"
             size="small"
             style="margin-right: 4px"
           />
-          {{ scope.row.replyPublisherNickname }}
+          {{ scope.row.goalOwnerNickname }}
         </span>
       </template>
     </el-table-column>
@@ -66,6 +80,7 @@
 <script>
 import { UserApi } from "@/api/user";
 import { ArrowLeft } from "@element-plus/icons-vue";
+import { AdminReportApi } from "@/api/adminReport";
 
 export default {
   name: "ArticleReplyReport",
@@ -80,21 +95,42 @@ export default {
   data() {
     return {
       order: "desc",
-      keyword: "",
       page: 1,
-      tableData: [
-        {
-          id: 114514,
-          articleTitle:
-            "这是一个问题的标题，我可能会很长，那也就这么长，不会更长了",
-          articleReplyShortText:
-            "这是一段问题的正文的文章摘要，我需要足够长，才能测试出系统是否有问题...",
-          replyPublisherNickname: "发布者用户名",
-          replyPublisherAvatar: "default",
-        },
-      ],
+      isShowProcessed: false,
+      tableData: [],
     };
-  },
+  }, //data
+  methods: {
+    fetch() {
+      AdminReportApi.getArticleReplyReport(
+        this.page,
+        this.order.includes("asc"),
+        this.isShowProcessed
+      ).then((resp) => {
+        if (resp.data.data.length < 1) {
+          this.$notify.warning("没有更多数据");
+        } else {
+          this.tableData = resp.data.data;
+        }
+      });
+    },
+    doNewFetch() {
+      this.page = 1;
+      this.tableData = [];
+      this.fetch();
+    },
+    doGoNextPage() {
+      this.page++;
+      this.fetch();
+    },
+    doGoPrevPage() {
+      this.page--;
+      this.fetch();
+    },
+  }, //methods
+  mounted() {
+    this.fetch();
+  }, //mounted
 };
 </script>
 
