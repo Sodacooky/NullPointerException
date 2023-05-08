@@ -88,7 +88,7 @@
             <p style="font-style: italic; color: gray">
               如果账号遗失或申述解封请发邮件到：
             </p>
-            <p>xxxxxx@xxx.xx</p>
+            <p>hibin_org@qq.com</p>
           </div>
         </el-card>
       </div>

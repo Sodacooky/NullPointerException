@@ -1,9 +1,11 @@
 package soda.npe.servicearticle.controller;
 
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 import soda.npe.common.controller.Response;
+import soda.npe.common.entity.ApprovalArticle;
 import soda.npe.common.utils.JwtAuthUtil;
 import soda.npe.servicearticle.service.ApprovalArticleService;
 import soda.npe.servicearticle.service.ArticleReplyService;
@@ -50,6 +52,20 @@ public class OperationController {
         if (approvalArticleService.unApprove(articleId, userId)) return Response.ok(null, null);
         else return Response.fail(2, "可能未点赞或文章不存在");
     }
+
+    @GetMapping("/isApproved")
+    public Response isApproved(Long articleId, @RequestHeader("Authorization") String token) {
+        if (articleId == null) return Response.fail(1, "未指定回答");
+        Long userId = jwtAuthUtil.getPayload(token).getLong("userId");
+        //check record exist
+        ApprovalArticle record = approvalArticleService.getOne(
+                new LambdaQueryWrapper<ApprovalArticle>()
+                        .eq(ApprovalArticle::getArticleId, articleId)
+                        .eq(ApprovalArticle::getUserId, userId));
+        //
+        return Response.ok(record != null);
+    }
+
 
     /**
      * 发布文章，如果成功返回文章的ID

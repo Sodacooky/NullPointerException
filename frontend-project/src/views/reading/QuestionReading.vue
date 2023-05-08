@@ -15,7 +15,11 @@
           <!--订阅数量与订阅按钮            -->
           <span style="float: right">
             <el-tooltip content="订阅问题" placement="bottom">
-              <el-button style="font-size: large; font-weight: bold">
+              <el-button
+                style="font-size: large; font-weight: bold"
+                @click="onSubscribeBtn()"
+                :type="isSubscribed ? 'primary' : 'default'"
+              >
                 <el-icon style="margin-right: 4px"><Star /></el-icon>
                 {{ subscriptionAmount }}
               </el-button>
@@ -187,6 +191,7 @@ export default {
       publishTime: "2001-01-28 00:00:00",
       //问题相关数据
       subscriptionAmount: 0,
+      isSubscribed: false,
       answerAmount: 0,
       //用户实体属性，用于展示作者
       publisherNickname: "哈哈",
@@ -315,6 +320,50 @@ export default {
         }
       );
     },
+    onSubscribeBtn() {
+      console.log(this.isSubscribed);
+      if (this.hasLogin) {
+        if (this.isSubscribed) {
+          ReadingApi.doQuestionUnSubscribe(this.questionId).then((resp) => {
+            if (resp.data.code === "0") {
+              this.$notify.success("取消订阅问题成功");
+              ReadingApi.getQuestionSubscriptionAmount(this.articleId).then(
+                (resp) => {
+                  this.subscriptionAmount = resp.data.data;
+                }
+              );
+              ReadingApi.getQuestionIsSubscribed(this.questionId).then(
+                (resp) => {
+                  this.isSubscribed = resp.data.data;
+                }
+              );
+            } else {
+              this.$notify.error("取消订阅问题失败");
+            }
+          });
+        } else {
+          ReadingApi.doQuestionSubscribe(this.questionId).then((resp) => {
+            if (resp.data.code === "0") {
+              this.$notify.success("订阅问题成功");
+              ReadingApi.getQuestionSubscriptionAmount(this.questionId).then(
+                (resp) => {
+                  this.subscriptionAmount = resp.data.data;
+                }
+              );
+              ReadingApi.getQuestionIsSubscribed(this.questionId).then(
+                (resp) => {
+                  this.isSubscribed = resp.data.data;
+                }
+              );
+            } else {
+              this.$notify.error("订阅问题失败");
+            }
+          });
+        }
+      } else {
+        this.$notify.warning("尚未登录");
+      }
+    },
   }, //end of methods
   mounted() {
     //问题的基本信息
@@ -353,7 +402,12 @@ export default {
     //加载第一页回答
     this.loadFirstPageAnswer();
     //判断登录状态
-    AuthApi.hasLogin().then((resp) => (this.hasLogin = resp.data.data));
+    AuthApi.hasLogin().then((resp) => {
+      this.hasLogin = resp.data.data;
+      ReadingApi.getQuestionIsSubscribed(this.questionId).then((resp) => {
+        this.isSubscribed = resp.data.data;
+      });
+    });
   }, // end of mounted()
 };
 </script>

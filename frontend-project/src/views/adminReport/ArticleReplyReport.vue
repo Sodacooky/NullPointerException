@@ -51,7 +51,7 @@
       prop="goalArticleTitle"
     />
     <el-table-column
-      label="正文摘要"
+      label="回复摘要"
       min-width="256px"
       prop="goalArticleReplyShortText"
     />

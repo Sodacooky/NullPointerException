@@ -72,7 +72,9 @@
           :value="item.amount"
           class="hot-category-item"
         >
-          <el-button>{{ item.category }}</el-button>
+          <el-button @click="hotCategoriesJump(item.category)">
+            {{ item.category }}
+          </el-button>
         </el-badge>
       </div>
       <div v-else>近期似乎没有文章</div>
@@ -153,6 +155,12 @@ export default {
       this.$router.push({
         path: "/search",
         query: { keyword: this.searchText },
+      });
+    },
+    hotCategoriesJump(category) {
+      this.$router.push({
+        path: "/search",
+        query: { keyword: category },
       });
     },
   },

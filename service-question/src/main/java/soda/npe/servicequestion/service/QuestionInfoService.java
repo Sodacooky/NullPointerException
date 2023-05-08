@@ -252,7 +252,7 @@ public class QuestionInfoService extends ServiceImpl<QuestionInfoMapper, Questio
         return match.stream().map(QuestionInfo::getCategory).distinct().collect(Collectors.toList());
     }
 
-    public boolean updateQuestionInfo(ModifyQuestionInfoVO vo) {
+    public boolean adminUpdate(ModifyQuestionInfoVO vo) {
         //修改info里面的标题和分类
         QuestionInfo info = new QuestionInfo();
         info.setId(vo.getId());
@@ -264,10 +264,19 @@ public class QuestionInfoService extends ServiceImpl<QuestionInfoMapper, Questio
         wrapper.eq(QuestionAnswer::getQuestionId, vo.getId())
                 .eq(QuestionAnswer::getOrderNumber, 0)
                 .set(QuestionAnswer::getText, vo.getText());
-        return questionAnswerMapper.update(null, wrapper) == 1;
+        if (questionAnswerMapper.update(null, wrapper) != 1) return false;
+        //然后发送一条消息给用户
+        UserNotice userNotice = new UserNotice();
+        userNotice.setTitle("问题 " + info.getTitle() + " 已被管理员修改");
+        userNotice.setText("管理员已将该问题的部分内容进行了修改，请确认你已准守社区的规则。");
+        userNotice.setGoalUserId(info.getPublisherId());
+        userNotice.setTime(new Date());
+        userNotice.setType("system");
+        userNotice.setIsRead(0);
+        return userNoticeMapper.insert(userNotice) == 1;
     }
 
-    public boolean removeInfoAndAnswer(Long questionId) {
+    public boolean adminRemove(Long questionId) {
         //获取要删除的问题信息，用于构建消息
         QuestionInfo info = getById(questionId);
         //然后删除问题INFO

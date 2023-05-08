@@ -16,15 +16,19 @@
           <div style="color: gray">发布于：{{ item.publishTime }}</div>
         </el-col>
         <el-col :span="4">
-          <el-button
-            size="large"
-            style="font-size: large; font-weight: bold; float: right"
-          >
-            <el-icon style="margin-right: 4px">
-              <CaretTop />
-            </el-icon>
-            {{ item.approvalAmount }}
-          </el-button>
+          <el-tooltip content="点赞问题">
+            <el-button
+              size="large"
+              style="font-size: large; font-weight: bold; float: right"
+              @click="onApproveBtn()"
+              :type="isApproved ? 'primary' : 'default'"
+            >
+              <el-icon style="margin-right: 4px">
+                <CaretTop />
+              </el-icon>
+              {{ item.approvalAmount }}
+            </el-button>
+          </el-tooltip>
         </el-col>
       </el-row>
     </div>
@@ -65,6 +69,8 @@ import { UserApi } from "@/api/user";
 import { CaretTop } from "@element-plus/icons-vue";
 import { marked } from "marked";
 import { ReportApi } from "@/api/report";
+import { AuthApi } from "@/api/auth";
+import { ReadingApi } from "@/api/reading";
 
 export default {
   name: "QuestionAnswerListItem",
@@ -83,6 +89,8 @@ export default {
     return {
       isShowAnswerReport: false,
       reportComment: "",
+      isApproved: false,
+      hasLogin: false,
     };
   }, //data
   methods: {
@@ -121,7 +129,45 @@ export default {
         }
       });
     },
+    onApproveBtn() {
+      if (this.hasLogin) {
+        if (this.isApproved) {
+          ReadingApi.doAnswerUnApprove(this.item.id).then((resp) => {
+            if (resp.data.code === "0") {
+              this.$notify.success("取消点赞回答成功");
+              this.item.approvalAmount--;
+              this.isApproved = false;
+            } else {
+              this.$notify.error("取消点赞回答失败");
+            }
+          });
+        } else {
+          ReadingApi.doAnswerApprove(this.item.id).then((resp) => {
+            if (resp.data.code === "0") {
+              this.$notify.success("点赞回答成功");
+              this.item.approvalAmount++;
+              this.isApproved = true;
+            } else {
+              this.$notify.error("点赞回答失败");
+            }
+          });
+        }
+      } else {
+        this.$notify.warning("尚未登录");
+      }
+    },
   }, //methods
+  mounted() {
+    //判断登录状态
+    AuthApi.hasLogin().then((resp) => {
+      this.hasLogin = resp.data.data;
+      if (this.hasLogin === true) {
+        ReadingApi.getAnswerIsApproved(this.item.id).then((resp) => {
+          this.isApproved = resp.data.data;
+        });
+      }
+    });
+  },
 };
 </script>
 

@@ -1,7 +1,7 @@
 <template>
   <div class="item-card" style="padding: 8px 8px 24px 8px" @click="doJump()">
     <!--                文章数据-->
-    <div class="question-info">
+    <div class="article-info">
       <!--                    标题、分类、发布时间-->
       <div class="title-and-time">
         <span class="title" style="font-weight: bold">

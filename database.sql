@@ -37,7 +37,7 @@ CREATE TABLE `advertisement` (
 
 LOCK TABLES `advertisement` WRITE;
 /*!40000 ALTER TABLE `advertisement` DISABLE KEYS */;
-INSERT INTO `advertisement` VALUES (1654814633004941313,'https://www.bilibili.com/video/BV1GM411G7D7/','51d9fc39-028c-4a9f-9ab9-8df24b8e088d','2023-05-06 19:45:28'),(1654815704624447490,'https://www.bilibili.com/video/BV1Qo4y1473Z/','8e075788-5d1f-4f88-9d25-537dae844b88','2023-05-06 19:49:44');
+INSERT INTO `advertisement` VALUES (1654814633004941313,'https://www.baidu.com/','1','2023-05-06 19:45:28'),(1654815704624447490,'https://www.google.com/','2','2023-05-06 19:49:44');
 /*!40000 ALTER TABLE `advertisement` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -93,6 +93,7 @@ CREATE TABLE `approval_answer` (
 
 LOCK TABLES `approval_answer` WRITE;
 /*!40000 ALTER TABLE `approval_answer` DISABLE KEYS */;
+INSERT INTO `approval_answer` VALUES (1655523964281229313,1650889078710849537,1655252194873626625,'2023-05-08 18:44:06');
 /*!40000 ALTER TABLE `approval_answer` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -122,6 +123,7 @@ CREATE TABLE `approval_article` (
 
 LOCK TABLES `approval_article` WRITE;
 /*!40000 ALTER TABLE `approval_article` DISABLE KEYS */;
+INSERT INTO `approval_article` VALUES (1655524072729100290,1650889078710849537,1,'2023-05-08 18:44:32');
 /*!40000 ALTER TABLE `approval_article` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -151,7 +153,7 @@ CREATE TABLE `article` (
 
 LOCK TABLES `article` WRITE;
 /*!40000 ALTER TABLE `article` DISABLE KEYS */;
-INSERT INTO `article` VALUES (1,'试试发文章功能','# 标题\n\n* 列表项目1\n* 列表项目2\n\n我的代码如下：\n```java\nif (articlePublishVO == null) {\n    return RestResponse.fail(1, \"缺少参数\");\n}\n```\n\n> 你看懂了吗','其他',3,'2023-04-07 21:21:12'),(1652699489386921985,'标题','写点什么','测试',1650889078710849537,'2023-04-30 23:40:39');
+INSERT INTO `article` VALUES (1,'试试发文章功能','# 标题\n\n* 列表项目1\n* 列表项目2\n\n我的代码如下：\n```java\nif (articlePublishVO == null) {\n    return RestResponse.fail(1, \"缺少参数\");\n}\n```\n\n> 你看懂了吗','其他',3,'2023-04-07 21:21:12'),(1652699489386921985,'标题','写点什么??','测试',1650889078710849537,'2023-04-30 23:40:39'),(1655235581214507009,'测试文章','文本文本文本','测试',1650889078710849537,'2023-05-07 23:38:10');
 /*!40000 ALTER TABLE `article` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -238,7 +240,7 @@ CREATE TABLE `question_answer` (
 
 LOCK TABLES `question_answer` WRITE;
 /*!40000 ALTER TABLE `question_answer` DISABLE KEYS */;
-INSERT INTO `question_answer` VALUES (2,2,'就是说，同类网站那么多，你这个做得那么拉，有意义么',0,3,'2023-04-06 13:28:51'),(3,2,'问就是毕业设计',1,2,'2023-04-06 13:28:51');
+INSERT INTO `question_answer` VALUES (1655240863650992129,1655240863550328833,'就是说有啥用？',0,1650889078710849537,'2023-05-07 23:59:09'),(1655241020564099074,1655241020522156033,'本社爆破',0,1,'2023-05-07 23:59:47'),(1655251790655967234,1655251790580469761,'# 标题\n\n* 第一点\n* 第二点 \n\n```java\nString words = \"代码\"+\"块\";\n```',0,1,'2023-05-08 00:42:35'),(1655252194873626625,1655251790580469761,'最佳回答：**我不知道**',1,1650889078710849537,'2023-05-08 00:44:11');
 /*!40000 ALTER TABLE `question_answer` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -267,7 +269,7 @@ CREATE TABLE `question_info` (
 
 LOCK TABLES `question_info` WRITE;
 /*!40000 ALTER TABLE `question_info` DISABLE KEYS */;
-INSERT INTO `question_info` VALUES (2,'这个网站存在的意义是什么',3,'2023-04-06 13:28:51','社区');
+INSERT INTO `question_info` VALUES (1655240863550328833,'这个网站有什么用？',1650889078710849537,'2023-05-07 23:59:09','社区'),(1655241020522156033,'略略略，这个网站有啥用',1,'2023-05-07 23:59:47','测试'),(1655251790580469761,'Java中有什么好用的单元测试框架？',1,'2023-05-08 00:42:35','测');
 /*!40000 ALTER TABLE `question_info` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -311,7 +313,7 @@ CREATE TABLE `report` (
 
 LOCK TABLES `report` WRITE;
 /*!40000 ALTER TABLE `report` DISABLE KEYS */;
-INSERT INTO `report` VALUES (1653836413749264385,3,NULL,NULL,NULL,NULL,'2023-05-04 02:58:22','11',0,1650889078710849537);
+INSERT INTO `report` VALUES (1653836413749264385,3,NULL,NULL,NULL,NULL,'2023-05-04 02:58:22','11',1,1650889078710849537),(1655141665811308546,NULL,1652699489386921985,NULL,NULL,NULL,'2023-05-07 17:24:59','灌水啦啦啦啦啦啦这个',0,1650889078710849537),(1655266498171678721,NULL,NULL,NULL,1655241020522156033,NULL,'2023-05-08 01:41:01','111',0,1650889078710849537);
 /*!40000 ALTER TABLE `report` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -337,7 +339,7 @@ CREATE TABLE `user_authentication` (
 
 LOCK TABLES `user_authentication` WRITE;
 /*!40000 ALTER TABLE `user_authentication` DISABLE KEYS */;
-INSERT INTO `user_authentication` VALUES (1,'test@test.cn','114514'),(2,'test2@test.cn','114514'),(3,'test3@test.cn','114514'),(1650889078710849537,'523379653@qq.com','1145141919');
+INSERT INTO `user_authentication` VALUES (1,'test@test.cn','1145141919'),(2,'test2@test.cn','1145141919'),(3,'test3@test.cn','1145141919'),(1650889078710849537,'523379653@qq.com','1145141919');
 /*!40000 ALTER TABLE `user_authentication` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -366,7 +368,7 @@ CREATE TABLE `user_info` (
 
 LOCK TABLES `user_info` WRITE;
 /*!40000 ALTER TABLE `user_info` DISABLE KEYS */;
-INSERT INTO `user_info` VALUES (1,'TestUser1','测试用户1','default','2023-03-29 13:27:13',0),(2,'测试用户2','哈哈','default','2023-03-29 13:27:26',0),(3,'小明','我就是小明','default','2023-03-29 13:27:33',0),(1650889078710849537,'Sodacooky','哥只是一个传说','default','2023-04-25 23:46:43',0);
+INSERT INTO `user_info` VALUES (1,'TestUser1','测试用户1','default','2023-03-29 13:27:13',0),(2,'测试用户2','哈哈','default','2023-03-29 13:27:26',0),(3,'小明','我就是小明','default','2023-03-29 13:27:33',1),(1650889078710849537,'Sodacooky','哥只是一个传说','default','2023-04-25 23:46:43',0);
 /*!40000 ALTER TABLE `user_info` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -398,7 +400,7 @@ CREATE TABLE `user_notice` (
 
 LOCK TABLES `user_notice` WRITE;
 /*!40000 ALTER TABLE `user_notice` DISABLE KEYS */;
-INSERT INTO `user_notice` VALUES (1,1650889078710849537,'system','欢迎来到NullPointerException!','期待你为社区带来的改变！','2023-04-27 17:42:57',1,NULL),(1654424302270877698,1,'system','问题 测试问题1 网站 已被管理员删除','管理员已将该问题连同答案一起删除，请确认你已准守社区的规则。','2023-05-05 17:54:26',0,NULL),(1654428321815035906,2,'system','您在问题 这个网站存在的意义是什么 下的一条回答已被管理员删除','管理员已将该答案删除，请确认你已准守社区的规则。<br/>您的回答：<br/># 再回答一波','2023-05-05 18:10:24',0,'2'),(1654440282271301633,1650889078710849537,'system','问题 1 已被管理员删除','管理员已将该问题连同答案一起删除，请确认你已准守社区的规则。','2023-05-05 18:57:56',0,NULL),(1654440305629396994,1650889078710849537,'system','文章 标题 已被管理员删除','管理员已将该文章连同回复一起删除，请确认你已准守社区的规则。','2023-05-05 18:58:02',0,NULL),(1654453029855846402,1650889078710849537,'system','文章 2222 已被管理员删除','管理员已将该文章连同回复一起删除，请确认你已准守社区的规则。','2023-05-05 19:48:35',0,NULL),(1654453075221438466,2,'system','您在问题 试试发文章功能 下的一条回复已被管理员删除','管理员已将该答案该回复，请确认你已准守社区的规则。<br/>您的回复：<br/>回复~','2023-05-05 19:48:46',0,'1');
+INSERT INTO `user_notice` VALUES (1,1650889078710849537,'system','欢迎来到NullPointerException!','期待你为社区带来的改变！','2023-04-27 17:42:57',1,NULL),(1654424302270877698,1,'system','问题 测试问题1 网站 已被管理员删除','管理员已将该问题连同答案一起删除，请确认你已准守社区的规则。','2023-05-05 17:54:26',0,NULL),(1654428321815035906,2,'system','您在问题 这个网站存在的意义是什么 下的一条回答已被管理员删除','管理员已将该答案删除，请确认你已准守社区的规则。<br/>您的回答：<br/># 再回答一波','2023-05-05 18:10:24',0,'2'),(1654440282271301633,1650889078710849537,'system','问题 1 已被管理员删除','管理员已将该问题连同答案一起删除，请确认你已准守社区的规则。','2023-05-05 18:57:56',1,NULL),(1654440305629396994,1650889078710849537,'system','文章 标题 已被管理员删除','管理员已将该文章连同回复一起删除，请确认你已准守社区的规则。','2023-05-05 18:58:02',1,NULL),(1654453029855846402,1650889078710849537,'system','文章 2222 已被管理员删除','管理员已将该文章连同回复一起删除，请确认你已准守社区的规则。','2023-05-05 19:48:35',1,NULL),(1654453075221438466,2,'system','您在问题 试试发文章功能 下的一条回复已被管理员删除','管理员已将该答案该回复，请确认你已准守社区的规则。<br/>您的回复：<br/>回复~','2023-05-05 19:48:46',0,'1'),(1655208218569265153,3,'system','问题 这个网站存在的意义是什么 已被管理员删除','管理员已将该问题连同答案一起删除，请确认你已准守社区的规则。','2023-05-07 21:49:26',0,NULL),(1655209278226612226,1650889078710849537,'system','您在问题 标题 下的一条回复已被管理员删除','管理员已将该答案该回复，请确认你已准守社区的规则。<br/>您的回复：<br/>哈哈','2023-05-07 21:53:39',0,'1652699489386921985'),(1655252194923958274,1,'question_answer','问题 Java中有什么好用的单元测试框架？ 收到来自 Sodacooky 的回答','最佳回答：**我不知道**','2023-05-08 00:44:11',0,'1655251790580469761');
 /*!40000 ALTER TABLE `user_notice` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -428,6 +430,7 @@ CREATE TABLE `user_question_subscription` (
 
 LOCK TABLES `user_question_subscription` WRITE;
 /*!40000 ALTER TABLE `user_question_subscription` DISABLE KEYS */;
+INSERT INTO `user_question_subscription` VALUES (1655519230346465281,1650889078710849537,1655251790580469761,'2023-05-08 18:25:17');
 /*!40000 ALTER TABLE `user_question_subscription` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -440,4 +443,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-05-06 22:23:56
+-- Dump completed on 2023-05-08 18:47:50

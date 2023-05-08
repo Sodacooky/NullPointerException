@@ -82,7 +82,7 @@
     class="question-detail-dialog"
     width="800px"
   >
-    <template #header><span style="font-weight: bold">问题详情</span></template>
+    <template #header><span style="font-weight: bold">文章详情</span></template>
     <el-form label-position="right" label-width="96">
       <el-form-item label="文章ID">
         {{ detailDialogData.id }}

@@ -89,23 +89,34 @@ public class ArticleReplyService extends ServiceImpl<ArticleReplyMapper, Article
         return userNoticeMapper.insert(userNotice) == 1;
     }
 
-    public boolean updateReply(Long id, String text) {
+    public boolean adminUpdate(Long id, String text) {
         ArticleReply articleReply = new ArticleReply();
         articleReply.setId(id);
         articleReply.setText(text);
-        return updateById(articleReply);
+        if (!updateById(articleReply)) return false;
+        //发送消息
+        Article article = articleMapper.selectById(articleReply.getGoalArticleId());
+        UserNotice userNotice = new UserNotice();
+        userNotice.setGoalUserId(articleReply.getPublisherId());
+        userNotice.setType("system");
+        userNotice.setTitle("您在文章 " + article.getTitle() + " 下的一条回复已被管理员修改");
+        userNotice.setText("管理员已将该回复部分内容进行了修改，请确认你已准守社区的规则。");
+        userNotice.setTime(new Date());
+        userNotice.setIsRead(0);
+        userNotice.setSupplement(article.getId().toString());
+        return userNoticeMapper.insert(userNotice) == 1;
     }
 
-    public boolean removeAndNotice(Long replyId) {
+    public boolean adminRemove(Long replyId) {
         ArticleReply articleReply = getById(replyId);
         Article article = articleMapper.selectById(articleReply.getGoalArticleId());
         //删除
         if (!removeById(replyId)) return false;
         //发送消息
         UserNotice userNotice = new UserNotice();
-        userNotice.setTitle("您在问题 " + article.getTitle() + " 下的一条回复已被管理员删除");
+        userNotice.setTitle("您在文章 " + article.getTitle() + " 下的一条回复已被管理员删除");
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("管理员已将该答案该回复，请确认你已准守社区的规则。<br/>");
+        stringBuilder.append("管理员已将该回复删除，请确认你已准守社区的规则。<br/>");
         stringBuilder.append("您的回复：<br/>");
         stringBuilder.append(articleReply.getText().length() > 64 ? articleReply.getText().substring(0, 64) + "..." : articleReply.getText());
         userNotice.setText(stringBuilder.toString());

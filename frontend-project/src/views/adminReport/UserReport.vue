@@ -76,7 +76,7 @@
   >
     <template #header><span style="font-weight: bold">用户详情</span></template>
     <el-form label-position="right" label-width="96">
-      <el-form-item label="ID">
+      <el-form-item label="用户ID">
         {{ detailDialogData.id }}
       </el-form-item>
       <el-form-item label="昵称">

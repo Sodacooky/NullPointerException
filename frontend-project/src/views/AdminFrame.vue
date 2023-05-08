@@ -84,7 +84,7 @@ export default {
           if (Boolean(resp.data.data)) {
             //成功
             this.$notify({ title: "登出成功", type: "success" });
-            this.$router.replace("/admin/"); //强制重定向一下
+            this.$router.replace("/admin/login"); //强制重定向一下
           } else {
             //失败
             this.$notify({ title: "登出失败", type: "error" });

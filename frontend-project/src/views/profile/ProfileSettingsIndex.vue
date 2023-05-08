@@ -81,8 +81,7 @@
             <el-divider />
 
             <!--用户ID和邮箱查看              -->
-            <el-form-item label="注册邮箱"> 114514@cc.jp</el-form-item>
-            <el-form-item label="用户编号ID"> 1145141818aac</el-form-item>
+            <el-form-item label="用户编号ID"> {{ userInfo.id }}</el-form-item>
           </el-form>
         </div>
       </el-card>

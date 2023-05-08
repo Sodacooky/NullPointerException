@@ -1,9 +1,12 @@
 package soda.npe.servicequestion.controller;
 
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 import soda.npe.common.controller.Response;
+import soda.npe.common.entity.ApprovalAnswer;
+import soda.npe.common.entity.UserQuestionSubscription;
 import soda.npe.common.utils.JwtAuthUtil;
 import soda.npe.servicequestion.service.ApprovalAnswerService;
 import soda.npe.servicequestion.service.QuestionAnswerService;
@@ -70,6 +73,19 @@ public class OperationController {
         else return Response.fail(2, "可能未订阅或者问题不存在");
     }
 
+    @GetMapping("/isSubscribed")
+    public Response isSubscribed(Long questionId, @RequestHeader("Authorization") String token) {
+        if (questionId == null) return Response.fail(1, "未指定回答");
+        Long userId = jwtAuthUtil.getPayload(token).getLong("userId");
+        //check record exist
+        UserQuestionSubscription record = userQuestionSubscriptionService.getOne(
+                new LambdaQueryWrapper<UserQuestionSubscription>()
+                        .eq(UserQuestionSubscription::getQuestionId, questionId)
+                        .eq(UserQuestionSubscription::getUserId, userId));
+        //
+        return Response.ok(record != null);
+    }
+
     /**
      * 点赞回答
      *
@@ -102,6 +118,19 @@ public class OperationController {
         //做
         if (approvalAnswerService.unApprove(answerId, userId)) return Response.ok(null, null);
         else return Response.fail(2, "可能未点赞或答案不存在");
+    }
+
+    @GetMapping("/isApproved")
+    public Response isApproved(Long answerId, @RequestHeader("Authorization") String token) {
+        if (answerId == null) return Response.fail(1, "未指定回答");
+        Long userId = jwtAuthUtil.getPayload(token).getLong("userId");
+        //check record exist
+        ApprovalAnswer record = approvalAnswerService.getOne(
+                new LambdaQueryWrapper<ApprovalAnswer>()
+                        .eq(ApprovalAnswer::getAnswerId, answerId)
+                        .eq(ApprovalAnswer::getUserId, userId));
+        //
+        return Response.ok(record != null);
     }
 
     /**

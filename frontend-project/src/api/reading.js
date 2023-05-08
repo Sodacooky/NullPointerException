@@ -19,6 +19,24 @@ export class ReadingApi {
     });
   }
 
+  static doArticleApprove(articleId) {
+    return requests.get("/service-article/auth/approve", {
+      params: { articleId },
+    });
+  }
+
+  static doArticleUnApprove(articleId) {
+    return requests.get("/service-article/auth/unApprove", {
+      params: { articleId },
+    });
+  }
+
+  static getArticleIsApproved(articleId) {
+    return requests.get("/service-article/auth/isApproved", {
+      params: { articleId },
+    });
+  }
+
   static getQuestionInfo(questionId) {
     return requests.get("/service-question/public/getQuestionInfo", {
       params: { questionId: questionId },
@@ -43,6 +61,24 @@ export class ReadingApi {
     });
   }
 
+  static doQuestionSubscribe(questionId) {
+    return requests.get("/service-question/auth/subscription", {
+      params: { questionId },
+    });
+  }
+
+  static doQuestionUnSubscribe(questionId) {
+    return requests.get("/service-question/auth/unSubscription", {
+      params: { questionId },
+    });
+  }
+
+  static getQuestionIsSubscribed(questionId) {
+    return requests.get("/service-question/auth/isSubscribed", {
+      params: { questionId },
+    });
+  }
+
   static getQuestionAnswerByTime(questionId, page, isAsc) {
     return requests.get("/service-question/public/getAnswerByTimeOf", {
       params: { questionId: questionId, page: page, isAsc: isAsc },
@@ -64,6 +100,24 @@ export class ReadingApi {
   static getOneArticleReply(replyId) {
     return requests.get("/service-article/public/getReply", {
       params: { replyId },
+    });
+  }
+
+  static doAnswerApprove(answerId) {
+    return requests.get("/service-question/auth/approve", {
+      params: { answerId },
+    });
+  }
+
+  static doAnswerUnApprove(answerId) {
+    return requests.get("/service-question/auth/unApprove", {
+      params: { answerId },
+    });
+  }
+
+  static getAnswerIsApproved(answerId) {
+    return requests.get("/service-question/auth/isApproved", {
+      params: { answerId },
     });
   }
 }

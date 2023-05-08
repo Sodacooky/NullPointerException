@@ -4,8 +4,12 @@ import cn.hutool.core.util.StrUtil;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 import soda.npe.common.controller.Response;
+import soda.npe.common.entity.UserNotice;
 import soda.npe.serviceuser.service.UserInfoService;
+import soda.npe.serviceuser.service.UserNoticeService;
 import soda.npe.serviceuser.vo.ModifyUserVO;
+
+import java.util.Date;
 
 @RestController
 @RequestMapping("/auth/admin")
@@ -13,6 +17,9 @@ public class AdminOperationController {
 
     @Resource
     private UserInfoService userInfoService;
+
+    @Resource
+    private UserNoticeService userNoticeService;
 
     @PostMapping("/modify")
     public Response modify(@RequestBody ModifyUserVO vo) {
@@ -29,8 +36,17 @@ public class AdminOperationController {
             return Response.fail(5, "昵称已经被使用");
         }
         //传入修改
-        if (userInfoService.updateInfoAndAvatar(vo)) return Response.ok();
-        else return Response.fail(7, "内部修改失败");
+        if (userInfoService.adminUpdate(vo)) {
+            UserNotice userNotice = new UserNotice();
+            userNotice.setGoalUserId(vo.getId());
+            userNotice.setType("system");
+            userNotice.setTitle("您的个人信息以被管理员修改");
+            userNotice.setText("请确保您的个人信息符合相关规定。");
+            userNotice.setTime(new Date());
+            userNotice.setIsRead(0);
+            userNoticeService.save(userNotice);//ignore result
+            return Response.ok();
+        } else return Response.fail(7, "内部修改失败");
     }
 
     @GetMapping("/ban")

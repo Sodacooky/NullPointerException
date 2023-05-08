@@ -1,5 +1,7 @@
 package soda.npe.servicequestion.service;
 
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.thread.ThreadUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
@@ -29,6 +31,9 @@ public class QuestionAnswerService extends ServiceImpl<QuestionAnswerMapper, Que
 
     @Resource
     private ApprovalAnswerMapper approvalAnswerMapper;
+
+    @Resource
+    private UserQuestionSubscriptionMapper userQuestionSubscriptionMapper;
 
     public List<QuestionAnswerPreviewVO> getAnswerPublishedBy(long userId, int page) {
         List<QuestionAnswer> qa = this.list(
@@ -90,23 +95,37 @@ public class QuestionAnswerService extends ServiceImpl<QuestionAnswerMapper, Que
         questionAnswer.setPublishTime(new Date());
         //储存
         if (!this.save(questionAnswer)) return false;
+        //异步发送通知
+        ThreadUtil.execAsync(() -> sendSubscriptionNotice(questionAnswer));
+        return true;
+    }
+
+    private void sendSubscriptionNotice(QuestionAnswer answer) {
         //构建消息
         // - 获取用户和问题信息
-        UserInfo replyOwner = userInfoMapper.selectById(questionAnswer.getPublisherId());
-        QuestionInfo questionInfo = questionInfoMapper.selectById(questionAnswer.getQuestionId());
-        // - 自己回答自己不通知
-        if (questionInfo.getPublisherId().longValue() == replyOwner.getId()) return true;
+        UserInfo replyOwner = userInfoMapper.selectById(answer.getPublisherId());
+        QuestionInfo questionInfo = questionInfoMapper.selectById(answer.getQuestionId());
         // - 填充实体
         UserNotice userNotice = new UserNotice();
         userNotice.setTitle("问题 " + questionInfo.getTitle() + " 收到来自 " + replyOwner.getNickname() + " 的回答");
-        userNotice.setText(questionAnswer.getText());
+        userNotice.setText(answer.getText());
         userNotice.setGoalUserId(questionInfo.getPublisherId());
         userNotice.setTime(new Date());
         userNotice.setType("question_answer");
         userNotice.setIsRead(0);
         userNotice.setSupplement(questionInfo.getId().toString());
-        //储存
-        return userNoticeMapper.insert(userNotice) == 1;
+        //对订阅了问题的用户发送消息
+        // - 构建条件：对指定问题60天内订阅的用户
+        LambdaQueryWrapper<UserQuestionSubscription> wrapper = new LambdaQueryWrapper<UserQuestionSubscription>()
+                .eq(UserQuestionSubscription::getQuestionId, questionInfo.getId())
+                .gt(UserQuestionSubscription::getTime, DateUtil.offsetDay(new Date(), -60).toJdkDate());
+        // - 获取，高内存占用风险！
+        List<UserQuestionSubscription> subscriptions = userQuestionSubscriptionMapper.selectList(wrapper);
+        // - 对其中每一个用户发送消息
+        for (var sub : subscriptions) {
+            userNotice.setGoalUserId(sub.getUserId());
+            userNoticeMapper.insert(userNotice);
+        }
     }
 
     private List<QuestionAnswerReadingVO> convertToReadingVO(List<QuestionAnswer> origin) {
@@ -160,14 +179,24 @@ public class QuestionAnswerService extends ServiceImpl<QuestionAnswerMapper, Que
         return result;
     }
 
-    public boolean updateAnswer(Long answerId, String newText) {
+    public boolean adminUpdate(Long answerId, String newText) {
         QuestionAnswer questionAnswer = new QuestionAnswer();
         questionAnswer.setId(answerId);
         questionAnswer.setText(newText);
-        return updateById(questionAnswer);
+        if (!updateById(questionAnswer)) return false;
+        //然后发送一条消息给用户
+        QuestionInfo questionInfo = questionInfoMapper.selectById(questionAnswer.getQuestionId());
+        UserNotice userNotice = new UserNotice();
+        userNotice.setTitle("您在问题 " + questionInfo.getTitle() + " 下的一条回答已被管理员修改");
+        userNotice.setText("管理员已将该回答的部分内容进行了修改，请确认你已准守社区的规则。");
+        userNotice.setGoalUserId(questionAnswer.getPublisherId());
+        userNotice.setTime(new Date());
+        userNotice.setType("system");
+        userNotice.setIsRead(0);
+        return userNoticeMapper.insert(userNotice) == 1;
     }
 
-    public boolean removeAndNotice(Long answerId) {
+    public boolean adminRemove(Long answerId) {
         QuestionAnswer answer = getById(answerId);
         QuestionInfo info = questionInfoMapper.selectById(answer.getQuestionId());
         //删除

@@ -30,7 +30,7 @@ public class AdminOperationController {
             return Response.fail(3, "所有字段不能为空");
         }
         //传入修改
-        if (articleService.updateQuestionInfo(vo)) return Response.ok();
+        if (articleService.adminUpdate(vo)) return Response.ok();
         else return Response.fail(5, "内部修改失败");
     }
 
@@ -45,7 +45,7 @@ public class AdminOperationController {
             return Response.fail(3, "目标文本不能为空");
         }
         //传入修改
-        if (articleReplyService.updateReply(vo.getId(), vo.getText())) return Response.ok();
+        if (articleReplyService.adminUpdate(vo.getId(), vo.getText())) return Response.ok();
         else return Response.fail(5, "内部修改失败");
     }
 
@@ -56,7 +56,7 @@ public class AdminOperationController {
             return Response.fail(1, "文章ID未指定或不存在");
         }
         //执行删除
-        if (articleService.removeWithReply(articleId)) return Response.ok();
+        if (articleService.adminRemove(articleId)) return Response.ok();
         else return Response.fail(3, "内部修改失败");
     }
 
@@ -67,7 +67,7 @@ public class AdminOperationController {
             return Response.fail(1, "回复ID未指定或不存在");
         }
         //执行删除
-        if (articleReplyService.removeAndNotice(replyId)) return Response.ok();
+        if (articleReplyService.adminRemove(replyId)) return Response.ok();
         else return Response.fail(3, "内部修改失败");
     }
 

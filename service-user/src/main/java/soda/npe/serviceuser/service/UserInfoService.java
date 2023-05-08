@@ -71,7 +71,7 @@ public class UserInfoService extends ServiceImpl<UserInfoMapper, UserInfo> {
         return this.updateById(userInfo);
     }
 
-    public boolean updateInfoAndAvatar(ModifyUserVO vo) {
+    public boolean adminUpdate(ModifyUserVO vo) {
         UserInfo userInfo = new UserInfo();
         userInfo.setId(vo.getId());
         userInfo.setNickname(vo.getNickname());

@@ -20,7 +20,12 @@
             </el-form-item>
           </el-form>
           <!--登录提示            -->
-          <div style="font-size: small">密码储存在数据库中</div>
+          <div style="font-size: small; color: gray">
+            <p>
+              密码储存在数据库中，如遗忘请在global_data表中检查adminPassword配置项。
+            </p>
+            <p>请确保定期更新密码以保证安全。</p>
+          </div>
         </el-card>
       </div>
     </el-main>

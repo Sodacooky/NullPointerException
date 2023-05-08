@@ -14,7 +14,11 @@
           <!--点赞数量与点赞按钮            -->
           <span style="float: right">
             <el-tooltip content="点赞文章" placement="bottom">
-              <el-button style="font-size: large; font-weight: bold">
+              <el-button
+                style="font-size: large; font-weight: bold"
+                :type="isApproved ? 'primary' : 'default'"
+                @click="onApproveBtn()"
+              >
                 <el-icon style="margin-right: 4px"><CaretTop /></el-icon>
                 {{ approvalAmount }}
               </el-button>
@@ -157,6 +161,7 @@ export default {
       publishTime: "",
       //文章相关数据
       approvalAmount: 0,
+      isApproved: false,
       //用户实体属性，用于展示作者
       publisherNickname: "",
       publisherAvatar: undefined,
@@ -273,6 +278,48 @@ export default {
         }
       );
     },
+    //
+    onApproveBtn() {
+      if (this.hasLogin) {
+        if (this.isApproved) {
+          ReadingApi.doArticleUnApprove(this.articleId).then((resp) => {
+            if (resp.data.code === "0") {
+              this.$notify.success("取消点赞文章成功");
+              //加载点赞数量
+              ReadingApi.getArticleApprovalAmount(this.articleId).then(
+                (resp) => {
+                  this.approvalAmount = resp.data.data;
+                }
+              );
+              ReadingApi.getArticleIsApproved(this.articleId).then((resp) => {
+                this.isApproved = resp.data.data;
+              });
+            } else {
+              this.$notify.error("取消点赞文章失败");
+            }
+          });
+        } else {
+          ReadingApi.doArticleApprove(this.articleId).then((resp) => {
+            if (resp.data.code === "0") {
+              this.$notify.success("点赞文章成功");
+              //加载点赞数量
+              ReadingApi.getArticleApprovalAmount(this.articleId).then(
+                (resp) => {
+                  this.approvalAmount = resp.data.data;
+                }
+              );
+              ReadingApi.getArticleIsApproved(this.articleId).then((resp) => {
+                this.isApproved = resp.data.data;
+              });
+            } else {
+              this.$notify.error("点赞文章失败");
+            }
+          });
+        }
+      } else {
+        this.$notify.warning("尚未登录");
+      }
+    },
   }, // methods
   mounted() {
     //加载内容
@@ -284,7 +331,14 @@ export default {
       this.approvalAmount = resp.data.data;
     });
     //判断登录状态
-    AuthApi.hasLogin().then((resp) => (this.hasLogin = resp.data.data));
+    AuthApi.hasLogin().then((resp) => {
+      this.hasLogin = resp.data.data;
+      if (this.hasLogin === true) {
+        ReadingApi.getArticleIsApproved(this.articleId).then((resp) => {
+          this.isApproved = resp.data.data;
+        });
+      }
+    });
   }, //mounted
   computed: {
     UserApi() {

@@ -232,17 +232,26 @@ public class ArticleService extends ServiceImpl<ArticleMapper, Article> {
         return match.stream().map(Article::getCategory).distinct().collect(Collectors.toList());
     }
 
-    public boolean updateQuestionInfo(ModifyArticleVO vo) {
+    public boolean adminUpdate(ModifyArticleVO vo) {
         //修改info里面的标题和分类
         Article article = new Article();
         article.setId(vo.getId());
         article.setTitle(vo.getTitle());
         article.setText(vo.getText());
         article.setCategory(vo.getCategory());
+        //然后发送一条消息给用户
+        UserNotice userNotice = new UserNotice();
+        userNotice.setTitle("文章 " + article.getTitle() + " 已被管理员修改");
+        userNotice.setText("管理员已将该文章部分内容进行了修改，请确认你已准守社区的规则。");
+        userNotice.setGoalUserId(article.getPublisherId());
+        userNotice.setTime(new Date());
+        userNotice.setType("system");
+        userNotice.setIsRead(0);
+        userNoticeMapper.insert(userNotice); //不在乎这一条的失败
         return updateById(article);
     }
 
-    public boolean removeWithReply(Long articleId) {
+    public boolean adminRemove(Long articleId) {
         //获取要删除的文章信息，用于构建消息
         Article info = getById(articleId);
         //然后删除文章
