@@ -32,7 +32,7 @@
               <el-avatar :src="UserApi.getUserAvatarUrl(publisherAvatar)" />
             </el-col>
             <el-col :span="22">
-              <div class="publisher-info">
+              <div class="publisher-info" @click="jumpUserDetailPage()">
                 <a style="font-weight: bold">{{ publisherNickname }}</a>
               </div>
               <div style="color: gray">发布于：{{ publishTime }}</div>
@@ -319,6 +319,12 @@ export default {
       } else {
         this.$notify.warning("尚未登录");
       }
+    },
+    jumpUserDetailPage() {
+      let routeData = this.$router.resolve(
+        `/profile?userId=${this.publisherId}`
+      );
+      window.open(routeData.href, "_blank");
     },
   }, // methods
   mounted() {

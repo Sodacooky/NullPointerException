@@ -3,7 +3,7 @@
     <div
       class="item-card"
       style="padding: 4px 4px 4px 4px; display: flex"
-      @click="$router.push(`/profile?userId=${item.id}`)"
+      @click="jumpDetailPage()"
     >
       <!--头像        -->
       <div class="avatar">
@@ -54,6 +54,10 @@ export default {
   methods: {
     baseUrl() {
       return baseUrl;
+    },
+    jumpDetailPage() {
+      let routeData = this.$router.resolve(`/profile?userId=${this.item.id}`);
+      window.open(routeData.href, "_blank");
     },
   },
   props: ["item"],

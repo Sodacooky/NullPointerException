@@ -6,7 +6,7 @@
       style="display: flex; justify-content: space-between; align-items: center"
     >
       <!--用户头像和昵称        -->
-      <span class="user-info">
+      <span class="user-info" @click="jumpUserDetailPage()">
         <span
           class="nickname-avatar"
           style="display: flex; align-items: center; font-weight: bold"
@@ -110,6 +110,12 @@ export default {
           }
         }
       );
+    },
+    jumpUserDetailPage() {
+      let routeData = this.$router.resolve(
+        `/profile?userId=${this.item.publisherId}`
+      );
+      window.open(routeData.href, "_blank");
     },
   },
   props: ["item"],

@@ -27,4 +27,22 @@ export class AdminMiscApi {
       text,
     });
   }
+
+  static removeAnnouncement(announcementId) {
+    return requests.get(
+      "/service-miscellaneous/auth/admin/removeAnnouncement",
+      {
+        params: {
+          announcementId,
+        },
+      }
+    );
+  }
+
+  static addAnnouncement(title, text) {
+    return requests.post("/service-miscellaneous/auth/admin/addAnnouncement", {
+      title,
+      text,
+    });
+  }
 }

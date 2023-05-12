@@ -30,7 +30,7 @@
     <!--                底部信息-->
     <div class="bottom-bar" style="margin-top: 8px; padding-bottom: 8px">
       <!--            用户信息-->
-      <span class="user-info">
+      <span class="user-info" @click="jumpUserDetailPage()">
         <span style="display: flex; align-items: center; float: left">
           <el-avatar
             :src="UserApi.getUserAvatarUrl(item.publisherAvatar)"
@@ -75,6 +75,12 @@ export default {
     },
     doJump() {
       let routeData = this.$router.resolve(`/article/${this.item.id}`);
+      window.open(routeData.href, "_blank");
+    },
+    jumpUserDetailPage() {
+      let routeData = this.$router.resolve(
+        `/profile?userId=${this.item.publisherId}`
+      );
       window.open(routeData.href, "_blank");
     },
   }, //methods
