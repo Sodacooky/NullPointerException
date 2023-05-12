@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import soda.npe.common.entity.UserNotice;
 import soda.npe.common.mapper.UserNoticeMapper;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -23,6 +24,23 @@ public class UserNoticeService extends ServiceImpl<UserNoticeMapper, UserNotice>
                 .eq(UserNotice::getType, typeName)
                 .orderByDesc(UserNotice::getTime)
                 .last("limit 300"));//限制300条
+    }
+
+
+    public int sendCustomNotice(String[] userIds, String title, String text) {
+        int count = 0;
+        Date currentDate = new Date();
+        for (var userId : userIds) {
+            UserNotice userNotice = new UserNotice();
+            userNotice.setGoalUserId(Long.parseLong(userId));
+            userNotice.setType("system");
+            userNotice.setTitle(title);
+            userNotice.setText(text);
+            userNotice.setTime(currentDate);
+            userNotice.setIsRead(0);
+            if (this.save(userNotice)) count++;
+        }
+        return count;
     }
 
     public boolean read(Long noticeId, Long userId) {

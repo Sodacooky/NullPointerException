@@ -15,7 +15,7 @@
       <!--标题，如果未读有标志-->
       <template #title>
         <div style="font-weight: bold; font-size: large">
-          <span v-if="item.isRead === 0">
+          <span v-if="item.isRead === '0'">
             <el-tag type="info">未读</el-tag>
           </span>
           {{ item.title }}

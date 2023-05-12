@@ -19,4 +19,12 @@ export class AdminMiscApi {
   static getAdvImageUploadUrl() {
     return baseUrl + "/service-miscellaneous/auth/admin/uploadAdvImage";
   }
+
+  static sendCustomNotice(goalUserId, title, text) {
+    return requests.post("/service-user/auth/admin/sendCustomNotice", {
+      goalUserId,
+      title,
+      text,
+    });
+  }
 }
