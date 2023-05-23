@@ -177,7 +177,7 @@ export default {
         if (resp.data.code !== "0") {
           this.isShowNicknameUsed = true;
         } else {
-          this.isShowPasswordMismatch = false;
+          this.isShowNicknameUsed = false;
         }
       });
     },

@@ -12,7 +12,7 @@
     >
       <!--标题        -->
       <div class="article-name" style="font-size: large">
-        <el-tag v-if="item.isRead === 0" type="info">未读</el-tag>
+        <el-tag v-if="item.isRead === '0'" type="info">未读</el-tag>
         {{ item.title }}
       </div>
       <div class="reply-short" style="color: gray">

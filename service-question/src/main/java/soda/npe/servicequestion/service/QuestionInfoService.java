@@ -66,6 +66,12 @@ public class QuestionInfoService extends ServiceImpl<QuestionInfoMapper, Questio
             //返回
             return null;
         }
+        //自己默认订阅自己的问题
+        UserQuestionSubscription userQuestionSubscription = new UserQuestionSubscription();
+        userQuestionSubscription.setUserId(questionInfo.getPublisherId());
+        userQuestionSubscription.setQuestionId(questionInfo.getId());
+        userQuestionSubscription.setTime(publishDate);
+        userQuestionSubscriptionMapper.insert(userQuestionSubscription);
         return infoId;
     }
 
@@ -125,7 +131,7 @@ public class QuestionInfoService extends ServiceImpl<QuestionInfoMapper, Questio
             //填充回答数量
             Long answerAmount = questionAnswerMapper.selectCount(
                     new LambdaQueryWrapper<QuestionAnswer>()
-                            .lt(QuestionAnswer::getOrderNumber, 1)
+                            .ge(QuestionAnswer::getOrderNumber, 1)
                             .eq(QuestionAnswer::getQuestionId, info.getId()));
             vo.setAnswerAmount(answerAmount);
             //填充用户昵称和头像URL

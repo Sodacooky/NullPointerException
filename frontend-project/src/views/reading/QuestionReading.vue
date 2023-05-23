@@ -410,9 +410,11 @@ export default {
     //判断登录状态
     AuthApi.hasLogin().then((resp) => {
       this.hasLogin = resp.data.data;
-      ReadingApi.getQuestionIsSubscribed(this.questionId).then((resp) => {
-        this.isSubscribed = resp.data.data;
-      });
+      if (this.hasLogin === true) {
+        ReadingApi.getQuestionIsSubscribed(this.questionId).then((resp) => {
+          this.isSubscribed = resp.data.data;
+        });
+      }
     });
   }, // end of mounted()
 };

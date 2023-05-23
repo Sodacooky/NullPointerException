@@ -112,6 +112,10 @@ export default {
   watch: {
     //监听路由切换，切换路由时检查用户登录状态
     $route() {
+      if (localStorage.getItem("token") === null) {
+        this.currentUserInfo = null;
+        return;
+      }
       AuthApi.hasLogin().then((resp) => {
         if (Boolean(resp.data.data)) {
           //已登录，加载用户数据

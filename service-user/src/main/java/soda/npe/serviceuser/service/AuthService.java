@@ -10,9 +10,11 @@ import org.springframework.util.Assert;
 import soda.npe.common.entity.GlobalData;
 import soda.npe.common.entity.UserAuthentication;
 import soda.npe.common.entity.UserInfo;
+import soda.npe.common.entity.UserNotice;
 import soda.npe.common.mapper.GlobalDataMapper;
 import soda.npe.common.mapper.UserAuthenticationMapper;
 import soda.npe.common.mapper.UserInfoMapper;
+import soda.npe.common.mapper.UserNoticeMapper;
 import soda.npe.common.utils.JwtAuthUtil;
 import soda.npe.common.utils.MailUtil;
 import soda.npe.serviceuser.vo.RegisterVO;
@@ -35,6 +37,9 @@ public class AuthService extends ServiceImpl<UserAuthenticationMapper, UserAuthe
 
     @Resource
     private UserInfoMapper userInfoMapper;
+
+    @Resource
+    private UserNoticeMapper userNoticeMapper;
 
     @Resource
     private StringRedisTemplate stringRedisTemplate;
@@ -117,6 +122,15 @@ public class AuthService extends ServiceImpl<UserAuthenticationMapper, UserAuthe
         UserInfo updateInfo = new UserInfo();
         updateInfo.setId(userId);
         updateInfo.setIsBanned(0);
+        //发送欢迎消息
+        UserNotice userNotice = new UserNotice();
+        userNotice.setGoalUserId(updateInfo.getId());
+        userNotice.setType("system");
+        userNotice.setTitle("欢迎来到NullPointerException~");
+        userNotice.setText("社区将因你的到来而改变吗？拭目以待吧！");
+        userNotice.setTime(new Date());
+        userNotice.setIsRead(0);
+        userNoticeMapper.insert(userNotice);//ignore result
         //redis中的记录将在一天内删除
         return userInfoMapper.updateById(updateInfo) == 1;
     }
